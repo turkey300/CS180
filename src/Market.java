@@ -58,33 +58,27 @@ public class Market {
                     }
                 }
             } else if (userType.equals("1")) {
-                System.out.println("Please enter a username/email");
-                username = scanner.nextLine();
-                System.out.println("Please enter a password");
-                password = scanner.nextLine();
-                if (userType.equals("2")) {
+                try {
+                    Seller newSeller = new Seller(username, password, true);
+                } catch (NoUserException e) {
+                    e.printStackTrace();
+                } catch (AlreadyUserException e) {
+                    System.out.println(e.getMessage());
+                }
+
+                System.out.println("Please login"); // logging in now
+                while (true) {
+                    System.out.println("Please enter your username/email");
+                    username = scanner.nextLine();
+                    System.out.println("Please enter your password");
+                    password = scanner.nextLine();
                     try {
-                        Seller newSeller = new Seller(username, password, true);
+                        seller = new Seller(username, password, false);
+                        break;
                     } catch (NoUserException e) {
-                        e.printStackTrace();
+                        System.out.println(e.getMessage());
                     } catch (AlreadyUserException e) {
                         System.out.println(e.getMessage());
-                    }
-
-                    System.out.println("Please login"); // logging in now
-                    while (true) {
-                        System.out.println("Please enter your username/email");
-                        username = scanner.nextLine();
-                        System.out.println("Please enter your password");
-                        password = scanner.nextLine();
-                        try {
-                            seller = new Seller(username, password, false);
-                            break;
-                        } catch (NoUserException e) {
-                            System.out.println(e.getMessage());
-                        } catch (AlreadyUserException e) {
-                            System.out.println(e.getMessage());
-                        }
                     }
                 }
             } else if (accountType.equals("1")) { // if they want to login
@@ -121,6 +115,7 @@ public class Market {
                 }
             }
 
+            System.out.println("Successfully logged in!");
             // main marketplace
             if (customer == null) {
                 // marketplace for customer
