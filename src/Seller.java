@@ -1,6 +1,6 @@
 import java.io.*;
 
-public class Seller {
+public class Seller implements Serializable{
     private String username;
     private String password;
     // sets up or makes sure account is correct
