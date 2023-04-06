@@ -1,4 +1,5 @@
 import java.util.Scanner;
+
 public class Market {
     public static void main(String[] args) {
         // logging in/creating account
@@ -8,6 +9,7 @@ public class Market {
         String username;
         String password;
         Customer customer = null; // customer account if they select customer
+        Seller seller = null;
         // add name if we want
         System.out.println("Welcome to the marketplace!");
         System.out.println("Please select your account type");
@@ -56,34 +58,75 @@ public class Market {
                     }
                 }
             } else if (userType.equals("1")) {
-                // Do something to setup seller account
-            }
-        } else if (accountType.equals("1")) { // if they want to login
-            if (userType.equals("2")) {
-                while (true) {
-                    System.out.println("Please enter your username/email");
-                    username = scanner.nextLine();
-                    System.out.println("Please enter your password");
-                    password = scanner.nextLine();
+                System.out.println("Please enter a username/email");
+                username = scanner.nextLine();
+                System.out.println("Please enter a password");
+                password = scanner.nextLine();
+                if (userType.equals("2")) {
                     try {
-                        customer = new Customer(username, password, false);
-                        break;
+                        Seller newSeller = new Seller(username, password, true);
                     } catch (NoUserException e) {
-                        System.out.println(e.getMessage());
+                        e.printStackTrace();
                     } catch (AlreadyUserException e) {
                         System.out.println(e.getMessage());
                     }
-                }
-            } else if (userType.equals("1")) {
-                // Do something to login seller account
-            }
-        }
 
-        // main marketplace
-        if (customer == null) {
-            // marketplace for customer
-        } else {
-            // marketplace for seller
+                    System.out.println("Please login"); // logging in now
+                    while (true) {
+                        System.out.println("Please enter your username/email");
+                        username = scanner.nextLine();
+                        System.out.println("Please enter your password");
+                        password = scanner.nextLine();
+                        try {
+                            seller = new Seller(username, password, false);
+                            break;
+                        } catch (NoUserException e) {
+                            System.out.println(e.getMessage());
+                        } catch (AlreadyUserException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+            } else if (accountType.equals("1")) { // if they want to login
+                if (userType.equals("2")) {
+                    while (true) {
+                        System.out.println("Please enter your username/email");
+                        username = scanner.nextLine();
+                        System.out.println("Please enter your password");
+                        password = scanner.nextLine();
+                        try {
+                            customer = new Customer(username, password, false);
+                            break;
+                        } catch (NoUserException e) {
+                            System.out.println(e.getMessage());
+                        } catch (AlreadyUserException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                } else if (userType.equals("1")) {
+                    while (true) {
+                        System.out.println("Please enter your username/email");
+                        username = scanner.nextLine();
+                        System.out.println("Please enter your password");
+                        password = scanner.nextLine();
+                        try {
+                            seller = new Seller(username, password, false);
+                            break;
+                        } catch (NoUserException e) {
+                            System.out.println(e.getMessage());
+                        } catch (AlreadyUserException e) {
+                            System.out.println(e.getMessage());
+                        }
+                    }
+                }
+            }
+
+            // main marketplace
+            if (customer == null) {
+                // marketplace for customer
+            } else {
+                // marketplace for seller
+            }
         }
     }
 }
