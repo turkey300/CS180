@@ -174,9 +174,12 @@ public class Market {
     }
 
     public static void customerMarketplace(Scanner scanner) {
+        //TODO:change this realization of displaying products
+        ArrayList<Store> stores = Store.loadAllStores();
         ArrayList<Product> products = Product.loadAllProducts();
         while (true) {   //loop for the main page
             int i = 1;   //index used to number products and other choices
+            //TODO:change this realization of displaying all products
             while (i <= products.size()) {
                 System.out.print(i + ". ");   //display product number
                 System.out.println(products.get(i - 1).marketplaceDisplay());   //display product info
@@ -197,6 +200,7 @@ public class Market {
             if (choice > i || choice <= 0) {    //user chose a number not from the list
                 System.out.println("Please enter an existing option.");
                 continue;    //start the main page prompts again
+
             } else if (choice <= products.size()) {    //user selected a product
                 boolean validOption;
                 do {
