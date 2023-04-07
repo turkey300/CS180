@@ -128,7 +128,6 @@ public class Market {
             customerMarketplace(scanner);
         } else {
             // marketplace for seller
-            sellerMarketplace(scanner);
         }
     }
 
@@ -174,12 +173,9 @@ public class Market {
     }
 
     public static void customerMarketplace(Scanner scanner) {
-        //TODO:change this realization of displaying products
-        ArrayList<Store> stores = Store.loadAllStores();
         ArrayList<Product> products = Product.loadAllProducts();
         while (true) {   //loop for the main page
             int i = 1;   //index used to number products and other choices
-            //TODO:change this realization of displaying all products
             while (i <= products.size()) {
                 System.out.print(i + ". ");   //display product number
                 System.out.println(products.get(i - 1).marketplaceDisplay());   //display product info
@@ -194,13 +190,12 @@ public class Market {
             try {    //if input is not String, catch exception and repeat main page prompt
                 choice = Integer.parseInt(scanner.nextLine());
             } catch (NumberFormatException e) {
-                System.out.println("You didn't input a integer number.");
+                System.out.println("You didn't input an integer number.");
                 continue;   //start the main page prompts again
             }
             if (choice > i || choice <= 0) {    //user chose a number not from the list
                 System.out.println("Please enter an existing option.");
                 continue;    //start the main page prompts again
-
             } else if (choice <= products.size()) {    //user selected a product
                 boolean validOption;
                 do {
@@ -238,9 +233,56 @@ public class Market {
             }
         }
     }
-
-    public static void sellerMarketplace(Scanner scanner) {
-
+    public static void sellerMarketplace(TODO Scanner scan) {
+        ArrayList<Store> sellstore = new ArrayList<>();
+        sellstore = seller.loadStores();
+        String[] storeName = new String[sellstore.size()];
+        for (int n = 0; n < sellname.length; n++){
+            storenName[n] = sellstore.get(n);
+        }
+        System.out.println("What would you like to do?");
+        System.out.println("1. Modify products");
+        System.out.println("2. View Stores");
+        int choice;
+        try {    //if input is not String, catch exception and repeat main page prompt
+            choice = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+               System.out.println("You didn't input an integer number.");
+               continue;   //start the main page prompts again
+        }
+        if (choice != 1 && choice != 2) {
+            System.out.println("Please enter a valid integer");
+            continue;
+        }
+        else if (choice == 1) { // Modify products
+            boolean valid = true;
+            do {
+                System.out.println("Which store would you like to edit?");
+                for (int i = 0; i < storeName.length; i++){
+                     System.out.printf("%d. %s", i, storeName[i]);
+                }
+                int num;
+                try {
+                     num = Integer.parseInt(scanner.nextLine());
+                } catch (NumberFormatException e) {
+                    System.out.println("You didn't input an integer number.");
+                    valid = false;
+                } 
+            } while (!valid)
+            System.out.println("What would you like to do?"):
+            System.out.println("1. Add a product");
+            System.out.println("2. Edit a product");
+            System.out.println("3. Delete a product");
+            try {
+                action = Integer.parseInt(scanner.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("You didn't input an integer number.");
+                valid2 = false;
+            }
+                
+                    
+        }
+        else { // View Store and stats
     }
 }
 
