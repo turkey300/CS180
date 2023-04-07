@@ -128,6 +128,7 @@ public class Market {
             customerMarketplace(scanner);
         } else {
             // marketplace for seller
+            sellerMarketplace(scanner);
         }
     }
 
@@ -232,6 +233,10 @@ public class Market {
                 }
             }
         }
+    }
+
+    public static void sellerMarketplace(Scanner scanner) {
+
     }
 }
 

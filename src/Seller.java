@@ -1,8 +1,11 @@
 import java.io.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class Seller implements Serializable{
     private String username;
     private String password;
+    private ArrayList<Store> stores = new ArrayList<>();
     // sets up or makes sure account is correct
     public Seller(String username, String password, boolean newUser) throws NoUserException, AlreadyUserException {
         if (newUser) {
@@ -17,6 +20,7 @@ public class Seller implements Serializable{
             if (checkAccount(username, password)) {
                 this.username = username;
                 this.password = password;
+                stores = loadStores();
             } else { // if account details are wrong throws error
                 throw new NoUserException("This account does not exist!");
             }
@@ -60,5 +64,31 @@ public class Seller implements Serializable{
         }
 
         return false;
+    }
+
+    public ArrayList<Store> loadStores() {
+        File file = new File(username);
+        ArrayList<Store> stores = new ArrayList<>();
+        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
+            Store store = (Store) out.readObject();
+            while (store != null) {
+                stores.add(store);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return stores;
+    }
+
+    public void saveStore(Store store) {    //saves store in sellers account
+        File file = new File(username);
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
+            out.writeObject(store);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        stores = loadStores(); // loads store list so its up to date
     }
 }
