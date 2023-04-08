@@ -187,24 +187,30 @@ public class Market {
                     String choiceOnProductPage = scanner.nextLine();
                     switch (choiceOnProductPage) {
                         case "1":
-                            //TODO:purchase product-still working on
-//                            int amount = -1;
-//                            while (true) {
-//                                System.out.println("What amount would you like to purchase?");
-//                                try {
-//                                    amount = Integer.parseInt(scanner.nextLine());
-//                                } catch (NumberFormatException e) {
-//                                    System.out.println("Please input valid number.");
-//                                    continue;
-//                                }
-//                                if (amount <= 0) {
-//                                    System.out.println("Please input valid number.");
-//                                    continue;
-//                                }
-//                                currentStore.purchaseProductFromStore(productIndex, amount);
-//                                break;
-//                            }
-//                            break;
+                            int amount;
+                            while (true) {
+                                System.out.println("What amount would you like to purchase?");
+                                try {
+                                    amount = Integer.parseInt(scanner.nextLine());
+                                } catch (NumberFormatException e) {
+                                    System.out.println("Please input valid number.");
+                                    continue;
+                                }
+                                if (amount < 0) {
+                                    System.out.println("Please input valid number.");
+                                    continue;
+                                }
+                                if (currentStore.purchaseProductFromStore(productIndex, amount)) {
+                                    System.out.println("Purchased successfully!");
+                                    System.out.println("Returning to product's page...\n");
+                                    break;
+                                } else {
+                                    System.out.println("Sorry, we don't have enough items available.");
+                                    System.out.println("Returning to product's page...\n");
+                                    break;
+                                }
+                            }
+                            break;
                         case "2":
                             //TODO:add to cart
                             break;

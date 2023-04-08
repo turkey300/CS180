@@ -39,10 +39,14 @@ public class Store implements Serializable {
         saveStore();
     }
 
-    public void purchaseProductFromStore(int productIndex, int amount) {
-        this.productsSold += amount;
-        products.get(productIndex).purchase(amount);
-        saveStore();
+    public boolean purchaseProductFromStore(int productIndex, int amount) {
+        if (products.get(productIndex).purchase(amount)) {
+            this.productsSold += amount;
+            saveStore();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     //saves store info into a file named as the store's name
