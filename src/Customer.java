@@ -21,6 +21,60 @@ public class Customer implements Serializable {
         }
     }
 
+    public void setUsername(String username) {
+        File file = new File(this.username);
+        file.delete();
+
+        file = new File("customers.txt");
+        ArrayList<String> lines2 = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.substring(0, line.indexOf(":")).equals(this.username)) {
+                    lines2.add(username + ":" + password);
+                } else {
+                    lines2.add(line);
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines2.size(); i++) {
+                pw.println(lines2.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        file = new File("customerList.txt");
+        ArrayList<String> lines = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.equals(this.username)) {
+                    lines.add(username);
+                } else {
+                    lines.add(line);
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines.size(); i++) {
+                pw.println(lines.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.username = username;
+        saveCustomer();
+    }
+
     public void setPassword(String password) {
         this.password = password;
         saveCustomer();
