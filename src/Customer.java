@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 public class Customer implements Serializable {
     private String username;
@@ -16,6 +17,52 @@ public class Customer implements Serializable {
                 throw new AlreadyUserException("This account already exists!");
             }
             System.out.println("User successfully created!");
+        }
+    }
+
+    public void deleteAccount() { // deletes all parts of account
+        File file = new File("customerList.txt");
+        ArrayList<String> lines = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (!line.equals(username))
+                    lines.add(line);
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines.size(); i++) {
+                pw.println(lines.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        file = new File(username);
+        file.delete();
+
+        file = new File("customers.txt");
+        ArrayList<String> lines2 = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            lines2.add(bfr.readLine());
+            String line = bfr.readLine();
+            while (line != null) {
+                if (!line.equals(username + ":" + password))
+                    lines2.add(line);
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines2.size(); i++) {
+                pw.println(lines2.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
