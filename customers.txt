@@ -1,3 +1,1 @@
-dimtest:test
-testo:testo
-pee:poo
+customer:customer

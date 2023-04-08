@@ -37,10 +37,11 @@ public class Market {
             if (userType.equals("2")) {    //Creating customer account
                 try {
                     Customer newCustomer = new Customer(username, password, true);
-                } catch (NoUserException e) {
-                    e.printStackTrace();
                 } catch (AlreadyUserException e) {
                     System.out.println(e.getMessage());
+                } catch (OtherUserException e) {
+                    System.out.println(e.getMessage());
+                    return;
                 }
 
                 System.out.println("Please login"); // logging in now
@@ -62,10 +63,11 @@ public class Market {
             } else if (userType.equals("1")) {    //creating Seller account
                 try {
                     Seller newSeller = new Seller(username, password, true);
-                } catch (NoUserException e) {
-                    e.printStackTrace();
                 } catch (AlreadyUserException e) {
                     System.out.println(e.getMessage());
+                } catch (OtherUserException e) {
+                    System.out.println(e.getMessage());
+                    return;
                 }
 
                 System.out.println("Please login"); // logging in now
@@ -128,6 +130,7 @@ public class Market {
             customerMarketplace(scanner);
         } else {
             // marketplace for seller
+            sellerMarketplace(scanner, seller);
         }
     }
 
@@ -141,14 +144,17 @@ public class Market {
             System.out.println("Please enter your password");
             String password = scanner.nextLine();
             try {
-                customer = new Customer(username, password, false);
-                break;
+                if (Customer.checkAccount(username, password)) {
+                    customer = Customer.loadCustomer(username);
+                    break;
+                } else { // if account details are wrong throws error
+                    throw new NoUserException("This account does not exist!");
+                }
             } catch (NoUserException e) {
-                System.out.println(e.getMessage());
-            } catch (AlreadyUserException e) {
                 System.out.println(e.getMessage());
             }
         }
+
         return customer;
     }
 
@@ -161,14 +167,17 @@ public class Market {
             System.out.println("Please enter your password");
             String password = scanner.nextLine();
             try {
-                seller = new Seller(username, password, false);
-                break;
+                if (Seller.checkAccount(username, password)) {
+                    seller = Seller.loadSeller(username);
+                    break;
+                } else { // if account details are wrong throws error
+                    throw new NoUserException("This account does not exist!");
+                }
             } catch (NoUserException e) {
-                System.out.println(e.getMessage());
-            } catch (AlreadyUserException e) {
                 System.out.println(e.getMessage());
             }
         }
+
         return seller;
     }
 
@@ -233,56 +242,53 @@ public class Market {
             }
         }
     }
-    public static void sellerMarketplace(TODO Scanner scan) {
-        ArrayList<Store> sellstore = new ArrayList<>();
-        sellstore = seller.loadStores();
-        String[] storeName = new String[sellstore.size()];
-        for (int n = 0; n < sellname.length; n++){
-            storenName[n] = sellstore.get(n);
-        }
+
+    public static void sellerMarketplace(Scanner scanner, Seller seller) {
+        int choice = 3;
         System.out.println("What would you like to do?");
-        System.out.println("1. Modify products");
-        System.out.println("2. View Stores");
-        int choice;
-        try {    //if input is not String, catch exception and repeat main page prompt
-            choice = Integer.parseInt(scanner.nextLine());
-        } catch (NumberFormatException e) {
-               System.out.println("You didn't input an integer number.");
-               continue;   //start the main page prompts again
-        }
-        if (choice != 1 && choice != 2) {
-            System.out.println("Please enter a valid integer");
-            continue;
-        }
-        else if (choice == 1) { // Modify products
+        do {
+            System.out.println("1. Modify products");
+            System.out.println("2. View Stores");
+            try {    //if input is not String, catch exception and repeat main page prompt
+                choice = Integer.parseInt(scanner.nextLine());
+                if (!(choice == 1 || choice == 2))
+                    System.out.println("Please enter 1 or 2");
+            } catch (NumberFormatException e) {
+                System.out.println("Please enter 1 or 2");
+            }
+        } while (!(choice == 1 || choice == 2));
+
+        if (choice == 1) { // Modify products
             boolean valid = true;
+            int num = 0;
+            System.out.println("Which store would you like to edit?");
             do {
-                System.out.println("Which store would you like to edit?");
-                for (int i = 0; i < storeName.length; i++){
-                     System.out.printf("%d. %s", i, storeName[i]);
+                for (int i = 0; i < seller.getStores().size(); i++) {
+                    System.out.printf("%d. %s", i + 1, seller.getStores().get(i));
                 }
-                int num;
                 try {
-                     num = Integer.parseInt(scanner.nextLine());
+                    num = Integer.parseInt(scanner.nextLine());
+                    if (!(num >= 1 && num <= seller.getStores().size())) {
+                        System.out.println("Please enter a number corresponding to a store.");
+                        valid = false;
+                    }
                 } catch (NumberFormatException e) {
-                    System.out.println("You didn't input an integer number.");
+                    System.out.println("Please enter a number corresponding to a store.");
                     valid = false;
-                } 
-            } while (!valid)
-            System.out.println("What would you like to do?"):
+                }
+            } while (!valid);
+            num -= 1;
+            System.out.println("What would you like to do?");
             System.out.println("1. Add a product");
             System.out.println("2. Edit a product");
             System.out.println("3. Delete a product");
-            try {
-                action = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("You didn't input an integer number.");
-                valid2 = false;
-            }
-                
-                    
+//            try {
+//                action = Integer.parseInt(scanner.nextLine());
+//            } catch (NumberFormatException e) {
+//                System.out.println("You didn't input an integer number.");
+//                valid2 = false;
+//            }
         }
-        else { // View Store and stats
     }
 }
 
