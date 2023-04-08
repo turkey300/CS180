@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Market {
@@ -168,7 +169,6 @@ public class Market {
 
             } else {    //user selected an option below listed products
                 if (choice == (i - 3)) {
-                    //TODO:search for a product
                     System.out.println("Please enter a term to search for.");
                     String term = scanner.nextLine().toLowerCase();
 
@@ -204,9 +204,66 @@ public class Market {
                         }
                     }
                 } else if (choice == (i - 2)) {
-                    //TODO:Sort the marketplace on price
+                    //Sort the marketplace on price:products with lower price are on the top
+                    Collections.sort(allProducts,new ProductComparatorByPrice());
+                    boolean toMainPage = false;
+                    while (!toMainPage) {
+                        i = 1;
+                        for (int j = 0; j < allProducts.size(); j++) {
+                                System.out.print(i + ". ");
+                                System.out.println(allProducts.get(j).marketplaceDisplay());
+                                i++;
+                        }
+                        System.out.println(i + ". Back to main page.");
+                        System.out.println("Please select a number to visit product's page.");
+                        try {    //if input is not Integer, catch exception and repeat main page prompt
+                            choice = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("You didn't input an integer number.");
+                            continue;   //start the main page prompts again
+                        }
+                        if (choice > i || choice <= 0) {    //user chose a number not from the list
+                            System.out.println("Please enter an existing option.");
+                            continue;    //start the main page prompts again
+                        } else if (choice == i) {   //user selected to go back to main page
+                            toMainPage = true;
+                        } else {    //user selected a product
+                            Product currentProduct = allProducts.get((choice - 1));
+                            productPage(scanner, currentProduct, allStores, sellers);
+                            toMainPage = true;
+                        }
+                    }
                 } else if (choice == (i - 1)) {
-                    //TODO:Sort the marketplace on quantity available.
+                    //Sort the marketplace on quantity available:products with more items available are on the top
+                    Collections.sort(allProducts,new ProductComparatorByAvailability());
+                    Collections.reverse(allProducts);
+                    boolean toMainPage = false;
+                    while (!toMainPage) {
+                        i = 1;
+                        for (int j = 0; j < allProducts.size(); j++) {
+                            System.out.print(i + ". ");
+                            System.out.println(allProducts.get(j).marketplaceDisplay());
+                            i++;
+                        }
+                        System.out.println(i + ". Back to main page.");
+                        System.out.println("Please select a number to visit product's page.");
+                        try {    //if input is not Integer, catch exception and repeat main page prompt
+                            choice = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("You didn't input an integer number.");
+                            continue;   //start the main page prompts again
+                        }
+                        if (choice > i || choice <= 0) {    //user chose a number not from the list
+                            System.out.println("Please enter an existing option.");
+                            continue;    //start the main page prompts again
+                        } else if (choice == i) {   //user selected to go back to main page
+                            toMainPage = true;
+                        } else {    //user selected a product
+                            Product currentProduct = allProducts.get((choice - 1));
+                            productPage(scanner, currentProduct, allStores, sellers);
+                            toMainPage = true;
+                        }
+                    }
                 } else if (choice == i) {
                     //TODO:View a dashboard with store and seller information.
                 }

@@ -1,7 +1,9 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Product implements Serializable {
+    private static final long serialVersionUID = 45L;
     private String productName;
     private String description;
     private int availableQuantity;
@@ -29,6 +31,10 @@ public class Product implements Serializable {
 
     public String getProductName() {
         return productName;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public boolean purchase(int purchasedAmt) {    //return boolean to indicate weather purchased successfully
@@ -100,18 +106,22 @@ public class Product implements Serializable {
         }
         return null;
     }
-    //TODO:delete this
-    //goes through the products and loads all products available. Used for displaying all products in marketplace.
-    public static ArrayList<Product> loadAllProducts() {
-        ArrayList<Product> allProducts = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("Products.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                allProducts.add(loadProduct(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+}
+
+class ProductComparatorByPrice implements Comparator<Product> {
+    @Override
+    public int compare(Product o1, Product o2) {
+        if (o1.getPrice() == o2.getPrice()) {
+            return 0;
         }
-        return allProducts;
+        int dif = (o1.getPrice() - o2.getPrice()) > 0 ? 1 : -1;
+        return dif;
+    }
+}
+
+class ProductComparatorByAvailability implements Comparator<Product> {
+    @Override
+    public int compare(Product o1, Product o2) {
+        return o1.getAvailableQuantity() - o2.getAvailableQuantity();
     }
 }
