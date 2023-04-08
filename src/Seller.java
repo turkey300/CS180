@@ -7,6 +7,7 @@ public class Seller implements Serializable {
     private String username;
     private String password;
     private ArrayList<Store> stores = new ArrayList<>();
+
     // sets up or makes sure account is correct
     public Seller(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException {
         if (newUser) {
@@ -149,7 +150,7 @@ public class Seller implements Serializable {
             e.printStackTrace();
         }
     }
-    public static boolean checkIfSeller(String username){ // checks if username is customer
+    public static boolean checkIfSeller(String username) { // checks if username is customer
         File file = new File("sellerList.txt"); // adds username to list
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
             String line = bfr.readLine();
@@ -169,7 +170,7 @@ public class Seller implements Serializable {
         return stores;
     }
 
-    public void setStore(Store stores) {
+    public void addStore(Store stores) {
         this.stores.add(stores);
         saveSeller();
     }
@@ -186,6 +187,7 @@ public class Seller implements Serializable {
             e.printStackTrace();
         }
     }
+
     public void writeSeller() {
         File f = new File(username); // writes seller to own file
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
@@ -249,5 +251,22 @@ public class Seller implements Serializable {
         }
 
         return false;
+    }
+
+    public static ArrayList<Seller> loadAllSellers() {
+        ArrayList<Seller> allSellers = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("sellerList.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allSellers.add(loadSeller(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return allSellers;
+    }
+
+    public String toString() {
+        return (username + password + stores);
     }
 }
