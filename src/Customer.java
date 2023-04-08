@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Customer implements Serializable {
+    private static final long serialVersionUID = 43L;
     private String username;
     private String password;
     // sets up or makes sure account is correct
@@ -17,6 +18,34 @@ public class Customer implements Serializable {
                 throw new AlreadyUserException("This account already exists!");
             }
             System.out.println("User successfully created!");
+        }
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+        saveCustomer();
+
+        File file = new File("sellers.txt");
+        ArrayList<String> lines2 = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.substring(0, line.indexOf(":")).equals(username)) {
+                    lines2.add(line.substring(0, line.indexOf(":")) + ":" + password);
+                } else {
+                    lines2.add(line);
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines2.size(); i++) {
+                pw.println(lines2.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -47,7 +76,6 @@ public class Customer implements Serializable {
         file = new File("customers.txt");
         ArrayList<String> lines2 = new ArrayList<>();
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
-            lines2.add(bfr.readLine());
             String line = bfr.readLine();
             while (line != null) {
                 if (!line.equals(username + ":" + password))
@@ -111,6 +139,15 @@ public class Customer implements Serializable {
         }
 
         return null;
+    }
+
+    public void saveCustomer() { // saves state of customer USE THIS TO UPDATE CUSTOMER OBJECT FILE
+        File f = new File(username); // writes seller to own file
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
+            out.writeObject(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean writeAccount(String username, String password) {
