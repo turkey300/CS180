@@ -25,6 +25,10 @@ public class Store implements Serializable {
         return products;
     }
 
+    public Product getProduct(int i) {
+        return (products.get(i));
+    }
+
     public String getStoreName() {
         return storeName;
     }

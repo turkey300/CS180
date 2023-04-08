@@ -5,6 +5,7 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 43L;
     private String username;
     private String password;
+    private ArrayList<ShoppingCart> shoppingCart = new ArrayList<>();
     // sets up or makes sure account is correct
     public Customer(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException {
         if (newUser) {
@@ -19,6 +20,39 @@ public class Customer implements Serializable {
             }
             System.out.println("User successfully created!");
         }
+    }
+
+    public void addShoppingCart(Product product, int sellerIndex, int storeIndex, int productIndex, int amount) {
+        shoppingCart.add(new ShoppingCart(product, sellerIndex, storeIndex, productIndex, amount));
+        saveCustomer();
+    }
+
+    public ArrayList<ShoppingCart> getShoppingCart() {
+        return shoppingCart;
+    }
+
+    public void checkShoppingCart() {
+        ArrayList<ShoppingCart> delete = new ArrayList<>();
+        for (int i = 0; i < shoppingCart.size(); i++) {
+            int j = shoppingCart.get(i).checkIfValid();
+            if (j != 0) {
+                if (j == 1) {
+                    System.out.printf("%s in your shopping cart may have been removed or sold out!" +
+                            "\nRemoving from shopping cart.", shoppingCart.get(i).getProduct().getProductName());
+                    delete.add(shoppingCart.get(i));
+                } else if (j == 2) {
+                    System.out.printf("%s's quantity is too low for the amount in your shopping cart!" +
+                            "\nRemoving from shopping cart.", shoppingCart.get(i).getProduct().getProductName());
+                    delete.add(shoppingCart.get(i));
+                }
+            }
+        }
+        if (!delete.isEmpty()) {
+            for (int i = 0; i < delete.size(); i++) {
+                shoppingCart.remove(delete.get(i));
+            }
+        }
+        saveCustomer();
     }
 
     public void setUsername(String username) {

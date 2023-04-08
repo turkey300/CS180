@@ -19,6 +19,10 @@ public class Product implements Serializable {
         saveProduct();
     }
 
+    public int getAvailableQuantity() {
+        return availableQuantity;
+    }
+
     public String getStoreName() {
         return storeName;
     }

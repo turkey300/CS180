@@ -71,7 +71,7 @@ public class Market {
         // main marketplace
         if (customer != null) {
             // marketplace for customer
-            customerMarketplace(scanner);
+            customerMarketplace(scanner, customer);
         } else {
             // marketplace for seller
             sellerMarketplace(scanner, seller);
@@ -125,7 +125,9 @@ public class Market {
         return seller;
     }
 
-    public static void customerMarketplace(Scanner scanner) {
+    public static void customerMarketplace(Scanner scanner, Customer customer) {
+        //checks shopping cart for updated products
+        customer.checkShoppingCart();
         //display of products
         ArrayList<Seller> sellers = Seller.loadAllSellers();
         while (true) {   //loop for the main page

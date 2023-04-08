@@ -150,7 +150,7 @@ public class Seller implements Serializable {
             e.printStackTrace();
         }
     }
-    public static boolean checkIfSeller(String username) { // checks if username is customer
+    public static boolean checkIfSeller(String username) { // checks if username is seller
         File file = new File("sellerList.txt"); // adds username to list
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
             String line = bfr.readLine();
@@ -168,6 +168,14 @@ public class Seller implements Serializable {
 
     public ArrayList<Store> getStores() {
         return stores;
+    }
+
+    public Store getStore(int i) {
+        return (stores.get(i));
+    }
+
+    public int getStoreIndex(Store store) {
+        return (stores.indexOf(store));
     }
 
     public void addStore(Store stores) {
