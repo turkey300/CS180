@@ -205,14 +205,14 @@ public class Market {
                     }
                 } else if (choice == (i - 2)) {
                     //Sort the marketplace on price:products with lower price are on the top
-                    Collections.sort(allProducts,new ProductComparatorByPrice());
+                    Collections.sort(allProducts, new ProductComparatorByPrice());
                     boolean toMainPage = false;
                     while (!toMainPage) {
                         i = 1;
                         for (int j = 0; j < allProducts.size(); j++) {
-                                System.out.print(i + ". ");
-                                System.out.println(allProducts.get(j).marketplaceDisplay());
-                                i++;
+                            System.out.print(i + ". ");
+                            System.out.println(allProducts.get(j).marketplaceDisplay());
+                            i++;
                         }
                         System.out.println(i + ". Back to main page.");
                         System.out.println("Please select a number to visit product's page.");
@@ -234,8 +234,9 @@ public class Market {
                         }
                     }
                 } else if (choice == (i - 1)) {
-                    //Sort the marketplace on quantity available:products with more items available are on the top
-                    Collections.sort(allProducts,new ProductComparatorByAvailability());
+                    //Sort the marketplace on quantity available:
+                    //products with more items available are on the top
+                    Collections.sort(allProducts, new ProductComparatorByAvailability());
                     Collections.reverse(allProducts);
                     boolean toMainPage = false;
                     while (!toMainPage) {
@@ -330,31 +331,33 @@ public class Market {
     }
 
     public static void sellerMarketplace(Scanner scanner, Seller seller) {
-        int choice = 3;
+        int choice = 0;
         System.out.println("What would you like to do?");
         do {
-            System.out.println("1. Modify products");
-            System.out.println("2. View Stores");
-            try {    //if input is not String, catch exception and repeat main page prompt
+            System.out.println("1. Modify products.");
+            System.out.println("2. View a list of sales by store.");
+            System.out.println("3. View a dashboard with statistics for each stores.");
+            try {    //if input is not Integer, catch exception and repeat main page prompt
                 choice = Integer.parseInt(scanner.nextLine());
-                if (!(choice == 1 || choice == 2))
-                    System.out.println("Please enter 1 or 2");
+                if (choice < 1 || choice > 3)
+                    System.out.println("Please enter an available option.");
             } catch (NumberFormatException e) {
-                System.out.println("Please enter 1 or 2");
+                System.out.println("Please enter an available option.");
             }
-        } while (!(choice == 1 || choice == 2));
+        } while (!(choice >= 1 && choice <= 3));
 
         if (choice == 1) { // Modify products
-            boolean valid = true;
-            int num = 0;
+            boolean valid;
+            int storeNum = 0;
             System.out.println("Which store would you like to edit?");
             do {
+                valid = true;
                 for (int i = 0; i < seller.getStores().size(); i++) {
-                    System.out.printf("%d. %s", i + 1, seller.getStores().get(i));
+                    System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
                 }
                 try {
-                    num = Integer.parseInt(scanner.nextLine());
-                    if (!(num >= 1 && num <= seller.getStores().size())) {
+                    storeNum = Integer.parseInt(scanner.nextLine());
+                    if (!(storeNum >= 1 && storeNum <= seller.getStores().size())) {
                         System.out.println("Please enter a number corresponding to a store.");
                         valid = false;
                     }
@@ -363,17 +366,131 @@ public class Market {
                     valid = false;
                 }
             } while (!valid);
-            num -= 1;
+            Store currentStore = seller.getStore((storeNum - 1));
+//            storeNum -= 1;
             System.out.println("What would you like to do?");
             System.out.println("1. Add a product");
             System.out.println("2. Edit a product");
             System.out.println("3. Delete a product");
-//            try {
-//                action = Integer.parseInt(scanner.nextLine());
-//            } catch (NumberFormatException e) {
-//                System.out.println("You didn't input an integer number.");
-//                valid2 = false;
-//            }
+            int modifyOption = 0;
+            do {
+                valid = true;
+                try {
+                    modifyOption = Integer.parseInt(scanner.nextLine());
+                    if (modifyOption < 1 || modifyOption > 3) {
+                        System.out.println("Please enter an available option.");
+                        valid = false;
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter an available option.");
+                    valid = false;
+                }
+            } while (!valid);
+            if (modifyOption == 1) {    //add a product
+                //TODO:"Sellers can import or export products for their stores using a csv file"?
+//                productName;description;int availableQuantity;double price;String storeName;
+                System.out.println("Please enter a product name:");
+                String name = scanner.nextLine();
+                System.out.println("Please enter a product description:");
+                String description = scanner.nextLine();
+                System.out.println("Please enter an available quantity.");
+            } else if (modifyOption == 2) {    //edit a product
+                int productNum = -1;
+                do {
+                    valid = true;
+                    for (int i = 0; i < currentStore.getProducts().size(); i++) {
+                        System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
+                                .getProductName(), currentStore.getProduct(i).getProductName());
+                    }
+                    System.out.println("Please select a product to edit.");
+                    try {
+                        productNum = Integer.parseInt(scanner.nextLine());
+                        if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+                            System.out.println("Please enter a number corresponding to a product.");
+                            valid = false;
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number corresponding to a product.");
+                        valid = false;
+                    }
+                } while (!valid);
+                Product currentProduct = currentStore.getProduct(productNum);
+                System.out.println(currentProduct.productPageDisplay());
+                System.out.println("1. Edit product name.");
+                System.out.println("2. Edit product description.");
+                System.out.println("3. Edit product available quantity.");
+                System.out.println("4. Edit product price.");
+                do {
+                    valid = true;
+                    String editOption = scanner.nextLine();
+                    if (editOption.equals("1")) {
+                        System.out.println("Please enter a new product name:");
+                        String name = scanner.nextLine();
+                        currentProduct.editProductName(name);
+                    } else if (editOption.equals("2")) {
+                        System.out.println("Please enter a new product description:");
+                        String description = scanner.nextLine();
+                        currentProduct.editDescription(description);
+                    } else if (editOption.equals("3")) {
+                        int availableQuantity = -1;
+                        do {
+                            System.out.println("Please enter a new available quantity:");
+                            try {
+                                availableQuantity = Integer.parseInt(scanner.nextLine());
+                                if (availableQuantity < 0)
+                                    System.out.println("Please enter a non-negative integer.");
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter a non-negative integer.");
+                            }
+                        } while (availableQuantity < 0);
+                        currentProduct.editAvailableQuantity(availableQuantity);
+                    } else if (editOption.equals("4")) {
+                        double price = -1;
+                        do {
+                            System.out.println("Please enter a new price:");
+                            try {
+                                price = Double.parseDouble(scanner.nextLine());
+                                if (price < 0)
+                                    System.out.println("Please enter a non-negative number.");
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter a non-negative number.");
+                            }
+                        } while (price < 0);
+                        currentProduct.editPrice(price);
+                    } else {
+                        System.out.println("Please enter an available option.");
+                        valid = false;
+                    }
+                } while (!valid);
+                seller.saveSeller();
+            } else {    //modify option = 3;delete a product
+                int productNum = -1;
+                do {
+                    valid = true;
+                    for (int i = 0; i < currentStore.getProducts().size(); i++) {
+                        System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
+                                .getProductName(), currentStore.getProduct(i).getProductName());
+                    }
+                    System.out.println("Please select a product to edit.");
+                    try {
+                        productNum = Integer.parseInt(scanner.nextLine());
+                        if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+                            System.out.println("Please enter a number corresponding to a product.");
+                            valid = false;
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a number corresponding to a product.");
+                        valid = false;
+                    }
+                } while (!valid);
+                Product currentProduct = currentStore.getProduct(productNum);
+                currentStore.deleteProduct(currentProduct);
+                seller.saveSeller();
+            }
+        } else if (choice == 2) {
+            //TODO:View a list of sales by store
+        } else {    //choice = 3
+            //TODO:View a dashboard with statistics for each stores
         }
     }
 }

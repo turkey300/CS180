@@ -47,7 +47,7 @@ public class Store implements Serializable {
         saveStore();
     }
 
-    public void deleteProduct(Product product) throws IOException {
+    public void deleteProduct(Product product) {
         products.remove(product);
         saveStore();
     }
