@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Store implements Serializable {
+    private static final long serialVersionUID = 44L;
     private String storeName;
     private String seller;    //username of the associated seller
     private ArrayList<Product> products = new ArrayList<>();//all products associated with this store
@@ -29,8 +30,16 @@ public class Store implements Serializable {
         return (products.get(i));
     }
 
+    public int getProductIndex(Product product) {
+        return (products.indexOf(product));
+    }
+
     public String getStoreName() {
         return storeName;
+    }
+
+    public String getSeller() {
+        return seller;
     }
 
     public void addProduct(Product product) {//adds a new product to the store
@@ -43,8 +52,8 @@ public class Store implements Serializable {
         saveStore();
     }
 
-    public boolean purchaseProductFromStore(int productIndex, int amount) {
-        if (products.get(productIndex).purchase(amount)) {
+    public boolean purchaseProductFromStore(Product product, int amount) {
+        if (product.purchase(amount)) {
             this.productsSold += amount;
             saveStore();
             return true;

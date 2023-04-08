@@ -132,10 +132,14 @@ public class Market {
         ArrayList<Seller> sellers = Seller.loadAllSellers();
         while (true) {   //loop for the main page
             int i = 1;   //index used to number products and other choices
+            ArrayList<Product> allProducts = new ArrayList<>();
+            ArrayList<Store> allStores = new ArrayList<>();
             for (int j = 0; j < sellers.size(); j++) {
                 ArrayList<Store> stores = sellers.get(j).getStores();
+                allStores.addAll(stores);
                 for (int k = 0; k < stores.size(); k++) {
                     ArrayList<Product> products = stores.get(k).getProducts();
+                    allProducts.addAll(products);
                     for (int l = 0; l < products.size(); l++) {
                         System.out.print(i + ". ");   //display product number
                         System.out.println(products.get(l).marketplaceDisplay());   //display product info
@@ -159,73 +163,46 @@ public class Market {
                 System.out.println("Please enter an existing option.");
                 continue;    //start the main page prompts again
             } else if (choice <= (i - 4)) {    //user selected a product
-                boolean validOption;
-                do {
-                    validOption = true;
-                    int sellerIndex = 0;
-                    int storeIndex = 0;
-                    int productIndex = 0;
-                    Store currentStore = null;
-                    i = 1;   //set index of products back to 1, loop and find when i==choice
-                    for (int j = 0; j < sellers.size(); j++) {
-                        ArrayList<Store> stores = sellers.get(j).getStores();
-                        for (int k = 0; k < stores.size(); k++) {
-                            ArrayList<Product> products = stores.get(k).getProducts();
-                            for (int l = 0; l < products.size(); l++) {
-                                if (i == choice) {
-                                    currentStore = stores.get(k);
-                                    sellerIndex = j;
-                                    storeIndex = k;
-                                    productIndex = l;
-                                }
-                                i++;
-                            }
-                        }
-                    }
-                    System.out.println(currentStore.getProducts().get(productIndex).productPageDisplay());
-                    System.out.println("1. Purchase this product.");
-                    System.out.println("2. Add this product to shopping cart.");
-                    System.out.println("3. Back to main page.");
-                    String choiceOnProductPage = scanner.nextLine();
-                    switch (choiceOnProductPage) {
-                        case "1":
-                            int amount;
-                            while (true) {
-                                System.out.println("What amount would you like to purchase?");
-                                try {
-                                    amount = Integer.parseInt(scanner.nextLine());
-                                } catch (NumberFormatException e) {
-                                    System.out.println("Please input valid number.");
-                                    continue;
-                                }
-                                if (amount < 0) {
-                                    System.out.println("Please input valid number.");
-                                    continue;
-                                }
-                                if (currentStore.purchaseProductFromStore(productIndex, amount)) {
-                                    System.out.println("Purchased successfully!");
-                                    System.out.println("Returning to product's page...\n");
-                                    break;
-                                } else {
-                                    System.out.println("Sorry, we don't have enough items available.");
-                                    System.out.println("Returning to product's page...\n");
-                                    break;
-                                }
-                            }
-                            break;
-                        case "2":
-                            //TODO:add to cart
-                            break;
-                        case "3":
-                            break;  //returns to main page again
-                        default:
-                            System.out.println("Please enter an existing option.");
-                            validOption = false;  //prompts again for a valid option
-                    }
-                } while (!validOption);
+                Product currentProduct = allProducts.get((choice - 1));
+                productPage(scanner, currentProduct, allStores, sellers);
+
             } else {    //user selected an option below listed products
                 if (choice == (i - 3)) {
                     //TODO:search for a product
+                    System.out.println("Please enter a term to search for.");
+                    String term = scanner.nextLine().toLowerCase();
+
+                    boolean toMainPage = false;
+                    while (!toMainPage) {
+                        i = 1;
+                        ArrayList<Product> filteredProducts = new ArrayList<>();
+                        for (int j = 0; j < allProducts.size(); j++) {
+                            if (allProducts.get(j).toString().toLowerCase().contains(term)) {
+                                filteredProducts.add(allProducts.get(j));
+                                System.out.print(i + ". ");
+                                System.out.println(allProducts.get(j).marketplaceDisplay());
+                                i++;
+                            }
+                        }
+                        System.out.println(i + ". Back to main page.");
+                        System.out.println("Please select a number to visit product's page.");
+                        try {    //if input is not Integer, catch exception and repeat main page prompt
+                            choice = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("You didn't input an integer number.");
+                            continue;   //start the main page prompts again
+                        }
+                        if (choice > i || choice <= 0) {    //user chose a number not from the list
+                            System.out.println("Please enter an existing option.");
+                            continue;    //start the main page prompts again
+                        } else if (choice == i) {   //user selected to go back to main page
+                            toMainPage = true;
+                        } else {    //user selected a product
+                            Product currentProduct = filteredProducts.get((choice - 1));
+                            productPage(scanner, currentProduct, allStores, sellers);
+                            toMainPage = true;
+                        }
+                    }
                 } else if (choice == (i - 2)) {
                     //TODO:Sort the marketplace on price
                 } else if (choice == (i - 1)) {
@@ -233,6 +210,64 @@ public class Market {
                 } else if (choice == i) {
                     //TODO:View a dashboard with store and seller information.
                 }
+            }
+        }
+    }
+
+    public static void productPage(Scanner scanner, Product currentProduct, ArrayList<Store> stores,
+                                   ArrayList<Seller> sellers) {
+        //this is a separated method used to display product's page and realize further operations
+        //it ends and returns void only when user selects "back to main page"
+        Store currentStore = null;
+        for (int j = 0; j < stores.size(); j++) {
+            if (stores.get(j).getStoreName().equals(currentProduct.getStoreName())) {
+                currentStore = stores.get(j);
+            }
+        }
+        while (true) {
+            System.out.println(currentProduct.productPageDisplay());
+            System.out.println("1. Purchase this product.");
+            System.out.println("2. Add this product to shopping cart.");
+            System.out.println("3. Back to main page.");
+            String choiceOnProductPage = scanner.nextLine();
+            switch (choiceOnProductPage) {
+                case "1":
+                    int amount;
+                    while (true) {
+                        System.out.println("What amount would you like to purchase?");
+                        try {
+                            amount = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please input valid number.");
+                            continue;
+                        }
+                        if (amount < 0) {
+                            System.out.println("Please input valid number.");
+                            continue;
+                        }
+                        if (currentStore.purchaseProductFromStore(currentProduct, amount)) {
+                            System.out.println("Purchased successfully!");
+                            System.out.println("Returning to product's page...\n");
+                            for (int i = 0; i < sellers.size(); i++) {
+                                if (sellers.get(i).getUsername().equals(currentStore.getSeller())) {
+                                    sellers.get(i).saveSeller();
+                                }
+                            }
+                            break;
+                        } else {
+                            System.out.println("Sorry, we don't have enough items available.");
+                            System.out.println("Returning to product's page...\n");
+                            break;
+                        }
+                    }
+                    break;
+                case "2":
+                    //TODO:add to cart
+                    break;
+                case "3":
+                    return;   //returns true indicating user wants to return to main page
+                default:
+                    System.out.println("Please enter an existing option.");
             }
         }
     }
