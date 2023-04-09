@@ -573,6 +573,8 @@ public class Market {
                         System.out.println("Amount of product in shopping carts: " + amount);
                     }
                 }
+
+                System.out.println("Returning to main menu.");
             } else if (choice == 5) { // modify account
                 String input;
                 do {
