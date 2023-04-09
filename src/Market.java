@@ -273,7 +273,76 @@ public class Market {
                 } else if (choice == (i - 3)) {
                     //TODO:View a dashboard with store and seller information.
                 } else if (choice == (i - 2)) {
-                    //TODO:View shopping cart.
+                    do {
+                        ArrayList<ShoppingCart> shoppingCart = customer.getShoppingCart();
+                        if (shoppingCart.isEmpty()) {
+                            System.out.println("Shopping cart is empty!");
+                            break;
+                        }
+                        System.out.println("Products in your shopping cart:");
+                        for (int a = 0; a < shoppingCart.size(); a++) {
+                            System.out.printf("%d. Product: %s. Amount: %d.\n",
+                                    a + 1, shoppingCart.get(a).getProduct().getProductName(), shoppingCart.get(a).getAmount());
+                        }
+
+                        String input;
+                        do {
+                            System.out.println("1. Purchase all products.");
+                            System.out.println("2. Delete product from shopping cart.");
+                            System.out.println("3. Leave shopping cart.");
+                            input = scanner.nextLine();
+                            if (!(input.equals("1") || input.equals("2") || input.equals("3")))
+                                System.out.println("Please enter a number corresponding to an option.");
+                        } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
+
+                        if (input.equals("1")) { // this seems bad but idk of a better way
+                            for (int b = 0; b < shoppingCart.size(); b++) { // loops through all products, if one matches name purchases products
+                                for (int e = 0; e < sellers.size(); e++) {
+                                    ArrayList<Store> stores = sellers.get(e).getStores();
+                                    for (int f = 0; f < stores.size(); f++) {
+                                        ArrayList<Product> products = stores.get(f).getProducts();
+                                        for (int k = 0; k < products.size(); k++) {
+                                            if (products.get(k).getProductName().equals(shoppingCart.get(b).getProduct().getProductName())) {
+                                                if (stores.get(f).purchaseProductFromStore(products.get(k), shoppingCart.get(b).getAmount(), customer)) {
+                                                    System.out.printf("Purchased %s successfully!\n", products.get(k).getProductName());
+                                                    for (int o = 0; o < sellers.size(); o++) {
+                                                        if (sellers.get(o).getUsername().equals(stores.get(f).getSeller())) {
+                                                            sellers.get(o).saveSeller();
+                                                        }
+                                                    }
+                                                }
+                                            } else {
+                                                System.out.printf("Sorry, we don't have enough items of %s available.\n", products.get(k).getProductName());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            System.out.println("Purchased all available products, leaving shopping cart!");
+                            break;
+                        } else if (input.equals("2")) { // deletes product
+                            do {
+                                System.out.println("Which product would you like to delete?");
+                                input = scanner.nextLine();
+                                try {
+                                    int intInput = Integer.parseInt(input);
+                                    if (intInput > 0 && intInput <= shoppingCart.size()) {
+                                        shoppingCart.remove(intInput - 1);
+                                        System.out.println("Product removed from shopping cart!");
+                                    } else {
+                                        System.out.println("Please enter an option corresponding to a product.");
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Please enter an option corresponding to a product.");
+                                }
+                            } while (true);
+                        } else if (input.equals("3")) { // leaves shopping cart
+                            System.out.println("Leaving shopping cart!");
+                            break;
+                        }
+                    } while (true);
+
                 } else if (choice == (i - 1)) {    //Modify account
                     String input;
                     do {
@@ -584,12 +653,12 @@ public class Market {
                         revlist[j] = (revenue.get(j)).toString();
                         custlist[j] = (customers.get(j));
                         purchased[j] = (amount.get(j)).toString();
-                        System.out.printf("Customer %s pruchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                        System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
                     }
                 }
 
                 System.out.println("Returning to main menu.");
-            } else if (choice == 3) {    //choice = 3, statiscs
+            } else if (choice == 3) {    //choice = 3, statistics
                 //TODO:View a dashboard with statistics for each stores
             } else if (choice == 4) { // view shopping carts
                 // this code is really really really bad but i sure hope it works
