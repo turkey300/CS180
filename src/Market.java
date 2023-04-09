@@ -1,3 +1,6 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -538,14 +541,95 @@ public class Market {
                     if (input.equals("1")) {
                         System.out.println("Please enter the file path to the csv file.");
                         String file = scanner.nextLine();
+
+                        File f = new File(file);
+                        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                            String line = bfr.readLine();
+                            while (line != null) {
+//                productName;description;int availableQuantity;double price;String storeName
+                                try {
+                                    String productName;
+                                    String description;
+                                    int availableQuantity;
+                                    double price;
+                                    String storeName;
+                                    String substring;
+
+                                    productName = line.substring(0, line.indexOf(","));
+                                    productName = productName.replaceAll("\"", "");
+                                    substring = line.substring(line.indexOf(",") + 1);
+                                    description = substring.substring(0, substring.indexOf(","));
+                                    description = description.replaceAll("\"", "");
+                                    substring = substring.substring(substring.indexOf(",") + 1);
+                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf(",")).replaceAll("\"", ""));
+                                    substring = substring.substring(substring.indexOf(",") + 1);
+                                    price = Double.parseDouble(substring.substring(0, substring.indexOf(",")).replaceAll("\"", ""));
+                                    storeName = substring.substring(substring.indexOf(",") + 1);
+                                    storeName = storeName.replaceAll("\"", "");
+
+
+                                    if (availableQuantity > 0 && price >= 0) {
+                                        currentStore.addProduct(new Product(productName, description, availableQuantity, price, currentStore.getStoreName()));
+                                        System.out.println("Product added!");
+                                        ArrayList<Store> stores = Store.loadAllStores();
+                                        for (int i = 0; i < stores.size(); i++) {
+                                            if (stores.get(i).getSeller().equals(currentStore.getSeller()))
+                                                stores.get(i).saveStore();
+                                        }
+                                    } else {
+                                        System.out.println("Product has invalid data!");
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Error parsing product!");
+                                }
+
+                                line = bfr.readLine();
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error reading in product!");
+                        }
                     } else if (input.equals("2")) {
                         System.out.println("Please enter a product name:");
                         String name = scanner.nextLine();
                         System.out.println("Please enter a product description:");
                         String description = scanner.nextLine();
-                        System.out.println("Please enter an available quantity.");
+                        String q;
+                        String p;
+                        double price = -1;
+                        int quantity = 0;
+
+                        do {
+                            System.out.println("Please enter an available quantity.");
+                            q = scanner.nextLine();
+                            try {
+                                quantity = Integer.parseInt(q);
+                                if (quantity <= 0)
+                                    System.out.println("Please enter an integer greater than 0");
+                            } catch (Exception e) {
+                                System.out.println("Please enter an integer greater than 0");
+                            }
+                        } while (quantity <= 0);
+
+                        do {
+                            System.out.println("Please enter a price for the product.");
+                            p = scanner.nextLine();
+                            try {
+                                price = Double.parseDouble(p);
+                                if (price < 0)
+                                    System.out.println("Please enter a number greater or equal to 0");
+                            } catch (Exception e) {
+                                System.out.println("Please enter a number greater or equal to 0");
+                            }
+                        } while (!(price >= 0));
+
+                        currentStore.addProduct(new Product(name, description, quantity, price, currentStore.getStoreName()));
+                        System.out.println("Product added!");
+                        ArrayList<Store> stores = Store.loadAllStores();
+                        for (int i = 0; i < stores.size(); i++) {
+                            if (stores.get(i).getSeller().equals(currentStore.getSeller()))
+                                stores.get(i).saveStore();
+                        }
                     }
-//                productName;description;int availableQuantity;double price;String storeName;
                 } else if (modifyOption == 2) {    //edit a product
                     int productNum = -1;
                     do {
