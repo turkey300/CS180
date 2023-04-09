@@ -104,17 +104,4 @@ public class Store implements Serializable {
     public String toString() {
         return String.format("%s,%s,%d\n%s", storeName, seller, productsSold, products.toString());
     }
-
-    public static ArrayList<Store> loadAllStores() {
-        ArrayList<Store> allStores = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("Stores.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                allStores.add(loadStore(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return allStores;
-    }
 }

@@ -1,5 +1,4 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -68,9 +67,7 @@ public class Market {
             } else if (userType.equals("1")) {    //log in as a seller
                 seller = sellerLogin(scanner);
             }
-            System.out.println("Goodbye!");
         }
-
         System.out.println("Successfully logged in!");
         // main marketplace
         if (customer != null) {
@@ -80,6 +77,7 @@ public class Market {
             // marketplace for seller
             sellerMarketplace(scanner, seller);
         }
+        System.out.println("Goodbye!");
     }
 
 
@@ -273,7 +271,7 @@ public class Market {
                     }
                 } else if (choice == (i - 3)) {
                     //TODO:View a dashboard with store and seller information.
-                } else if (choice == (i - 2)) {
+                } else if (choice == (i - 2)) {    //view shopping cart
                     do {
                         ArrayList<ShoppingCart> shoppingCart = customer.getShoppingCart();
                         if (shoppingCart.isEmpty()) {
@@ -287,6 +285,7 @@ public class Market {
                         }
 
                         String input;
+                        System.out.println();
                         do {
                             System.out.println("1. Purchase all products.");
                             System.out.println("2. Delete product from shopping cart.");
@@ -305,15 +304,17 @@ public class Market {
                                         for (int k = 0; k < products.size(); k++) {
                                             if (products.get(k).getProductName().equals(shoppingCart.get(b).getProduct().getProductName())) {
                                                 if (stores.get(f).purchaseProductFromStore(products.get(k), shoppingCart.get(b).getAmount(), customer)) {
+                                                    shoppingCart.remove(shoppingCart.get(b));
                                                     System.out.printf("Purchased %s successfully!\n", products.get(k).getProductName());
+                                                    customer.saveCustomer();
                                                     for (int o = 0; o < sellers.size(); o++) {
                                                         if (sellers.get(o).getUsername().equals(stores.get(f).getSeller())) {
                                                             sellers.get(o).saveSeller();
                                                         }
                                                     }
+                                                }else {
+                                                    System.out.printf("Sorry, we don't have enough items of %s available.\n", products.get(k).getProductName());
                                                 }
-                                            } else {
-                                                System.out.printf("Sorry, we don't have enough items of %s available.\n", products.get(k).getProductName());
                                             }
                                         }
                                     }
@@ -331,6 +332,8 @@ public class Market {
                                     if (intInput > 0 && intInput <= shoppingCart.size()) {
                                         shoppingCart.remove(intInput - 1);
                                         System.out.println("Product removed from shopping cart!");
+                                        customer.saveCustomer();
+                                        break;
                                     } else {
                                         System.out.println("Please enter an option corresponding to a product.");
                                     }
@@ -377,7 +380,7 @@ public class Market {
                         }
                     }
                     System.out.println("Success! Returning to main page...");
-                } else if (choice == 1) return;
+                } else if (choice == i) return;
             }
         }
     }
@@ -447,6 +450,7 @@ public class Market {
                             for (int i = 0; i < sellers.size(); i++) {
                                 if (sellers.get(i).getUsername().equals(currentStore.getSeller())) {
                                     customer.addShoppingCart(currentProduct, sellers.get(i), amount1);
+                                    customer.saveCustomer();
                                     System.out.println("Successfully added to shopping cart!");
                                     System.out.println("Returning to product's page...\n");
                                 }
@@ -460,7 +464,7 @@ public class Market {
                     }
                     break;
                 case "3":
-                    return;   //returns true indicating user wants to return to main page
+                    return;   //returns to main page
                 default:
                     System.out.println("Please enter an existing option.");
             }
@@ -477,15 +481,16 @@ public class Market {
                 System.out.println("3. View a dashboard with statistics for each stores.");
                 System.out.println("4. View number of products in shopping carts.");
                 System.out.println("5. Modify Account.");
-                System.out.println("6. Exit.");
+                System.out.println("6. Create a store.");
+                System.out.println("7. Exit.");
                 try {    //if input is not Integer, catch exception and repeat main page prompt
                     choice = Integer.parseInt(scanner.nextLine());
-                    if (choice < 1 || choice > 6)
+                    if (choice < 1 || choice > 7)
                         System.out.println("Please enter an available option.");
                 } catch (NumberFormatException e) {
                     System.out.println("Please enter an available option.");
                 }
-            } while (!(choice >= 1 && choice <= 6));
+            } while (!(choice >= 1 && choice <= 7));
 
             if (choice == 1) { // Modify products
                 boolean valid;
@@ -537,7 +542,7 @@ public class Market {
                             System.out.println("Please enter an option corresponding to a product.");
                     } while (!(input.equals("1") || input.equals("2")));
 
-                    if (input.equals("1")) {
+                    if (input.equals("1")) {    //Import product from csv.
                         System.out.println("Please enter the file path to the csv file.");
                         String file = scanner.nextLine();
 
@@ -570,11 +575,7 @@ public class Market {
                                     if (availableQuantity > 0 && price >= 0) {
                                         currentStore.addProduct(new Product(productName, description, availableQuantity, price, currentStore.getStoreName()));
                                         System.out.println("Product added!");
-                                        ArrayList<Store> stores = Store.loadAllStores();
-                                        for (int i = 0; i < stores.size(); i++) {
-                                            if (stores.get(i).getSeller().equals(currentStore.getSeller()))
-                                                stores.get(i).saveStore();
-                                        }
+                                        seller.saveSeller();
                                     } else {
                                         System.out.println("Product has invalid data!");
                                     }
@@ -587,7 +588,7 @@ public class Market {
                         } catch (Exception e) {
                             System.out.println("Error reading in product!");
                         }
-                    } else if (input.equals("2")) {
+                    } else if (input.equals("2")) {    //Create product in terminal.
                         System.out.println("Please enter a product name:");
                         String name = scanner.nextLine();
                         System.out.println("Please enter a product description:");
@@ -623,11 +624,8 @@ public class Market {
 
                         currentStore.addProduct(new Product(name, description, quantity, price, currentStore.getStoreName()));
                         System.out.println("Product added!");
-                        ArrayList<Store> stores = Store.loadAllStores();
-                        for (int i = 0; i < stores.size(); i++) {
-                            if (stores.get(i).getSeller().equals(currentStore.getSeller()))
-                                stores.get(i).saveStore();
-                        }
+                        currentStore.saveStore();
+                        seller.saveSeller();
                     }
                 } else if (modifyOption == 2) {    //edit a product
                     int productNum = -1;
@@ -998,7 +996,12 @@ public class Market {
                     }
                 }
                 System.out.println("Success! Returning to main menu.");
-            } else if (choice == 6) return;
+            } else if(choice == 6){
+                System.out.println("Please enter a store name:");
+                String name = scanner.nextLine();
+                Store store = new Store(name,seller.getUsername());
+                seller.addStore(store);
+            } else if (choice == 7) return;
         } while (true);
     }
 }
