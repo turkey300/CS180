@@ -22,8 +22,8 @@ public class Customer implements Serializable {
         }
     }
 
-    public void addShoppingCart(Product product, int sellerIndex, int storeIndex, int productIndex, int amount) {
-        shoppingCart.add(new ShoppingCart(product, sellerIndex, storeIndex, productIndex, amount));
+    public void addShoppingCart(Product product, Seller seller, int amount) {
+        shoppingCart.add(new ShoppingCart(product, seller, amount));
         saveCustomer();
     }
 

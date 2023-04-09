@@ -320,7 +320,34 @@ public class Market {
                     }
                     break;
                 case "2":
-                    //TODO:add to cart
+                    int amount1;
+                    while (true) {
+                        System.out.println("What amount would you like to purchase?");
+                        try {
+                            amount1 = Integer.parseInt(scanner.nextLine());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Please input valid number.");
+                            continue;
+                        }
+                        if (amount1 < 0) {
+                            System.out.println("Please input valid number.");
+                            continue;
+                        }
+                        if (amount1 <= currentProduct.getAvailableQuantity()) {
+                            for (int i = 0; i < sellers.size(); i++) {
+                                if (sellers.get(i).getUsername().equals(currentStore.getSeller())) {
+                                    customer.addShoppingCart(currentProduct, sellers.get(i), amount1);
+                                    System.out.println("Successfully added to shopping cart!");
+                                    System.out.println("Returning to product's page...\n");
+                                }
+                            }
+                            break;
+                        } else {
+                            System.out.println("Sorry, we don't have enough items available.");
+                            System.out.println("Returning to product's page...\n");
+                            break;
+                        }
+                    }
                     break;
                 case "3":
                     return;   //returns true indicating user wants to return to main page
