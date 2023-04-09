@@ -7,7 +7,7 @@ public class Market {
     public static void main(String[] args) {
         // logging in/creating account
         Scanner scanner = new Scanner(System.in);
-        String userType;    //1 for Seller, 2 for Customer
+        String userType;    //1 for Seller, 12 for Customer
         String accountType; //1 for login or 2 for creating account
         String username;
         String password;
@@ -658,15 +658,19 @@ public class Market {
                     revenue = storelist[i].getRevenue();
                     customers = storelist[i].getCustList();
                     amount = storelist[i].getPurchased();
-                    String[] revlist = new String[revenue.size()];
-                    String[] custlist = new String[customers.size()];
-                    String[] purchased = new String[amount.size()];
-                    System.out.println(storename[i]);
-                    for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
-                        revlist[j] = (revenue.get(j)).toString();
-                        custlist[j] = (customers.get(j));
-                        purchased[j] = (amount.get(j)).toString();
-                        System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                    try {
+                        String[] revlist = new String[revenue.size()];
+                        String[] custlist = new String[customers.size()];
+                        String[] purchased = new String[amount.size()];
+                        System.out.println(storename[i]);
+                        for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                            revlist[j] = (revenue.get(j)).toString();
+                            custlist[j] = (customers.get(j));
+                            purchased[j] = (amount.get(j)).toString();
+                            System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                        }
+                    } catch (NullPointerException e) {
+                        System.out.println("No sales have been made on this store");
                     }
                 }
 
