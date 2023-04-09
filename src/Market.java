@@ -700,7 +700,7 @@ public class Market {
                             valid = false;
                         }
                     } while (!valid);
-                    Product currentProduct = currentStore.getProduct(productNum);
+                    Product currentProduct = currentStore.getProduct((productNum - 1));
                     System.out.println(currentProduct.productPageDisplay());
                     System.out.println("1. Edit product name.");
                     System.out.println("2. Edit product description.");
