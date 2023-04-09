@@ -382,7 +382,57 @@ public class Market {
                     }
                     System.out.println("Success! Returning to main page...");
                 } else if (choice == (i - 1)) {
-                    //TODO purchase history
+                    ArrayList<PurchaseHistory> purchaseHistory = customer.getPurchaseHistory();
+                    if (purchaseHistory.isEmpty()) {
+                        System.out.println("No purchase history.");
+                    } else {
+                        System.out.println("Purchase history: (Newest products purchased listed first)");
+                        for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
+                            PurchaseHistory product = purchaseHistory.get(j);
+                            System.out.printf("Product: %s. Amount purchased: %d\n",
+                                    product.getProduct().getProductName(), product.getAmount());
+                        }
+
+                        System.out.println();
+                        System.out.println("1. Export purchase history.");
+                        System.out.println("2. Exit");
+
+                        while (true) {
+                            String input = scanner.nextLine();
+                            try {
+                                int option = Integer.parseInt(input);
+                                if (option == 1) {
+                                    System.out.println("Please enter the file path to export to.");
+                                    while (true) {
+                                        String file = scanner.nextLine();
+                                        File f = new File(file);
+                                        if (f.exists()) {
+                                            System.out.println("This file already exists! Try a new file path.");
+                                        } else {
+                                            try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
+                                                for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
+                                                    PurchaseHistory product = purchaseHistory.get(j);
+                                                    pw.printf("Product: %s. Amount purchased: %d\n",
+                                                            product.getProduct().getProductName(), product.getAmount());
+                                                }
+                                                System.out.println("Purchase history exported!");
+                                                break;
+                                            } catch (Exception e) {
+                                                System.out.println("Error writing to file!");
+                                            }
+                                        }
+                                    }
+                                    break;
+                                } else if (option == 2) {
+                                    break;
+                                } else {
+                                    System.out.println("Please enter a number corresponding to an option.");
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Please enter a number corresponding to an option.");
+                            }
+                        }
+                    }
                 } else if (choice == i) return;
 
             }
@@ -735,7 +785,7 @@ public class Market {
                                 for (int i = 0; i < products.size(); i++) {
 //                productName;description;int availableQuantity;double price;String storeName
                                     Product product = products.get(i);
-                                    pw.printf("%s,%s,%d,%f,%s", product.getProductName(), product.getDescription(),
+                                    pw.printf("%s,%s,%d,%f,%s\n", product.getProductName(), product.getDescription(),
                                             product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
                                 }
                             } catch (Exception e) {
