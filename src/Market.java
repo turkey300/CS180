@@ -537,7 +537,6 @@ public class Market {
                     }
                 } while (!valid);
                 if (modifyOption == 1) {    //add a product
-                    //TODO:"Sellers can import or export products for their stores using a csv file"?
                     String input;
                     do {
                         System.out.println("1. Import product from csv.\n2. Create product in terminal.");
