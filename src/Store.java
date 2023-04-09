@@ -9,6 +9,12 @@ public class Store implements Serializable {
     //as Store contains Product(s) as a field, have to access the product through the store
     private int productsSold;//total number of products sold
 
+    private ArrayList<Integer> purchased = new ArrayList<>();
+
+    private ArrayList<Double> revenue = new ArrayList<>(); //Revenue for each sale in a list for the store
+
+    private ArrayList<String> custlist = new ArrayList<>();
+
     public Store(String storeName, String seller, ArrayList<Product> products) {
         this.storeName = storeName;
         this.seller = seller;
@@ -42,6 +48,14 @@ public class Store implements Serializable {
         return seller;
     }
 
+    public int getProductsSold() { return productsSold;}
+
+   public ArrayList<Double> getRevenue() { return revenue;}
+
+    public ArrayList<String> getCustList() { return custlist;}
+
+    public ArrayList<Integer> getPurchased() { return purchased;}
+
     public void addProduct(Product product) {//adds a new product to the store
         products.add(product);
         saveStore();
@@ -52,9 +66,12 @@ public class Store implements Serializable {
         saveStore();
     }
 
-    public boolean purchaseProductFromStore(Product product, int amount) {
+    public boolean purchaseProductFromStore(Product product, int amount, Customer customer) {
         if (product.purchase(amount)) {
             this.productsSold += amount;
+            this.revenue.add(product.getPrice() * amount);
+            this.custlist.add(customer.getUsername());
+            this.purchased.add(amount);
             saveStore();
             return true;
         } else {

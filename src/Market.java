@@ -165,7 +165,7 @@ public class Market {
                 continue;    //start the main page prompts again
             } else if (choice <= (i - 4)) {    //user selected a product
                 Product currentProduct = allProducts.get((choice - 1));
-                productPage(scanner, currentProduct, allStores, sellers);
+                productPage(scanner, currentProduct, allStores, sellers, customer);
 
             } else {    //user selected an option below listed products
                 if (choice == (i - 3)) {
@@ -199,7 +199,7 @@ public class Market {
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = filteredProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers);
+                            productPage(scanner, currentProduct, allStores, sellers, customer);
                             toMainPage = true;
                         }
                     }
@@ -229,7 +229,7 @@ public class Market {
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers);
+                            productPage(scanner, currentProduct, allStores, sellers, customer);
                             toMainPage = true;
                         }
                     }
@@ -261,7 +261,7 @@ public class Market {
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers);
+                            productPage(scanner, currentProduct, allStores, sellers, customer);
                             toMainPage = true;
                         }
                     }
@@ -273,7 +273,7 @@ public class Market {
     }
 
     public static void productPage(Scanner scanner, Product currentProduct, ArrayList<Store> stores,
-                                   ArrayList<Seller> sellers) {
+                                   ArrayList<Seller> sellers, Customer customer) {
         //this is a separated method used to display product's page and realize further operations
         //it ends and returns void only when user selects "back to main page"
         Store currentStore = null;
@@ -303,7 +303,7 @@ public class Market {
                             System.out.println("Please input valid number.");
                             continue;
                         }
-                        if (currentStore.purchaseProductFromStore(currentProduct, amount)) {
+                        if (currentStore.purchaseProductFromStore(currentProduct, amount, customer)) {
                             System.out.println("Purchased successfully!");
                             System.out.println("Returning to product's page...\n");
                             for (int i = 0; i < sellers.size(); i++) {
@@ -489,6 +489,33 @@ public class Market {
             }
         } else if (choice == 2) {
             //TODO:View a list of sales by store
+            ArrayList<Store> sellstore = new ArrayList<>();
+            sellstore = seller.getStores();
+            Store[] storelist = new Store[sellstore.size()];
+            String[] storename = new String[storelist.length];
+            ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
+            ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
+            ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
+            for (int i = 0; i < storelist.length; i++){
+                storelist[i] = sellstore.get(i);
+                storename[i] = storelist[i].getStoreName();
+            }
+            for (int i = 0; i < storelist.length; i++){ //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
+                revenue = storelist[i].getRevenue();
+                customers = storelist[i].getCustList();
+                amount = storelist[i].getPurchased();
+                String[] revlist = new String[revenue.size()];
+                String[] custlist = new String[customers.size()];
+                String[] purchased = new String[amount.size()];
+                System.out.println(storename[i]);
+                for (int j = 0; j < revlist.length; j++){ // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                    revlist[j] = (revenue.get(j)).toString();
+                    custlist[j] = (customers.get(j));
+                    purchased[j] = (amount.get(j)).toString();
+                    System.out.printf("Customer %s pruchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                }
+            }
+
         } else {    //choice = 3
             //TODO:View a dashboard with statistics for each stores
         }
