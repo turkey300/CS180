@@ -1,3 +1,4 @@
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -358,194 +359,256 @@ public class Market {
     }
 
     public static void sellerMarketplace(Scanner scanner, Seller seller) {
-        int choice = 0;
-        System.out.println("What would you like to do?");
         do {
-            System.out.println("1. Modify products.");
-            System.out.println("2. View a list of sales by store.");
-            System.out.println("3. View a dashboard with statistics for each stores.");
-            try {    //if input is not Integer, catch exception and repeat main page prompt
-                choice = Integer.parseInt(scanner.nextLine());
-                if (choice < 1 || choice > 3)
-                    System.out.println("Please enter an available option.");
-            } catch (NumberFormatException e) {
-                System.out.println("Please enter an available option.");
-            }
-        } while (!(choice >= 1 && choice <= 3));
-
-        if (choice == 1) { // Modify products
-            boolean valid;
-            int storeNum = 0;
-            System.out.println("Which store would you like to edit?");
+            int choice = 0;
+            System.out.println("What would you like to do?");
             do {
-                valid = true;
-                for (int i = 0; i < seller.getStores().size(); i++) {
-                    System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
+                System.out.println("1. Modify products.");
+                System.out.println("2. View a list of sales by store.");
+                System.out.println("3. View a dashboard with statistics for each stores.");
+                System.out.println("4. View number of products in shopping carts.");
+                System.out.println("5. Modify Account.");
+                System.out.println("5. Exit.");
+                try {    //if input is not Integer, catch exception and repeat main page prompt
+                    choice = Integer.parseInt(scanner.nextLine());
+                    if (choice < 1 || choice > 6)
+                        System.out.println("Please enter an available option.");
+                } catch (NumberFormatException e) {
+                    System.out.println("Please enter an available option.");
                 }
-                try {
-                    storeNum = Integer.parseInt(scanner.nextLine());
-                    if (!(storeNum >= 1 && storeNum <= seller.getStores().size())) {
+            } while (!(choice >= 1 && choice <= 6));
+
+            if (choice == 1) { // Modify products
+                boolean valid;
+                int storeNum = 0;
+                System.out.println("Which store would you like to edit?");
+                do {
+                    valid = true;
+                    for (int i = 0; i < seller.getStores().size(); i++) {
+                        System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
+                    }
+                    try {
+                        storeNum = Integer.parseInt(scanner.nextLine());
+                        if (!(storeNum >= 1 && storeNum <= seller.getStores().size())) {
+                            System.out.println("Please enter a number corresponding to a store.");
+                            valid = false;
+                        }
+                    } catch (NumberFormatException e) {
                         System.out.println("Please enter a number corresponding to a store.");
                         valid = false;
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter a number corresponding to a store.");
-                    valid = false;
-                }
-            } while (!valid);
-            Store currentStore = seller.getStore((storeNum - 1));
+                } while (!valid);
+                Store currentStore = seller.getStore((storeNum - 1));
 //            storeNum -= 1;
-            System.out.println("What would you like to do?");
-            System.out.println("1. Add a product");
-            System.out.println("2. Edit a product");
-            System.out.println("3. Delete a product");
-            int modifyOption = 0;
-            do {
-                valid = true;
-                try {
-                    modifyOption = Integer.parseInt(scanner.nextLine());
-                    if (modifyOption < 1 || modifyOption > 3) {
+                System.out.println("What would you like to do?");
+                System.out.println("1. Add a product");
+                System.out.println("2. Edit a product");
+                System.out.println("3. Delete a product");
+                int modifyOption = 0;
+                do {
+                    valid = true;
+                    try {
+                        modifyOption = Integer.parseInt(scanner.nextLine());
+                        if (modifyOption < 1 || modifyOption > 3) {
+                            System.out.println("Please enter an available option.");
+                            valid = false;
+                        }
+                    } catch (NumberFormatException e) {
                         System.out.println("Please enter an available option.");
                         valid = false;
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter an available option.");
-                    valid = false;
-                }
-            } while (!valid);
-            if (modifyOption == 1) {    //add a product
-                //TODO:"Sellers can import or export products for their stores using a csv file"?
+                } while (!valid);
+                if (modifyOption == 1) {    //add a product
+                    //TODO:"Sellers can import or export products for their stores using a csv file"?
 //                productName;description;int availableQuantity;double price;String storeName;
-                System.out.println("Please enter a product name:");
-                String name = scanner.nextLine();
-                System.out.println("Please enter a product description:");
-                String description = scanner.nextLine();
-                System.out.println("Please enter an available quantity.");
-            } else if (modifyOption == 2) {    //edit a product
-                int productNum = -1;
-                do {
-                    valid = true;
-                    for (int i = 0; i < currentStore.getProducts().size(); i++) {
-                        System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
-                                .getProductName(), currentStore.getProduct(i).getProductName());
-                    }
-                    System.out.println("Please select a product to edit.");
-                    try {
-                        productNum = Integer.parseInt(scanner.nextLine());
-                        if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+                    System.out.println("Please enter a product name:");
+                    String name = scanner.nextLine();
+                    System.out.println("Please enter a product description:");
+                    String description = scanner.nextLine();
+                    System.out.println("Please enter an available quantity.");
+                } else if (modifyOption == 2) {    //edit a product
+                    int productNum = -1;
+                    do {
+                        valid = true;
+                        for (int i = 0; i < currentStore.getProducts().size(); i++) {
+                            System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
+                                    .getProductName(), currentStore.getProduct(i).getProductName());
+                        }
+                        System.out.println("Please select a product to edit.");
+                        try {
+                            productNum = Integer.parseInt(scanner.nextLine());
+                            if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+                                System.out.println("Please enter a number corresponding to a product.");
+                                valid = false;
+                            }
+                        } catch (NumberFormatException e) {
                             System.out.println("Please enter a number corresponding to a product.");
                             valid = false;
                         }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Please enter a number corresponding to a product.");
-                        valid = false;
-                    }
-                } while (!valid);
-                Product currentProduct = currentStore.getProduct(productNum);
-                System.out.println(currentProduct.productPageDisplay());
-                System.out.println("1. Edit product name.");
-                System.out.println("2. Edit product description.");
-                System.out.println("3. Edit product available quantity.");
-                System.out.println("4. Edit product price.");
-                do {
-                    valid = true;
-                    String editOption = scanner.nextLine();
-                    if (editOption.equals("1")) {
-                        System.out.println("Please enter a new product name:");
-                        String name = scanner.nextLine();
-                        currentProduct.editProductName(name);
-                    } else if (editOption.equals("2")) {
-                        System.out.println("Please enter a new product description:");
-                        String description = scanner.nextLine();
-                        currentProduct.editDescription(description);
-                    } else if (editOption.equals("3")) {
-                        int availableQuantity = -1;
-                        do {
-                            System.out.println("Please enter a new available quantity:");
-                            try {
-                                availableQuantity = Integer.parseInt(scanner.nextLine());
-                                if (availableQuantity < 0)
+                    } while (!valid);
+                    Product currentProduct = currentStore.getProduct(productNum);
+                    System.out.println(currentProduct.productPageDisplay());
+                    System.out.println("1. Edit product name.");
+                    System.out.println("2. Edit product description.");
+                    System.out.println("3. Edit product available quantity.");
+                    System.out.println("4. Edit product price.");
+                    do {
+                        valid = true;
+                        String editOption = scanner.nextLine();
+                        if (editOption.equals("1")) {
+                            System.out.println("Please enter a new product name:");
+                            String name = scanner.nextLine();
+                            currentProduct.editProductName(name);
+                        } else if (editOption.equals("2")) {
+                            System.out.println("Please enter a new product description:");
+                            String description = scanner.nextLine();
+                            currentProduct.editDescription(description);
+                        } else if (editOption.equals("3")) {
+                            int availableQuantity = -1;
+                            do {
+                                System.out.println("Please enter a new available quantity:");
+                                try {
+                                    availableQuantity = Integer.parseInt(scanner.nextLine());
+                                    if (availableQuantity < 0)
+                                        System.out.println("Please enter a non-negative integer.");
+                                } catch (NumberFormatException e) {
                                     System.out.println("Please enter a non-negative integer.");
-                            } catch (NumberFormatException e) {
-                                System.out.println("Please enter a non-negative integer.");
-                            }
-                        } while (availableQuantity < 0);
-                        currentProduct.editAvailableQuantity(availableQuantity);
-                    } else if (editOption.equals("4")) {
-                        double price = -1;
-                        do {
-                            System.out.println("Please enter a new price:");
-                            try {
-                                price = Double.parseDouble(scanner.nextLine());
-                                if (price < 0)
+                                }
+                            } while (availableQuantity < 0);
+                            currentProduct.editAvailableQuantity(availableQuantity);
+                        } else if (editOption.equals("4")) {
+                            double price = -1;
+                            do {
+                                System.out.println("Please enter a new price:");
+                                try {
+                                    price = Double.parseDouble(scanner.nextLine());
+                                    if (price < 0)
+                                        System.out.println("Please enter a non-negative number.");
+                                } catch (NumberFormatException e) {
                                     System.out.println("Please enter a non-negative number.");
-                            } catch (NumberFormatException e) {
-                                System.out.println("Please enter a non-negative number.");
+                                }
+                            } while (price < 0);
+                            currentProduct.editPrice(price);
+                        } else {
+                            System.out.println("Please enter an available option.");
+                            valid = false;
+                        }
+                    } while (!valid);
+                    seller.saveSeller();
+                } else {    //modify option = 3;delete a product
+                    int productNum = -1;
+                    do {
+                        valid = true;
+                        for (int i = 0; i < currentStore.getProducts().size(); i++) {
+                            System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
+                                    .getProductName(), currentStore.getProduct(i).getProductName());
+                        }
+                        System.out.println("Please select a product to edit.");
+                        try {
+                            productNum = Integer.parseInt(scanner.nextLine());
+                            if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+                                System.out.println("Please enter a number corresponding to a product.");
+                                valid = false;
                             }
-                        } while (price < 0);
-                        currentProduct.editPrice(price);
-                    } else {
-                        System.out.println("Please enter an available option.");
-                        valid = false;
-                    }
-                } while (!valid);
-                seller.saveSeller();
-            } else {    //modify option = 3;delete a product
-                int productNum = -1;
-                do {
-                    valid = true;
-                    for (int i = 0; i < currentStore.getProducts().size(); i++) {
-                        System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
-                                .getProductName(), currentStore.getProduct(i).getProductName());
-                    }
-                    System.out.println("Please select a product to edit.");
-                    try {
-                        productNum = Integer.parseInt(scanner.nextLine());
-                        if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+                        } catch (NumberFormatException e) {
                             System.out.println("Please enter a number corresponding to a product.");
                             valid = false;
                         }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Please enter a number corresponding to a product.");
-                        valid = false;
-                    }
-                } while (!valid);
-                Product currentProduct = currentStore.getProduct(productNum);
-                currentStore.deleteProduct(currentProduct);
-                seller.saveSeller();
-            }
-        } else if (choice == 2) {
-            //TODO:View a list of sales by store
-            ArrayList<Store> sellstore = new ArrayList<>();
-            sellstore = seller.getStores();
-            Store[] storelist = new Store[sellstore.size()];
-            String[] storename = new String[storelist.length];
-            ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
-            ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
-            ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
-            for (int i = 0; i < storelist.length; i++){
-                storelist[i] = sellstore.get(i);
-                storename[i] = storelist[i].getStoreName();
-            }
-            for (int i = 0; i < storelist.length; i++){ //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
-                revenue = storelist[i].getRevenue();
-                customers = storelist[i].getCustList();
-                amount = storelist[i].getPurchased();
-                String[] revlist = new String[revenue.size()];
-                String[] custlist = new String[customers.size()];
-                String[] purchased = new String[amount.size()];
-                System.out.println(storename[i]);
-                for (int j = 0; j < revlist.length; j++){ // I'm not sure why I made the Double and Integer arrays into Strings but I did so
-                    revlist[j] = (revenue.get(j)).toString();
-                    custlist[j] = (customers.get(j));
-                    purchased[j] = (amount.get(j)).toString();
-                    System.out.printf("Customer %s pruchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                    } while (!valid);
+                    Product currentProduct = currentStore.getProduct(productNum);
+                    currentStore.deleteProduct(currentProduct);
+                    seller.saveSeller();
                 }
-            }
 
-        } else {    //choice = 3
-            //TODO:View a dashboard with statistics for each stores
-        }
+                System.out.println("Returning to main menu.");
+            } else if (choice == 2) {
+                //TODO:View a list of sales by store
+                ArrayList<Store> sellstore = new ArrayList<>();
+                sellstore = seller.getStores();
+                Store[] storelist = new Store[sellstore.size()];
+                String[] storename = new String[storelist.length];
+                ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
+                ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
+                ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
+                for (int i = 0; i < storelist.length; i++) {
+                    storelist[i] = sellstore.get(i);
+                    storename[i] = storelist[i].getStoreName();
+                }
+                for (int i = 0; i < storelist.length; i++) { //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
+                    revenue = storelist[i].getRevenue();
+                    customers = storelist[i].getCustList();
+                    amount = storelist[i].getPurchased();
+                    String[] revlist = new String[revenue.size()];
+                    String[] custlist = new String[customers.size()];
+                    String[] purchased = new String[amount.size()];
+                    System.out.println(storename[i]);
+                    for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                        revlist[j] = (revenue.get(j)).toString();
+                        custlist[j] = (customers.get(j));
+                        purchased[j] = (amount.get(j)).toString();
+                        System.out.printf("Customer %s pruchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                    }
+                }
+
+                System.out.println("Returning to main menu.");
+            } else if (choice == 3) {    //choice = 3, statiscs
+                //TODO:View a dashboard with statistics for each stores
+            } else if (choice == 4) { // view shopping carts
+                // this code is really really really bad but i sure hope it works
+                // gotta test this
+                ArrayList<Customer> customers = Customer.loadAllCustomers();
+                ArrayList<Store> stores = seller.getStores();
+                for (int i = 0; i < stores.size(); i++) {
+                    ArrayList<Product> products = stores.get(i).getProducts();
+                    for (int j = 0; j < products.size(); j++) {
+                        int amount = 0;
+                        for (int k = 0; k < customers.size(); k++) {
+                            ArrayList<ShoppingCart> cart = customers.get(k).getShoppingCart();
+                            for (int l = 0; l < cart.size(); l++) {
+                                if (products.get(j).getProductName().equals(cart.get(l).getProduct().getProductName()))
+                                    amount += cart.get(l).getAmount();
+                            }
+                        }
+                        System.out.println(products.get(i).productPageDisplay());
+                        System.out.println("Amount of product in shopping carts: " + amount);
+                    }
+                }
+            } else if (choice == 5) { // modify account
+                String input;
+                do {
+                    System.out.println("1. Edit username.");
+                    System.out.println("2. Edit password.");
+                    System.out.println("3. Delete account.");
+                    input = scanner.nextLine();
+                    if (!(input.equals("1") || input.equals("2") || input.equals("3")))
+                        System.out.println("Please enter a number corresponding to an option.");
+                } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
+
+                if (input.equals("1")) {
+                    System.out.println("What is your new username?");
+                    input = scanner.nextLine();
+                    seller.setUsername(input);
+                } else if (input.equals("2")) {
+                    System.out.println("What is your new password?");
+                    input = scanner.nextLine();
+                    seller.setPassword(input);
+                } else if (input.equals("3")) {
+                    System.out.println("Are you sure you want to delete your account?");
+                    System.out.println("1. Yes\n2. No");
+                    input = scanner.nextLine();
+                    if (input.equals("1")) {
+                        seller.deleteAccount();
+                        System.out.println("Account has been deleted.");
+                        return;
+                    }
+                }
+
+                System.out.println("Success! Returning to main menu.");
+            } else if (choice == 6) {
+                System.out.println("Goodbye!");
+                return;
+            }
+        } while (true);
     }
 }
 

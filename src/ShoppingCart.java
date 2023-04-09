@@ -44,5 +44,13 @@ public class ShoppingCart implements Serializable {
     public Product getProduct() {
         return product;
     }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
 }
 

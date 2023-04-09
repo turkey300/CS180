@@ -22,6 +22,19 @@ public class Customer implements Serializable {
         }
     }
 
+    public static ArrayList<Customer> loadAllCustomers() {
+        ArrayList<Customer> allCustomers = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("customerList.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allCustomers.add(loadCustomer(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return allCustomers;
+    }
+
     public void addShoppingCart(Product product, Seller seller, int amount) {
         shoppingCart.add(new ShoppingCart(product, seller, amount));
         saveCustomer();
