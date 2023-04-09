@@ -39,7 +39,7 @@ public class ShoppingCart implements Serializable {
         if (a == -1)
             return 1;
 
-        return 1;
+        return 0;
     }
     public Product getProduct() {
         return product;
