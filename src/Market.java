@@ -1,3 +1,4 @@
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -511,12 +512,13 @@ public class Market {
                 System.out.println("1. Add a product");
                 System.out.println("2. Edit a product");
                 System.out.println("3. Delete a product");
+                System.out.println("4. Export products");
                 int modifyOption = 0;
                 do {
                     valid = true;
                     try {
                         modifyOption = Integer.parseInt(scanner.nextLine());
-                        if (modifyOption < 1 || modifyOption > 3) {
+                        if (modifyOption < 1 || modifyOption > 4) {
                             System.out.println("Please enter an available option.");
                             valid = false;
                         }
@@ -538,14 +540,95 @@ public class Market {
                     if (input.equals("1")) {
                         System.out.println("Please enter the file path to the csv file.");
                         String file = scanner.nextLine();
+
+                        File f = new File(file);
+                        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                            String line = bfr.readLine();
+                            while (line != null) {
+//                productName;description;int availableQuantity;double price;String storeName
+                                try {
+                                    String productName;
+                                    String description;
+                                    int availableQuantity;
+                                    double price;
+                                    String storeName;
+                                    String substring;
+
+                                    productName = line.substring(0, line.indexOf(","));
+                                    productName = productName.replaceAll("\"", "");
+                                    substring = line.substring(line.indexOf(",") + 1);
+                                    description = substring.substring(0, substring.indexOf(","));
+                                    description = description.replaceAll("\"", "");
+                                    substring = substring.substring(substring.indexOf(",") + 1);
+                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf(",")).replaceAll("\"", ""));
+                                    substring = substring.substring(substring.indexOf(",") + 1);
+                                    price = Double.parseDouble(substring.substring(0, substring.indexOf(",")).replaceAll("\"", ""));
+                                    storeName = substring.substring(substring.indexOf(",") + 1);
+                                    storeName = storeName.replaceAll("\"", "");
+
+
+                                    if (availableQuantity > 0 && price >= 0) {
+                                        currentStore.addProduct(new Product(productName, description, availableQuantity, price, currentStore.getStoreName()));
+                                        System.out.println("Product added!");
+                                        ArrayList<Store> stores = Store.loadAllStores();
+                                        for (int i = 0; i < stores.size(); i++) {
+                                            if (stores.get(i).getSeller().equals(currentStore.getSeller()))
+                                                stores.get(i).saveStore();
+                                        }
+                                    } else {
+                                        System.out.println("Product has invalid data!");
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Error parsing product!");
+                                }
+
+                                line = bfr.readLine();
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Error reading in product!");
+                        }
                     } else if (input.equals("2")) {
                         System.out.println("Please enter a product name:");
                         String name = scanner.nextLine();
                         System.out.println("Please enter a product description:");
                         String description = scanner.nextLine();
-                        System.out.println("Please enter an available quantity.");
+                        String q;
+                        String p;
+                        double price = -1;
+                        int quantity = 0;
+
+                        do {
+                            System.out.println("Please enter an available quantity.");
+                            q = scanner.nextLine();
+                            try {
+                                quantity = Integer.parseInt(q);
+                                if (quantity <= 0)
+                                    System.out.println("Please enter an integer greater than 0");
+                            } catch (Exception e) {
+                                System.out.println("Please enter an integer greater than 0");
+                            }
+                        } while (quantity <= 0);
+
+                        do {
+                            System.out.println("Please enter a price for the product.");
+                            p = scanner.nextLine();
+                            try {
+                                price = Double.parseDouble(p);
+                                if (price < 0)
+                                    System.out.println("Please enter a number greater or equal to 0");
+                            } catch (Exception e) {
+                                System.out.println("Please enter a number greater or equal to 0");
+                            }
+                        } while (!(price >= 0));
+
+                        currentStore.addProduct(new Product(name, description, quantity, price, currentStore.getStoreName()));
+                        System.out.println("Product added!");
+                        ArrayList<Store> stores = Store.loadAllStores();
+                        for (int i = 0; i < stores.size(); i++) {
+                            if (stores.get(i).getSeller().equals(currentStore.getSeller()))
+                                stores.get(i).saveStore();
+                        }
                     }
-//                productName;description;int availableQuantity;double price;String storeName;
                 } else if (modifyOption == 2) {    //edit a product
                     int productNum = -1;
                     do {
@@ -615,7 +698,7 @@ public class Market {
                         }
                     } while (!valid);
                     seller.saveSeller();
-                } else {    //modify option = 3;delete a product
+                } else if (modifyOption == 3) {    //modify option = 3;delete a product
                     int productNum = -1;
                     do {
                         valid = true;
@@ -638,6 +721,30 @@ public class Market {
                     Product currentProduct = currentStore.getProduct(productNum);
                     currentStore.deleteProduct(currentProduct);
                     seller.saveSeller();
+                } else if (modifyOption == 4) { //modify option = 4; export products
+                    while (true) {
+                        System.out.println("Please enter the file path to export to.");
+                        String file = scanner.nextLine();
+                        File f = new File(file);
+                        if (f.exists()) {
+                            System.out.println("This file already exists! Try a new file path.");
+                        } else {
+                            ArrayList<Product> products = currentStore.getProducts();
+                            try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
+                                for (int i = 0; i < products.size(); i++) {
+//                productName;description;int availableQuantity;double price;String storeName
+                                    Product product = products.get(i);
+                                    pw.printf("%s,%s,%d,%f,%s", product.getProductName(), product.getDescription(),
+                                            product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Error exporting file!");
+                            }
+
+                            System.out.println("Products exported!");
+                            break;
+                        }
+                    }
                 }
 
                 System.out.println("Returning to main menu.");
