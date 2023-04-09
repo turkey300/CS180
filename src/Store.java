@@ -72,6 +72,7 @@ public class Store implements Serializable {
             this.revenue.add(product.getPrice() * amount);
             this.custlist.add(customer.getUsername());
             this.purchased.add(amount);
+            customer.addPurchaseHistory(product, amount);
             saveStore();
             return true;
         } else {
