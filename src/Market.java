@@ -67,6 +67,7 @@ public class Market {
             } else if (userType.equals("1")) {    //log in as a seller
                 seller = sellerLogin(scanner);
             }
+            System.out.println("Goodbye!");
         }
 
         System.out.println("Successfully logged in!");
@@ -152,7 +153,10 @@ public class Market {
             System.out.println((i++) + ". Search for specific products.");
             System.out.println((i++) + ". Sort the marketplace on price.");
             System.out.println((i++) + ". Sort the marketplace on quantity available.");
-            System.out.println((i) + ". View a dashboard with store and seller information.");
+            System.out.println((i++) + ". View a dashboard with store and seller information.");
+            System.out.println((i++) + ". View shopping cart.");
+            System.out.println((i++) + ". Modify account.");
+            System.out.println((i) + ". Exit.");
             System.out.println("Please select a number to visit product's page or option you want to perform.");
             int choice;
             try {    //if input is not Integer, catch exception and repeat main page prompt
@@ -164,12 +168,12 @@ public class Market {
             if (choice > i || choice <= 0) {    //user chose a number not from the list
                 System.out.println("Please enter an existing option.");
                 continue;    //start the main page prompts again
-            } else if (choice <= (i - 4)) {    //user selected a product
+            } else if (choice <= (i - 7)) {    //user selected a product
                 Product currentProduct = allProducts.get((choice - 1));
                 productPage(scanner, currentProduct, allStores, sellers, customer);
 
             } else {    //user selected an option below listed products
-                if (choice == (i - 3)) {
+                if (choice == (i - 6)) {   //Search for specific products
                     System.out.println("Please enter a term to search for.");
                     String term = scanner.nextLine().toLowerCase();
 
@@ -204,7 +208,7 @@ public class Market {
                             toMainPage = true;
                         }
                     }
-                } else if (choice == (i - 2)) {
+                } else if (choice == (i - 5)) {
                     //Sort the marketplace on price:products with lower price are on the top
                     Collections.sort(allProducts, new ProductComparatorByPrice());
                     boolean toMainPage = false;
@@ -234,7 +238,7 @@ public class Market {
                             toMainPage = true;
                         }
                     }
-                } else if (choice == (i - 1)) {
+                } else if (choice == (i - 4)) {
                     //Sort the marketplace on quantity available:
                     //products with more items available are on the top
                     Collections.sort(allProducts, new ProductComparatorByAvailability());
@@ -266,9 +270,44 @@ public class Market {
                             toMainPage = true;
                         }
                     }
-                } else if (choice == i) {
+                } else if (choice == (i - 3)) {
                     //TODO:View a dashboard with store and seller information.
-                }
+                } else if (choice == (i - 2)) {
+                    //TODO:View shopping cart.
+                } else if (choice == (i - 1)) {    //Modify account
+                    String input;
+                    do {
+                        System.out.println("1. Edit username.");
+                        System.out.println("2. Edit password.");
+                        System.out.println("3. Delete account.");
+                        input = scanner.nextLine();
+                        if (!(input.equals("1") || input.equals("2") || input.equals("3")))
+                            System.out.println("Please enter a number corresponding to an option.");
+                    } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
+
+                    if (input.equals("1")) {
+                        System.out.println("What is your new username?");
+                        input = scanner.nextLine();
+                        customer.setUsername(input);
+                    } else if (input.equals("2")) {
+                        System.out.println("What is your new password?");
+                        input = scanner.nextLine();
+                        customer.setPassword(input);
+                    } else {
+                        System.out.println("Are you sure you want to delete your account?");
+                        System.out.println("1. Yes\n2. No");
+                        input = scanner.nextLine();
+                        if (input.equals("1")) {
+                            customer.deleteAccount();
+                            System.out.println("Account has been deleted.");
+                            return;
+                        } else {
+                            System.out.println("You chose not to delete this account! Returning to main page...");
+                            continue;
+                        }
+                    }
+                    System.out.println("Success! Returning to main page...");
+                } else if (choice == 1) return;
             }
         }
     }
@@ -290,7 +329,7 @@ public class Market {
             System.out.println("3. Back to main page.");
             String choiceOnProductPage = scanner.nextLine();
             switch (choiceOnProductPage) {
-                case "1":
+                case "1":   //purchase this product
                     int amount;
                     while (true) {
                         System.out.println("What amount would you like to purchase?");
@@ -320,10 +359,10 @@ public class Market {
                         }
                     }
                     break;
-                case "2":
+                case "2":    // Add this product to shopping cart
                     int amount1;
                     while (true) {
-                        System.out.println("What amount would you like to purchase?");
+                        System.out.println("What amount would you like to put into shopping cart?");
                         try {
                             amount1 = Integer.parseInt(scanner.nextLine());
                         } catch (NumberFormatException e) {
@@ -368,7 +407,7 @@ public class Market {
                 System.out.println("3. View a dashboard with statistics for each stores.");
                 System.out.println("4. View number of products in shopping carts.");
                 System.out.println("5. Modify Account.");
-                System.out.println("5. Exit.");
+                System.out.println("6. Exit.");
                 try {    //if input is not Integer, catch exception and repeat main page prompt
                     choice = Integer.parseInt(scanner.nextLine());
                     if (choice < 1 || choice > 6)
@@ -399,7 +438,6 @@ public class Market {
                     }
                 } while (!valid);
                 Store currentStore = seller.getStore((storeNum - 1));
-//            storeNum -= 1;
                 System.out.println("What would you like to do?");
                 System.out.println("1. Add a product");
                 System.out.println("2. Edit a product");
@@ -602,14 +640,13 @@ public class Market {
                         seller.deleteAccount();
                         System.out.println("Account has been deleted.");
                         return;
+                    } else {
+                        System.out.println("You chose not to delete this account! Returning to main menu...");
+                        continue;
                     }
                 }
-
                 System.out.println("Success! Returning to main menu.");
-            } else if (choice == 6) {
-                System.out.println("Goodbye!");
-                return;
-            }
+            } else if (choice == 6) return;
         } while (true);
     }
 }
