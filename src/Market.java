@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -514,12 +512,13 @@ public class Market {
                 System.out.println("1. Add a product");
                 System.out.println("2. Edit a product");
                 System.out.println("3. Delete a product");
+                System.out.println("4. Export products");
                 int modifyOption = 0;
                 do {
                     valid = true;
                     try {
                         modifyOption = Integer.parseInt(scanner.nextLine());
-                        if (modifyOption < 1 || modifyOption > 3) {
+                        if (modifyOption < 1 || modifyOption > 4) {
                             System.out.println("Please enter an available option.");
                             valid = false;
                         }
@@ -699,7 +698,7 @@ public class Market {
                         }
                     } while (!valid);
                     seller.saveSeller();
-                } else {    //modify option = 3;delete a product
+                } else if (modifyOption == 3) {    //modify option = 3;delete a product
                     int productNum = -1;
                     do {
                         valid = true;
@@ -722,6 +721,30 @@ public class Market {
                     Product currentProduct = currentStore.getProduct(productNum);
                     currentStore.deleteProduct(currentProduct);
                     seller.saveSeller();
+                } else if (modifyOption == 4) { //modify option = 4; export products
+                    while (true) {
+                        System.out.println("Please enter the file path to export to.");
+                        String file = scanner.nextLine();
+                        File f = new File(file);
+                        if (f.exists()) {
+                            System.out.println("This file already exists! Try a new file path.");
+                        } else {
+                            ArrayList<Product> products = currentStore.getProducts();
+                            try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
+                                for (int i = 0; i < products.size(); i++) {
+//                productName;description;int availableQuantity;double price;String storeName
+                                    Product product = products.get(i);
+                                    pw.printf("%s,%s,%d,%f,%s", product.getProductName(), product.getDescription(),
+                                            product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Error exporting file!");
+                            }
+
+                            System.out.println("Products exported!");
+                            break;
+                        }
+                    }
                 }
 
                 System.out.println("Returning to main menu.");
