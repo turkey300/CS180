@@ -527,12 +527,25 @@ public class Market {
                 } while (!valid);
                 if (modifyOption == 1) {    //add a product
                     //TODO:"Sellers can import or export products for their stores using a csv file"?
+                    String input;
+                    do {
+                        System.out.println("1. Import product from csv.\n2. Create product in terminal.");
+                        input = scanner.nextLine();
+                        if (!(input.equals("1") || input.equals("2")))
+                            System.out.println("Please enter an option corresponding to a product.");
+                    } while (!(input.equals("1") || input.equals("2")));
+
+                    if (input.equals("1")) {
+                        System.out.println("Please enter the file path to the csv file.");
+                        String file = scanner.nextLine();
+                    } else if (input.equals("2")) {
+                        System.out.println("Please enter a product name:");
+                        String name = scanner.nextLine();
+                        System.out.println("Please enter a product description:");
+                        String description = scanner.nextLine();
+                        System.out.println("Please enter an available quantity.");
+                    }
 //                productName;description;int availableQuantity;double price;String storeName;
-                    System.out.println("Please enter a product name:");
-                    String name = scanner.nextLine();
-                    System.out.println("Please enter a product description:");
-                    String description = scanner.nextLine();
-                    System.out.println("Please enter an available quantity.");
                 } else if (modifyOption == 2) {    //edit a product
                     int productNum = -1;
                     do {
