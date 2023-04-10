@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
  *
  * <p>Purdue University -- CS18000 -- Fall 2022</p>
  *
- * @author Purdue CS
- * @version August 22, 2022
+ * @author Ekaterina Tszyao, Ryan Timmerman, Dimitri Paikos
+ * @version 04/10/23
  */
 public class RunLocalTest {
     public static void main(String[] args) {

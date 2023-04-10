@@ -1,11 +1,19 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Seller Class
+ * <p>
+ * creates seller objects
+ *
+ * @author Ekaterina Tszyao, Ryan Timmerman, Dimitri Paikos
+ * @version 04/10/23
+ */
 public class Seller implements Serializable {
     private static final long serialVersionUID = 42L;
     private String username;
     private String password;
-    private ArrayList<Store> stores = new ArrayList<>();
+    private final ArrayList<Store> stores = new ArrayList<>();
 
     // sets up or makes sure account is correct
     public Seller(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException {
@@ -23,58 +31,61 @@ public class Seller implements Serializable {
         }
     }
 
-    public void setUsername(String username) {
-        File file = new File(this.username);
-        file.delete();
-
-        file = new File("sellers.txt");
-        ArrayList<String> lines2 = new ArrayList<>();
+    public static boolean checkIfSeller(String username) { // checks if username is seller
+        File file = new File("sellerList.txt"); // adds username to list
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
             String line = bfr.readLine();
             while (line != null) {
-                if (line.substring(0, line.indexOf(":")).equals(this.username)) {
-                    lines2.add(username + ":" + password);
-                } else {
-                    lines2.add(line);
-                }
+                if (line.equals(username))
+                    return true;
                 line = bfr.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
-            for (int i = 0; i < lines2.size(); i++) {
-                pw.println(lines2.get(i));
-            }
+
+        return false;
+    }
+
+    public static Seller loadSeller(String username) {
+        File file = new File(username);
+        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
+            Seller seller = (Seller) out.readObject();
+            return seller;
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        file = new File("sellerList.txt");
-        ArrayList<String> lines = new ArrayList<>();
-        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+        return null;
+    }
+
+    public static boolean checkAccount(String username, String password) {
+        File f = new File("sellers.txt");
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
             String line = bfr.readLine();
             while (line != null) {
-                if (line.equals(this.username)) {
-                    lines.add(username);
-                } else {
-                    lines.add(line);
-                }
+                if (line.equals(username + ":" + password))
+                    return true;
                 line = bfr.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
-            for (int i = 0; i < lines.size(); i++) {
-                pw.println(lines.get(i));
+
+        return false;
+    }
+
+    public static ArrayList<Seller> loadAllSellers() {
+        ArrayList<Seller> allSellers = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("sellerList.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allSellers.add(loadSeller(line));
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-
-        this.username = username;
-        saveSeller();
+        return allSellers;
     }
 
     public void setPassword(String password) {
@@ -149,21 +160,6 @@ public class Seller implements Serializable {
             e.printStackTrace();
         }
     }
-    public static boolean checkIfSeller(String username) { // checks if username is seller
-        File file = new File("sellerList.txt"); // adds username to list
-        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.equals(username))
-                    return true;
-                line = bfr.readLine();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
 
     public ArrayList<Store> getStores() {
         return stores;
@@ -184,6 +180,60 @@ public class Seller implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        File file = new File(this.username);
+        file.delete();
+
+        file = new File("sellers.txt");
+        ArrayList<String> lines2 = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.substring(0, line.indexOf(":")).equals(this.username)) {
+                    lines2.add(username + ":" + password);
+                } else {
+                    lines2.add(line);
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines2.size(); i++) {
+                pw.println(lines2.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        file = new File("sellerList.txt");
+        ArrayList<String> lines = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.equals(this.username)) {
+                    lines.add(username);
+                } else {
+                    lines.add(line);
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines.size(); i++) {
+                pw.println(lines.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.username = username;
+        saveSeller();
     }
 
     public void saveSeller() { // saves state of seller USE THIS TO UPDATE SELLER OBJECT FILE
@@ -211,18 +261,6 @@ public class Seller implements Serializable {
         }
     }
 
-    public static Seller loadSeller(String username) {
-        File file = new File(username);
-        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
-            Seller seller = (Seller) out.readObject();
-            return seller;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     public boolean writeAccount(String username, String password) {
         File f = new File("sellers.txt");
         try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
@@ -242,35 +280,6 @@ public class Seller implements Serializable {
         }
 
         return true;
-    }
-
-    public static boolean checkAccount(String username, String password) {
-        File f = new File("sellers.txt");
-        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.equals(username + ":" + password))
-                    return true;
-                line = bfr.readLine();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    public static ArrayList<Seller> loadAllSellers() {
-        ArrayList<Seller> allSellers = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("sellerList.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                allSellers.add(loadSeller(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return allSellers;
     }
 
     public String toString() {
