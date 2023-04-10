@@ -13,9 +13,9 @@ public class Store implements Serializable {
     private static final long serialVersionUID = 44L;
     private String storeName;
     private String seller;    //username of the associated seller
-    private ArrayList<Product> products = new ArrayList<>();//all products associated with this store
+    private ArrayList<Product> products = new ArrayList<>(); //all products associated with this store
     //as Store contains Product(s) as a field, have to access the product through the store
-    private int productsSold;//total number of products sold
+    private int productsSold; //total number of products sold
 
     private ArrayList<Integer> purchased = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public class Store implements Serializable {
         return purchased;
     }
 
-    public void addProduct(Product product) {//adds a new product to the store
+    public void addProduct(Product product) { //adds a new product to the store
         products.add(product);
         saveStore();
     }

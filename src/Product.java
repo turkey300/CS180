@@ -75,24 +75,24 @@ public class Product implements Serializable {
     }
 
 
-    public void editProductName(String productName) {
-        this.productName = productName;
+    public void editProductName(String productName1) {
+        this.productName = productName1;
         saveProduct();
     }
 
-    public void editDescription(String description) {
-        this.description = description;
+    public void editDescription(String description1) {
+        this.description = description1;
         saveProduct();
     }
 
-    public void editAvailableQuantity(int availableQuantity) {
+    public void editAvailableQuantity(int availableQuantity1) {
         //directly editing this field should only be allowed to sellers
-        this.availableQuantity = availableQuantity;
+        this.availableQuantity = availableQuantity1;
         saveProduct();
     }
 
-    public void editPrice(double price) {
-        this.price = price;
+    public void editPrice(double price1) {
+        this.price = price1;
         saveProduct();
     }
 

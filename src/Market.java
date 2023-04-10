@@ -276,7 +276,6 @@ public class Market {
                         }
                     }
                 } else if (choice == (i - 4)) {
-                    //TODO:View a dashboard with store and seller information.
                     boolean validChoice;
                     do {
                         validChoice = true;
@@ -402,10 +401,10 @@ public class Market {
                                     for (int f = 0; f < stores.size(); f++) {
                                         ArrayList<Product> products = stores.get(f).getProducts();
                                         for (int k = 0; k < products.size(); k++) {
-                                            if (products.get(k).getProductName().equals
-                                                    (shoppingCart.get(b).getProduct().getProductName())) {
-                                                if (stores.get(f).purchaseProductFromStore
-                                                        (products.get(k), shoppingCart.get(b).getAmount(), customer)) {
+                                            if (products.get(k).getProductName().equals(
+                                                    shoppingCart.get(b).getProduct().getProductName())) {
+                                                if (stores.get(f).purchaseProductFromStore(
+                                                        products.get(k), shoppingCart.get(b).getAmount(), customer)) {
                                                     //shoppingCart.remove(shoppingCart.get(b));
                                                     //this would sometimes crash,
                                                     //it removes something from shopping cart
@@ -415,8 +414,8 @@ public class Market {
                                                             products.get(k).getProductName());
                                                     customer.saveCustomer();
                                                     for (int o = 0; o < sellers.size(); o++) {
-                                                        if (sellers.get(o).getUsername().
-                                                                equals(stores.get(f).getSeller())) {
+                                                        if (sellers.get(o).getUsername().equals(
+                                                                stores.get(f).getSeller())) {
                                                             sellers.get(o).saveSeller();
                                                         }
                                                     }
@@ -723,11 +722,11 @@ public class Market {
                                     description = substring.substring(0, substring.indexOf(","));
                                     description = description.replaceAll("\"", "");
                                     substring = substring.substring(substring.indexOf(",") + 1);
-                                    availableQuantity = Integer.parseInt(substring.substring
-                                            (0, substring.indexOf(",")).replaceAll("\"", ""));
+                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf("," +
+                                            "")).replaceAll("\"", ""));
                                     substring = substring.substring(substring.indexOf(",") + 1);
-                                    price = Double.parseDouble(substring.substring
-                                            (0, substring.indexOf(",")).replaceAll("\"", ""));
+                                    price = Double.parseDouble(substring.substring(0, substring.indexOf("," +
+                                            "")).replaceAll("\"", ""));
                                     storeName = substring.substring(substring.indexOf(",") + 1);
                                     storeName = storeName.replaceAll("\"", "");
 
@@ -783,8 +782,8 @@ public class Market {
                             }
                         } while (!(price >= 0));
 
-                        currentStore.addProduct(new Product
-                                (name, description, quantity, price, currentStore.getStoreName()));
+                        currentStore.addProduct(new Product(name, description,
+                                quantity, price, currentStore.getStoreName()));
                         System.out.println("Product added!");
                         currentStore.saveStore();
                         seller.saveSeller();
@@ -909,7 +908,6 @@ public class Market {
 
                 System.out.println("Returning to main menu.");
             } else if (choice == 2) {
-                //TODO:View a list of sales by store
                 ArrayList<Store> sellstore = new ArrayList<>();
                 sellstore = seller.getStores();
                 Store[] storelist = new Store[sellstore.size()];
@@ -953,7 +951,6 @@ public class Market {
 
                 System.out.println("Returning to main menu.");
             } else if (choice == 3) {    //choice = 3, statistics
-                //TODO:View a dashboard with statistics for each stores
                 System.out.println("What would you like Statistics of?");
                 boolean validate;
                 int stats = 0;

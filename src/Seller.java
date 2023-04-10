@@ -30,7 +30,7 @@ public class Seller implements Serializable {
         }
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username1) {
         File file = new File(this.username);
         file.delete();
 
@@ -40,7 +40,7 @@ public class Seller implements Serializable {
             String line = bfr.readLine();
             while (line != null) {
                 if (line.substring(0, line.indexOf(":")).equals(this.username)) {
-                    lines2.add(username + ":" + password);
+                    lines2.add(username1 + ":" + password);
                 } else {
                     lines2.add(line);
                 }
@@ -63,7 +63,7 @@ public class Seller implements Serializable {
             String line = bfr.readLine();
             while (line != null) {
                 if (line.equals(this.username)) {
-                    lines.add(username);
+                    lines.add(username1);
                 } else {
                     lines.add(line);
                 }
@@ -84,8 +84,8 @@ public class Seller implements Serializable {
         saveSeller();
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPassword(String password1) {
+        this.password = password1;
         saveSeller();
 
         File file = new File("sellers.txt");
@@ -94,7 +94,7 @@ public class Seller implements Serializable {
             String line = bfr.readLine();
             while (line != null) {
                 if (line.substring(0, line.indexOf(":")).equals(username)) {
-                    lines2.add(line.substring(0, line.indexOf(":")) + ":" + password);
+                    lines2.add(line.substring(0, line.indexOf(":")) + ":" + password1);
                 } else {
                     lines2.add(line);
                 }
@@ -157,12 +157,12 @@ public class Seller implements Serializable {
         }
     }
 
-    public static boolean checkIfSeller(String username) { // checks if username is seller
+    public static boolean checkIfSeller(String username1) { // checks if username is seller
         File file = new File("sellerList.txt"); // adds username to list
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
             String line = bfr.readLine();
             while (line != null) {
-                if (line.equals(username))
+                if (line.equals(username1))
                     return true;
                 line = bfr.readLine();
             }
@@ -185,8 +185,8 @@ public class Seller implements Serializable {
         return (stores.indexOf(store));
     }
 
-    public void addStore(Store stores) {
-        this.stores.add(stores);
+    public void addStore(Store stores1) {
+        this.stores.add(stores1);
         saveSeller();
     }
 
@@ -219,8 +219,8 @@ public class Seller implements Serializable {
         }
     }
 
-    public static Seller loadSeller(String username) {
-        File file = new File(username);
+    public static Seller loadSeller(String username1) {
+        File file = new File(username1);
         try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
             Seller seller = (Seller) out.readObject();
             return seller;
@@ -231,12 +231,12 @@ public class Seller implements Serializable {
         return null;
     }
 
-    public boolean writeAccount(String username, String password) {
+    public boolean writeAccount(String username1, String password1) {
         File f = new File("sellers.txt");
         try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
             String line = bfr.readLine();
             while (line != null) {
-                if (line.substring(0, line.indexOf(":")).equals(username))
+                if (line.substring(0, line.indexOf(":")).equals(username1))
                     return false;
                 line = bfr.readLine();
             }
@@ -244,7 +244,7 @@ public class Seller implements Serializable {
             e.printStackTrace();
         }
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(f, true))) {
-            pw.println(username + ":" + password);
+            pw.println(username1 + ":" + password1);
         } catch (Exception e) {
             e.printStackTrace();
         }

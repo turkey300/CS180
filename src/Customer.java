@@ -270,12 +270,12 @@ public class Customer implements Serializable {
         }
     }
 
-    public boolean writeAccount(String username, String password) {
+    public boolean writeAccount(String username1, String password2) {
         File f = new File("customers.txt");
         try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
             String line = bfr.readLine();
             while (line != null) {
-                if (line.substring(0, line.indexOf(":")).equals(username))
+                if (line.substring(0, line.indexOf(":")).equals(username1))
                     return false;
                 line = bfr.readLine();
             }
@@ -283,7 +283,7 @@ public class Customer implements Serializable {
             e.printStackTrace();
         }
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(f, true))) {
-            pw.println(username + ":" + password);
+            pw.println(username1 + ":" + password2);
         } catch (Exception e) {
             e.printStackTrace();
         }
