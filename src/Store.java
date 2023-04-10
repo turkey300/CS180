@@ -2,27 +2,19 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-/**
- * Store class
- * <p>
- * create stores owned by sellers
- *
- * @author Ekaterina Tszyao, Ryan Timmerman, Dimitri Paikos
- * @version 04/10/23
- */
 public class Store implements Serializable {
     private static final long serialVersionUID = 44L;
-    private final String storeName;
-    private final String seller;    //username of the associated seller
+    private String storeName;
+    private String seller;    //username of the associated seller
     private ArrayList<Product> products = new ArrayList<>();//all products associated with this store
     //as Store contains Product(s) as a field, have to access the product through the store
     private int productsSold;//total number of products sold
 
-    private final ArrayList<Integer> purchased = new ArrayList<>();
+    private ArrayList<Integer> purchased = new ArrayList<>();
 
-    private final ArrayList<Double> revenue = new ArrayList<>(); //Revenue for each sale in a list for the store
+    private ArrayList<Double> revenue = new ArrayList<>(); //Revenue for each sale in a list for the store
 
-    private final ArrayList<String> custlist = new ArrayList<>();
+    private ArrayList<String> custlist = new ArrayList<>();
 
     public Store(String storeName, String seller, ArrayList<Product> products) {
         this.storeName = storeName;
@@ -35,18 +27,6 @@ public class Store implements Serializable {
         this.storeName = storeName;
         this.seller = seller;
         saveStore();
-    }
-
-    //given store name, loads the store from file
-    public static Store loadStore(String storeName) {
-        File file = new File(storeName);
-        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
-            Store store = (Store) out.readObject();
-            return store;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public ArrayList<Product> getProducts() {
@@ -117,6 +97,18 @@ public class Store implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    //given store name, loads the store from file
+    public static Store loadStore(String storeName) {
+        File file = new File(storeName);
+        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
+            Store store = (Store) out.readObject();
+            return store;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String toString() {
