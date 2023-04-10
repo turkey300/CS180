@@ -768,7 +768,7 @@ public class Market {
                         valid = true;
                         for (int i = 0; i < currentStore.getProducts().size(); i++) {
                             System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
-                                    .getProductName(), currentStore.getProduct(i).getProductName());
+                                    .getProductName(), currentStore.getProduct(i).getDescription());
                         }
                         System.out.println("Please select a product to edit.");
                         try {
