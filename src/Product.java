@@ -77,7 +77,8 @@ public class Product implements Serializable {
         saveProduct();
     }
 
-    public void editAvailableQuantity(int availableQuantity) {     //directly editing this field should only be allowed to sellers
+    public void editAvailableQuantity(int availableQuantity) {
+        //directly editing this field should only be allowed to sellers
         this.availableQuantity = availableQuantity;
         saveProduct();
     }
