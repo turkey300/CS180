@@ -821,13 +821,19 @@ public class Market {
                         String[] custlist = new String[customers.size()];
                         String[] purchased = new String[amount.size()];
                         System.out.println(storename[i]);
-                        for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                        int j = 0;
+                        do {
+                        //for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
                             revlist[j] = (revenue.get(j)).toString();
                             custlist[j] = (customers.get(j));
                             purchased[j] = (amount.get(j)).toString();
+                            if ((custlist[j].equals("")) || (purchased[j].equals("0")) || (revlist[j].equals("0.0"))) {
+                                System.out.println("No sales have been made on this store");
+                            }
                             System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
-                        }
-                    } catch (NullPointerException e) {
+                            j++;
+                        } while (j < revlist.length);
+                    } catch (IndexOutOfBoundsException e) {
                         System.out.println("No sales have been made on this store");
                     }
                 }
@@ -886,20 +892,23 @@ public class Market {
                                 storename[i] = stores[i].getStoreName();
                             }
                             for (int i = 0; i < stores.length; i++) {
+
                                 prodlist = stores[i].getProducts();
                                 Product[] products = new Product[prodlist.size()];
                                 Integer[] number = new Integer[prodlist.size()];
+                                String[] sproduct = new String[prodlist.size()];
                                 for (int j = 0; j < prodlist.size(); j++) {
                                     products[j] = prodlist.get(j);
                                     number[j] = products[j].getSale();
+                                    sproduct[j] = products[j].getProductName();
                                 }
                                 try {
                                     int n = products.length;
                                     System.out.println(storename[i]);
                                     String[] prods = new String[products.length];
-                                    for (int l = 0; l < products.length; l++) {
-                                        prods[l] = products[l].toString();
-                                    }
+                                    //for (int l = 0; l < products.length; l++) {
+                                       // prods[l] = products[l].toString();
+                                   // }
                                     int tempn = 0;
                                     String tempd = "";
                                     for (int k = 0; k < n; k++) {
@@ -908,13 +917,15 @@ public class Market {
                                                 tempn = number[g - 1];
                                                 number[g - 1] = number[g];
                                                 number[g] = tempn;
-                                                tempd = prods[g - 1];
-                                                prods[g - 1] = prods[g];
-                                                prods[g] = tempd;
+                                                tempd = sproduct[g - 1];
+                                                sproduct[g - 1] = sproduct[g];
+                                                sproduct[g] = tempd;
                                             }
                                         }
                                     }
-                                    System.out.printf("Product %s sold %d units", prods[i], number[i]);
+                                    for (int m = 0; m < prods.length; m++) {
+                                        System.out.printf("Product %s sold %d units\n", sproduct[m], number[m]);
+                                    }
                                 } catch (NullPointerException e) {
                                     System.out.println("No sales have been made at this store");
                                 }
@@ -929,17 +940,19 @@ public class Market {
                                 prodlist = stores[i].getProducts();
                                 Product[] products = new Product[prodlist.size()];
                                 Integer[] number = new Integer[prodlist.size()];
+                                String[] sproduct = new String[prodlist.size()];
                                 for (int j = 0; j < prodlist.size(); j++) {
                                     products[j] = prodlist.get(j);
                                     number[j] = products[j].getSale();
+                                    sproduct[j] = products[j].getProductName();
                                 }
                                 try {
                                     int n = products.length;
                                     System.out.println(storename[i]);
                                     String[] prods = new String[products.length];
-                                    for (int l = 0; l < products.length; l++) {
-                                        prods[l] = products[l].toString();
-                                    }
+                                   // for (int l = 0; l < products.length; l++) {
+                                       // prods[l] = products[l].toString();
+                                   // }
                                     int tempn = 0;
                                     String tempd = "";
                                     for (int k = 0; k < n; k++) {
@@ -948,13 +961,15 @@ public class Market {
                                                 tempn = number[g - 1];
                                                 number[g - 1] = number[g];
                                                 number[g] = tempn;
-                                                tempd = prods[g - 1];
-                                                prods[g - 1] = prods[g];
-                                                prods[g] = tempd;
+                                                tempd = sproduct[g - 1];
+                                                sproduct[g - 1] = sproduct[g];
+                                                sproduct[g] = tempd;
                                             }
                                         }
                                     }
-                                    System.out.printf("Product %s sold %d units", prods[i], number[i]);
+                                    for (int m = 0; m < prods.length; m++) {
+                                        System.out.printf("Product %s sold %d units\n", sproduct[m], number[m]);
+                                    }
                                 } catch (NullPointerException e) {
                                     System.out.println("No sales have been made at this store");
                                 }
@@ -969,18 +984,22 @@ public class Market {
                             prodlist = stores[i].getProducts();
                             Product[] products = new Product[prodlist.size()];
                             Integer[] number = new Integer[prodlist.size()];
+                            String[] sproduct = new String[prodlist.size()];
                             for (int j = 0; j < prodlist.size(); j++) {
                                 products[j] = prodlist.get(j);
                                 number[j] = products[j].getSale();
+                                sproduct[j] = products[j].getProductName();
                             }
                             try {
                                 int n = products.length;
                                 System.out.println(storename[i]);
                                 String[] prods = new String[products.length];
-                                for (int l = 0; l < products.length; l++) {
-                                    prods[l] = products[l].toString();
+                               // for (int l = 0; l < products.length; l++) {
+                               //     prods[l] = products[l].toString();
+                               // }
+                                for (int m = 0; m < prods.length; m++) {
+                                    System.out.printf("Product %s sold %d units\n", sproduct[m], number[m]);
                                 }
-                                System.out.printf("Product %s sold %d units", prods[i], number[i]);
                             } catch (NullPointerException e) {
                                 System.out.println("No sales have been made at this store");
                             }
@@ -1029,7 +1048,9 @@ public class Market {
                                     String[] custlist = new String[customers.size()];
                                     Integer[] purchased = new Integer[amount.size()];
                                     System.out.println(storename[i]);
-                                    for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                                    int j = 0;
+                                    do {
+                                    //for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
                                         revlist[j] = (revenue.get(j));
                                         custlist[j] = (customers.get(j));
                                         purchased[j] = (amount.get(j));
@@ -1052,14 +1073,16 @@ public class Market {
                                                 }
                                             }
                                         }
-                                        System.out.printf("Customer %s purchased %d produces for a total sale of $%f", custlist[j], purchased[j], revlist[j]);
-                                    }
-                                } catch (NullPointerException e) {
+                                        if ((custlist[j].equals("")) || (purchased[j] == 0) || (revlist[j] == 0.0)) {
+                                            System.out.println("No sales have been made on this store");
+                                        }
+                                        System.out.printf("Customer %s purchased %d produces for a total sale of $%f\n", custlist[j], purchased[j], revlist[j]);
+                                        j++;
+                                    } while (j < revlist.length);
+                                } catch (IndexOutOfBoundsException e) {
                                     System.out.println("No sales have been made on this store");
                                 }
                             }
-
-                            System.out.println("Returning to main menu.");
                         }
                         if (choices == 2) {
                             ArrayList<Store> sellstore = new ArrayList<>();
@@ -1082,7 +1105,9 @@ public class Market {
                                     String[] custlist = new String[customers.size()];
                                     Integer[] purchased = new Integer[amount.size()];
                                     System.out.println(storename[i]);
-                                    for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                                    int j = 0;
+                                    do {
+                                    //for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
                                         revlist[j] = (revenue.get(j));
                                         custlist[j] = (customers.get(j));
                                         purchased[j] = (amount.get(j));
@@ -1105,14 +1130,17 @@ public class Market {
                                                 }
                                             }
                                         }
-                                        System.out.printf("Customer %s purchased %d produces for a total sale of $%f", custlist[j], purchased[j], revlist[j]);
-                                    }
-                                } catch (NullPointerException e) {
+                                        if ((custlist[j].equals("")) || (purchased[j] == 0) || (revlist[j] == 0.0)) {
+                                            System.out.println("No sales have been made on this store");
+                                        }
+                                        System.out.printf("Customer %s purchased %d produces for a total sale of $%f\n", custlist[j], purchased[j], revlist[j]);
+                                    //}
+                                        j++;
+                                    } while (i < revlist.length);
+                                } catch (IndexOutOfBoundsException e) {
                                     System.out.println("No sales have been made on this store");
                                 }
                             }
-
-                            System.out.println("Returning to main menu.");
                         }
 
                     } else if (sort.equals("no")) {
@@ -1140,7 +1168,10 @@ public class Market {
                                     revlist[j] = (revenue.get(j)).toString();
                                     custlist[j] = (customers.get(j));
                                     purchased[j] = (amount.get(j)).toString();
-                                    System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
+                                    if ((custlist[j].equals("")) || (purchased[j].equals("0")) || (revlist[j].equals("0.0"))) {
+                                        System.out.println("No sales have been made on this store");
+                                    }
+                                    System.out.printf("Customer %s purchased %s produces for a total sale of $%s\n", custlist[j], purchased[j], revlist[j]);
                                 }
                             } catch (NullPointerException e) {
                                 System.out.println("No sales have been made on this store");
