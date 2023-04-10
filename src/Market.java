@@ -386,6 +386,7 @@ public class Market {
                         } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
 
                         if (input.equals("1")) { // this seems bad but idk of a better way
+                            ArrayList<Integer> delete = new ArrayList<>();
                             for (int b = 0; b < shoppingCart.size(); b++) { // loops through all products, if one matches name purchases products
                                 for (int e = 0; e < sellers.size(); e++) {
                                     ArrayList<Store> stores = sellers.get(e).getStores();
@@ -394,7 +395,9 @@ public class Market {
                                         for (int k = 0; k < products.size(); k++) {
                                             if (products.get(k).getProductName().equals(shoppingCart.get(b).getProduct().getProductName())) {
                                                 if (stores.get(f).purchaseProductFromStore(products.get(k), shoppingCart.get(b).getAmount(), customer)) {
-                                                    shoppingCart.remove(shoppingCart.get(b));
+                                                    //shoppingCart.remove(shoppingCart.get(b));
+                                                    //this would sometimes crash, it removes something from shopping cart changing the size of shopping cart which is not good
+                                                    delete.add(b);
                                                     System.out.printf("Purchased %s successfully!\n", products.get(k).getProductName());
                                                     customer.saveCustomer();
                                                     for (int o = 0; o < sellers.size(); o++) {
@@ -409,6 +412,10 @@ public class Market {
                                         }
                                     }
                                 }
+                            }
+
+                            for (int b = 0; b < delete.size(); b++) {
+                                shoppingCart.remove(shoppingCart.get(delete.get(b)));
                             }
 
                             System.out.println("Purchased all available products, leaving shopping cart!");

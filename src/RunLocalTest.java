@@ -199,7 +199,7 @@ public class RunLocalTest {
 //        @Test(timeout = 1000)
 //        public void testExpectedTwo() {
 //            // Set the input
-//            String input = "1,1" + System.lineSeparator() +
+//            String input = "2" + System.lineSeparator() +
 //                    "true" + System.lineSeparator() +
 //                    "0,0" + System.lineSeparator() +
 //                    "No" + System.lineSeparator();
