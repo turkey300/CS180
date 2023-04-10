@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Store implements Serializable {
     private static final long serialVersionUID = 44L;
@@ -48,13 +49,21 @@ public class Store implements Serializable {
         return seller;
     }
 
-    public int getProductsSold() { return productsSold;}
+    public int getProductsSold() {
+        return productsSold;
+    }
 
-   public ArrayList<Double> getRevenue() { return revenue;}
+    public ArrayList<Double> getRevenue() {
+        return revenue;
+    }
 
-    public ArrayList<String> getCustList() { return custlist;}
+    public ArrayList<String> getCustList() {
+        return custlist;
+    }
 
-    public ArrayList<Integer> getPurchased() { return purchased;}
+    public ArrayList<Integer> getPurchased() {
+        return purchased;
+    }
 
     public void addProduct(Product product) {//adds a new product to the store
         products.add(product);
@@ -104,5 +113,12 @@ public class Store implements Serializable {
 
     public String toString() {
         return String.format("%s,%s,%d\n%s", storeName, seller, productsSold, products.toString());
+    }
+}
+
+class StoreComparatorByProductsSold implements Comparator<Store> {
+    @Override
+    public int compare(Store o1, Store o2) {
+        return o1.getProductsSold() - o2.getProductsSold();
     }
 }
