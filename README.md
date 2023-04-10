@@ -11,7 +11,7 @@ made a product, etc. it could mess up the test cases.
 To ensure the test cases run successfully, download the workspace, compile the program, and then run the test cases.
 This makes sure all the files are original and the test cases should succeed.
 #### Submission
-
+Tyler - Submitted report on Brightpace. Ekaterina - Submitted Vocareum workspace.
 #### Market Class
 The market class contains all the logic and the main method. Because of this, it contains the most code and is closely
 tied to all the classes. It sets up the user, displays the marketplace, and handles all the logic, whether that be for
@@ -63,4 +63,14 @@ seller class because it holds a product and needs to know what seller has the it
 later.
 #### PurchaseHistory Class
 This class is very similar to the shopping cart class. It contains the product that was purchased and the amount 
-purchased.
+purchased. We tested this by purchasing a product and then checking if it would show up in the class. Additionally, we 
+made sure it worked when used in the market code. This is connected to the product class because it contains a product
+and the customer class because every customer has a purchase history.
+#### AlreadyUserException Class
+This exception is thrown when a seller/customer account is being made but there already is a customer/seller under that
+username.
+#### NoUserException Class
+This exception is thrown when someone tries to log in but the account cannot be found.
+#### OtherUserException
+This exception is thrown when someone is trying to create a seller/customer but that username is already taken by the 
+opposite user (ex. seller creates "user1" but there already is a customer named "user1").
