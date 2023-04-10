@@ -835,26 +835,192 @@ public class Market {
                 System.out.println("Returning to main menu.");
             } else if (choice == 3) {    //choice = 3, statistics
                 //TODO:View a dashboard with statistics for each stores
-                System.out.println("Would you like to sort the statistics? (yes/no)");
-                String sort = scanner.nextLine();
-                boolean valids = true;
-                if (sort.equals("yes")) {
+                System.out.println("What would you like Statistics of?");
+                boolean validate;
+                int stats = 0;
+                do {
+                    validate = true;
+                    System.out.println("1. Product Statistics");
+                    System.out.println("2. Customer Statistics");
+                    try {
+                        stats = Integer.parseInt(scanner.nextLine());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Please enter a valid integer.");
+                        validate = false;
+                    }
+                    if (stats != 1 && stats != 2) {
+                        System.out.println("Please enter 1 or 2.");
+                        validate = false;
+                    }
+                } while(!validate);
+                if (stats == 1) {
+                    ArrayList<Product> prodlist = new ArrayList<>();
+                    ArrayList<Integer> numsold = new ArrayList<>();
+                    ArrayList<Store> storelist = new ArrayList<>();
+                    storelist = seller.getStores();
+                    Store[] stores = new Store[storelist.size()];
+                    String[] storename = new String[stores.length];
                     int choices = 0;
-                    do {
-                        System.out.println("How would you like to sort?");
-                        System.out.println("1. Sale price low - high");
-                        System.out.println("2. Sale price high - low");
-                        try {
-                            choices = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("Please enter a valid integer.");
-                            valids = false;
+                    boolean valids = true;
+                    System.out.println("Would you like to sort the statistics? (yes/no)");
+                    String sort = scanner.nextLine();
+                    if (sort.equals("yes")) {
+                        do {
+                            System.out.println("How would you like to sort?");
+                            System.out.println("1. Sale price low - high");
+                            System.out.println("2. Sale price high - low");
+                            try {
+                                choices = Integer.parseInt(scanner.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter a valid integer.");
+                                valids = false;
+                            }
+                            if (choices != 1 && choices != 2) {
+                                System.out.println("Please enter either 1 or 2");
+                                valids = false;
+                            }
+                        } while (!valids);
+                        if (choices == 1){
+                            for (int i = 0; i < stores.length; i++) {
+                                stores[i] = storelist.get(i);
+                                storename[i] = stores[i].getStoreName();
+                            }
+                            for (int i = 0; i < stores.length; i++) {
+                                prodlist = stores[i].getProducts();
+
+                            }
                         }
-                        if (choices != 1 && choices != 2) {
-                            System.out.println("Please enter either 1 or 2");
+                    }
+                }
+                else {
+                    System.out.println("Would you like to sort the statistics? (yes/no)");
+                    String sort = scanner.nextLine();
+                    boolean valids = true;
+                    if (sort.equals("yes")) {
+                        int choices = 0;
+                        do {
+                            System.out.println("How would you like to sort?");
+                            System.out.println("1. Sale price low - high");
+                            System.out.println("2. Sale price high - low");
+                            try {
+                                choices = Integer.parseInt(scanner.nextLine());
+                            } catch (NumberFormatException e) {
+                                System.out.println("Please enter a valid integer.");
+                                valids = false;
+                            }
+                            if (choices != 1 && choices != 2) {
+                                System.out.println("Please enter either 1 or 2");
+                                valids = false;
+                            }
+                        } while (!valids);
+                        if (choices == 1) {
+                            ArrayList<Store> sellstore = new ArrayList<>();
+                            sellstore = seller.getStores();
+                            Store[] storelist = new Store[sellstore.size()];
+                            String[] storename = new String[storelist.length];
+                            ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
+                            ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
+                            ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
+                            for (int i = 0; i < storelist.length; i++) {
+                                storelist[i] = sellstore.get(i);
+                                storename[i] = storelist[i].getStoreName();
+                            }
+                            for (int i = 0; i < storelist.length; i++) { //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
+                                revenue = storelist[i].getRevenue();
+                                customers = storelist[i].getCustList();
+                                amount = storelist[i].getPurchased();
+                                try {
+                                    Double[] revlist = new Double[revenue.size()];
+                                    String[] custlist = new String[customers.size()];
+                                    Integer[] purchased = new Integer[amount.size()];
+                                    System.out.println(storename[i]);
+                                    for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                                        revlist[j] = (revenue.get(j));
+                                        custlist[j] = (customers.get(j));
+                                        purchased[j] = (amount.get(j));
+                                        int n = revlist.length;
+                                        double tempr = 0;
+                                        String tempc = "";
+                                        int tempp = 0;
+                                        for (int k = 0; k < n; k++) {
+                                            for (int g = 1; g < (n - k); g++) {
+                                                if (revlist[g - 1] > revlist[g]) {
+                                                    tempr = revlist[g - 1];
+                                                    revlist[g - 1] = revlist[g];
+                                                    revlist[g] = tempr;
+                                                    tempc = custlist[g - 1];
+                                                    custlist[g - 1] = custlist[g];
+                                                    custlist[g] = tempc;
+                                                    tempp = purchased[g - 1];
+                                                    purchased[g - 1] = purchased[g];
+                                                    purchased[g] = tempp;
+                                                }
+                                            }
+                                        }
+                                        System.out.printf("Customer %s purchased %d produces for a total sale of $%f", custlist[j], purchased[j], revlist[j]);
+                                    }
+                                } catch (NullPointerException e) {
+                                    System.out.println("No sales have been made on this store");
+                                }
+                            }
+
+                            System.out.println("Returning to main menu.");
                         }
-                    } while (!valids);
-                    if (choices == 1) {
+                        if (choices == 2) {
+                            ArrayList<Store> sellstore = new ArrayList<>();
+                            sellstore = seller.getStores();
+                            Store[] storelist = new Store[sellstore.size()];
+                            String[] storename = new String[storelist.length];
+                            ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
+                            ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
+                            ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
+                            for (int i = 0; i < storelist.length; i++) {
+                                storelist[i] = sellstore.get(i);
+                                storename[i] = storelist[i].getStoreName();
+                            }
+                            for (int i = 0; i < storelist.length; i++) { //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
+                                revenue = storelist[i].getRevenue();
+                                customers = storelist[i].getCustList();
+                                amount = storelist[i].getPurchased();
+                                try {
+                                    Double[] revlist = new Double[revenue.size()];
+                                    String[] custlist = new String[customers.size()];
+                                    Integer[] purchased = new Integer[amount.size()];
+                                    System.out.println(storename[i]);
+                                    for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
+                                        revlist[j] = (revenue.get(j));
+                                        custlist[j] = (customers.get(j));
+                                        purchased[j] = (amount.get(j));
+                                        int n = revlist.length;
+                                        double tempr = 0;
+                                        String tempc = "";
+                                        int tempp = 0;
+                                        for (int k = 0; k < n; k++) {
+                                            for (int g = 1; g < (n - k); g++) {
+                                                if (revlist[g - 1] < revlist[g]) {
+                                                    tempr = revlist[g - 1];
+                                                    revlist[g - 1] = revlist[g];
+                                                    revlist[g] = tempr;
+                                                    tempc = custlist[g - 1];
+                                                    custlist[g - 1] = custlist[g];
+                                                    custlist[g] = tempc;
+                                                    tempp = purchased[g - 1];
+                                                    purchased[g - 1] = purchased[g];
+                                                    purchased[g] = tempp;
+                                                }
+                                            }
+                                        }
+                                        System.out.printf("Customer %s purchased %d produces for a total sale of $%f", custlist[j], purchased[j], revlist[j]);
+                                    }
+                                } catch (NullPointerException e) {
+                                    System.out.println("No sales have been made on this store");
+                                }
+                            }
+
+                            System.out.println("Returning to main menu.");
+                        }
+
+                    } else if (sort.equals("no")) {
                         ArrayList<Store> sellstore = new ArrayList<>();
                         sellstore = seller.getStores();
                         Store[] storelist = new Store[sellstore.size()];
@@ -871,123 +1037,19 @@ public class Market {
                             customers = storelist[i].getCustList();
                             amount = storelist[i].getPurchased();
                             try {
-                                Double[] revlist = new Double[revenue.size()];
+                                String[] revlist = new String[revenue.size()];
                                 String[] custlist = new String[customers.size()];
-                                Integer[] purchased = new Integer[amount.size()];
+                                String[] purchased = new String[amount.size()];
                                 System.out.println(storename[i]);
                                 for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
-                                    revlist[j] = (revenue.get(j));
+                                    revlist[j] = (revenue.get(j)).toString();
                                     custlist[j] = (customers.get(j));
-                                    purchased[j] = (amount.get(j));
-                                    int n = revlist.length;
-                                    double tempr = 0;
-                                    String tempc = "";
-                                    int tempp = 0;
-                                    for (int k = 0; k < n; k++) {
-                                        for (int g = 1; g < (n - k); g++) {
-                                            if (revlist[g - 1] > revlist[g]) {
-                                                tempr = revlist[g - 1];
-                                                revlist[g - 1] = revlist[g];
-                                                revlist[g] = tempr;
-                                                tempc = custlist[g - 1];
-                                                custlist[g - 1] = custlist[g];
-                                                custlist[g] = tempc;
-                                                tempp = purchased[g - 1];
-                                                purchased[g - 1] = purchased[g];
-                                                purchased[g] = tempp;
-                                            }
-                                        }
-                                    }
+                                    purchased[j] = (amount.get(j)).toString();
+                                    System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
                                 }
                             } catch (NullPointerException e) {
                                 System.out.println("No sales have been made on this store");
                             }
-                        }
-
-                        System.out.println("Returning to main menu.");
-                    }
-                    if (choices == 2) {
-                        ArrayList<Store> sellstore = new ArrayList<>();
-                        sellstore = seller.getStores();
-                        Store[] storelist = new Store[sellstore.size()];
-                        String[] storename = new String[storelist.length];
-                        ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
-                        ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
-                        ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
-                        for (int i = 0; i < storelist.length; i++) {
-                            storelist[i] = sellstore.get(i);
-                            storename[i] = storelist[i].getStoreName();
-                        }
-                        for (int i = 0; i < storelist.length; i++) { //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
-                            revenue = storelist[i].getRevenue();
-                            customers = storelist[i].getCustList();
-                            amount = storelist[i].getPurchased();
-                            try {
-                                Double[] revlist = new Double[revenue.size()];
-                                String[] custlist = new String[customers.size()];
-                                Integer[] purchased = new Integer[amount.size()];
-                                System.out.println(storename[i]);
-                                for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
-                                    revlist[j] = (revenue.get(j));
-                                    custlist[j] = (customers.get(j));
-                                    purchased[j] = (amount.get(j));
-                                    int n = revlist.length;
-                                    double tempr = 0;
-                                    String tempc = "";
-                                    int tempp = 0;
-                                    for (int k = 0; k < n; k++) {
-                                        for (int g = 1; g < (n - k); g++) {
-                                            if (revlist[g - 1] < revlist[g]) {
-                                                tempr = revlist[g - 1];
-                                                revlist[g - 1] = revlist[g];
-                                                revlist[g] = tempr;
-                                                tempc = custlist[g - 1];
-                                                custlist[g - 1] = custlist[g];
-                                                custlist[g] = tempc;
-                                                tempp = purchased[g - 1];
-                                                purchased[g - 1] = purchased[g];
-                                                purchased[g] = tempp;
-                                            }
-                                        }
-                                    }
-                                }
-                            } catch (NullPointerException e) {
-                                System.out.println("No sales have been made on this store");
-                            }
-                        }
-
-                        System.out.println("Returning to main menu.");
-                    }
-
-                } else if (sort.equals("no")) {
-                    ArrayList<Store> sellstore = new ArrayList<>();
-                    sellstore = seller.getStores();
-                    Store[] storelist = new Store[sellstore.size()];
-                    String[] storename = new String[storelist.length];
-                    ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
-                    ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
-                    ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
-                    for (int i = 0; i < storelist.length; i++) {
-                        storelist[i] = sellstore.get(i);
-                        storename[i] = storelist[i].getStoreName();
-                    }
-                    for (int i = 0; i < storelist.length; i++) { //Fills the strings arrays from respective Arraylists and then prints information for each customer line by line
-                        revenue = storelist[i].getRevenue();
-                        customers = storelist[i].getCustList();
-                        amount = storelist[i].getPurchased();
-                        try {
-                            String[] revlist = new String[revenue.size()];
-                            String[] custlist = new String[customers.size()];
-                            String[] purchased = new String[amount.size()];
-                            System.out.println(storename[i]);
-                            for (int j = 0; j < revlist.length; j++) { // I'm not sure why I made the Double and Integer arrays into Strings but I did so
-                                revlist[j] = (revenue.get(j)).toString();
-                                custlist[j] = (customers.get(j));
-                                purchased[j] = (amount.get(j)).toString();
-                                System.out.printf("Customer %s purchased %s produces for a total sale of $%s", custlist[j], purchased[j], revlist[j]);
-                            }
-                        } catch (NullPointerException e) {
-                            System.out.println("No sales have been made on this store");
                         }
                     }
                 }

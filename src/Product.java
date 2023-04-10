@@ -37,6 +37,8 @@ public class Product implements Serializable {
         return productName;
     }
 
+    public int getSale() {return sale;}
+
     public double getPrice() {
         return price;
     }
