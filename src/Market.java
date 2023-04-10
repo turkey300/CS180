@@ -880,14 +880,109 @@ public class Market {
                                 valids = false;
                             }
                         } while (!valids);
-                        if (choices == 1){
+                        if (choices == 1) {
                             for (int i = 0; i < stores.length; i++) {
                                 stores[i] = storelist.get(i);
                                 storename[i] = stores[i].getStoreName();
                             }
                             for (int i = 0; i < stores.length; i++) {
                                 prodlist = stores[i].getProducts();
-
+                                Product[] products = new Product[prodlist.size()];
+                                Integer[] number = new Integer[prodlist.size()];
+                                for (int j = 0; j < prodlist.size(); j++) {
+                                    products[j] = prodlist.get(j);
+                                    number[j] = products[j].getSale();
+                                }
+                                try {
+                                    int n = products.length;
+                                    System.out.println(storename[i]);
+                                    String[] prods = new String[products.length];
+                                    for (int l = 0; l < products.length; l++) {
+                                        prods[l] = products[l].toString();
+                                    }
+                                    int tempn = 0;
+                                    String tempd = "";
+                                    for (int k = 0; k < n; k++) {
+                                        for (int g = 1; g < (n - k); g++) {
+                                            if (number[g - 1] > number[g]) {
+                                                tempn = number[g - 1];
+                                                number[g - 1] = number[g];
+                                                number[g] = tempn;
+                                                tempd = prods[g - 1];
+                                                prods[g - 1] = prods[g];
+                                                prods[g] = tempd;
+                                            }
+                                        }
+                                    }
+                                    System.out.printf("Product %s sold %d units", prods[i], number[i]);
+                                } catch (NullPointerException e) {
+                                    System.out.println("No sales have been made at this store");
+                                }
+                            }
+                        }
+                        if (choices == 2) {
+                            for (int i = 0; i < stores.length; i++) {
+                                stores[i] = storelist.get(i);
+                                storename[i] = stores[i].getStoreName();
+                            }
+                            for (int i = 0; i < stores.length; i++) {
+                                prodlist = stores[i].getProducts();
+                                Product[] products = new Product[prodlist.size()];
+                                Integer[] number = new Integer[prodlist.size()];
+                                for (int j = 0; j < prodlist.size(); j++) {
+                                    products[j] = prodlist.get(j);
+                                    number[j] = products[j].getSale();
+                                }
+                                try {
+                                    int n = products.length;
+                                    System.out.println(storename[i]);
+                                    String[] prods = new String[products.length];
+                                    for (int l = 0; l < products.length; l++) {
+                                        prods[l] = products[l].toString();
+                                    }
+                                    int tempn = 0;
+                                    String tempd = "";
+                                    for (int k = 0; k < n; k++) {
+                                        for (int g = 1; g < (n - k); g++) {
+                                            if (number[g - 1] < number[g]) {
+                                                tempn = number[g - 1];
+                                                number[g - 1] = number[g];
+                                                number[g] = tempn;
+                                                tempd = prods[g - 1];
+                                                prods[g - 1] = prods[g];
+                                                prods[g] = tempd;
+                                            }
+                                        }
+                                    }
+                                    System.out.printf("Product %s sold %d units", prods[i], number[i]);
+                                } catch (NullPointerException e) {
+                                    System.out.println("No sales have been made at this store");
+                                }
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < stores.length; i++) {
+                            stores[i] = storelist.get(i);
+                            storename[i] = stores[i].getStoreName();
+                        }
+                        for (int i = 0; i < stores.length; i++) {
+                            prodlist = stores[i].getProducts();
+                            Product[] products = new Product[prodlist.size()];
+                            Integer[] number = new Integer[prodlist.size()];
+                            for (int j = 0; j < prodlist.size(); j++) {
+                                products[j] = prodlist.get(j);
+                                number[j] = products[j].getSale();
+                            }
+                            try {
+                                int n = products.length;
+                                System.out.println(storename[i]);
+                                String[] prods = new String[products.length];
+                                for (int l = 0; l < products.length; l++) {
+                                    prods[l] = products[l].toString();
+                                }
+                                System.out.printf("Product %s sold %d units", prods[i], number[i]);
+                            } catch (NullPointerException e) {
+                                System.out.println("No sales have been made at this store");
                             }
                         }
                     }
