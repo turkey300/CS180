@@ -1,24 +1,23 @@
+import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
+
+
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
+import java.io.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * A framework to run public test cases.
  *
  * <p>Purdue University -- CS18000 -- Fall 2022</p>
  *
- * @author Ryan Timmerman, Ekaterina Tszyao, Dimitri Paikos, Tyler Kei
- * @version 04/10/23
+ * @author Purdue CS
+ * @version August 22, 2022
  */
 public class RunLocalTest {
     public static void main(String[] args) {
@@ -27,7 +26,7 @@ public class RunLocalTest {
         if (result.wasSuccessful()) {
             System.out.println("Excellent - all local tests ran successfully.");
         } else {
-            System.out.printf("Tests failed: %d.\n", result.getFailureCount());
+            System.out.printf("Tests failed: %d.\n",result.getFailureCount());
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure.getMessage());
                 System.out.println(failure.getTestHeader());
@@ -46,6 +45,37 @@ public class RunLocalTest {
      * @version August 22, 2022
      */
     public static class TestCase {
+        private final PrintStream originalOutput = System.out;
+        private final InputStream originalSysin = System.in;
+
+        @SuppressWarnings("FieldCanBeLocal")
+        private ByteArrayInputStream testIn;
+
+        @SuppressWarnings("FieldCanBeLocal")
+        private ByteArrayOutputStream testOut;
+
+        @Before
+        public void outputStart() {
+            testOut = new ByteArrayOutputStream();
+            System.setOut(new PrintStream(testOut));
+        }
+
+        @After
+        public void restoreInputAndOutput() {
+            System.setIn(originalSysin);
+            System.setOut(originalOutput);
+        }
+
+        private String getOutput() {
+            return testOut.toString();
+        }
+
+        @SuppressWarnings("SameParameterValue")
+        private void receiveInput(String str) {
+            testIn = new ByteArrayInputStream(str.getBytes());
+            System.setIn(testIn);
+        }
+
         // Each of the correct outputs
         public static final String WELCOME = "Welcome to the marketplace!\nPlease select your account type";
         public static final String SELLERCUSTOMER = "1. Seller\n2. Customer";
@@ -85,34 +115,7 @@ public class RunLocalTest {
         public static final String PRODUCTPRICE = "Please enter a price for the product.";
         public static final String PRODUCTADD = "Product added!";
         public static final String PRODUCTIMPORT = "Please enter the file path to the csv file.";
-        private final PrintStream originalOutput = System.out;
-        private final InputStream originalSysin = System.in;
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayInputStream testIn;
-        @SuppressWarnings("FieldCanBeLocal")
-        private ByteArrayOutputStream testOut;
 
-        @Before
-        public void outputStart() {
-            testOut = new ByteArrayOutputStream();
-            System.setOut(new PrintStream(testOut));
-        }
-
-        @After
-        public void restoreInputAndOutput() {
-            System.setIn(originalSysin);
-            System.setOut(originalOutput);
-        }
-
-        private String getOutput() {
-            return testOut.toString();
-        }
-
-        @SuppressWarnings("SameParameterValue")
-        private void receiveInput(String str) {
-            testIn = new ByteArrayInputStream(str.getBytes());
-            System.setIn(testIn);
-        }
 
         @Test(timeout = 1000)
         public void testExpectedOne() { // makes a seller, creates one product, imports another
@@ -187,8 +190,8 @@ public class RunLocalTest {
             String output = getOutput();
 
             // Trims the output and verifies it is correct.
-            expected = expected.replaceAll("\r\n", "\n");
-            output = output.replaceAll("\r\n", "\n");
+            expected = expected.replaceAll("\r\n","\n");
+            output = output.replaceAll("\r\n","\n");
             assertEquals("Error in expected output!",
                     expected.trim(), output.trim());
         }
@@ -381,8 +384,8 @@ public class RunLocalTest {
             String output = getOutput();
 
             // Trims the output and verifies it is correct.
-            expected = expected.replaceAll("\r\n", "\n");
-            output = output.replaceAll("\r\n", "\n");
+            expected = expected.replaceAll("\r\n","\n");
+            output = output.replaceAll("\r\n","\n");
             assertEquals("Error in expected output!",
                     expected.trim(), output.trim());
         }
