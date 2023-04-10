@@ -1,11 +1,19 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * ShoppingCart Class
+ * <p>
+ * saves potential purchases a customer could make
+ *
+ * @author Ryan Timmerman, Ekaterina Tszyao, Dimitri Paikos, Tyler Kei
+ * @version 04/10/23
+ */
 public class ShoppingCart implements Serializable {
     private static final long serialVersionUID = 46L;
-    private Product product;
-    private Seller seller;
-    private int amount;
+    private final Product product;
+    private final Seller seller;
+    private final int amount;
 
     // initiates shopping cart, contains product and where it is located in seller/store
     public ShoppingCart(Product product, Seller seller, int amount) {
@@ -15,7 +23,8 @@ public class ShoppingCart implements Serializable {
     }
 
     //checks if product can be found in the store
-    public int checkIfValid() { // returns 0 if product is in store, 1 if product cannot be found, and 2 if there is not enough amount of product left
+    public int checkIfValid() { // returns 0 if product is in store, 1 if product cannot be found, and 2 if there
+        // is not enough amount of product left
         ArrayList<Seller> sellers = Seller.loadAllSellers();
         int a = -1;
         int b;
@@ -41,6 +50,7 @@ public class ShoppingCart implements Serializable {
 
         return 0;
     }
+
     public Product getProduct() {
         return product;
     }

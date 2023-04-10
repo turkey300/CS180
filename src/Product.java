@@ -1,14 +1,22 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Comparator;
+
+/**
+ * Product Class
+ * <p>
+ * product object to for items being sold
+ *
+ * @author Ryan Timmerman, Ekaterina Tszyao, Dimitri Paikos, Tyler Kei
+ * @version 04/10/23
+ */
 
 public class Product implements Serializable {
     private static final long serialVersionUID = 45L;
+    private final String storeName;    //the store and product are connected to each other, so each modification to the
     private String productName;
     private String description;
     private int availableQuantity;
     private double price;
-    private String storeName;    //the store and product are connected to each other, so each modification to the
     // product should also be updated in the store class by "store.saveStore()".
     private int sale;    //number of items sold
 
@@ -19,6 +27,17 @@ public class Product implements Serializable {
         this.price = price;
         this.storeName = storeName;
         saveProduct();
+    }
+
+    public static Product loadProduct(String productName) {
+        File file = new File(productName);
+        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
+            Product product = (Product) out.readObject();
+            return product;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public String getDescription() {
@@ -37,7 +56,9 @@ public class Product implements Serializable {
         return productName;
     }
 
-    public int getSale() {return sale;}
+    public int getSale() {
+        return sale;
+    }
 
     public double getPrice() {
         return price;
@@ -66,7 +87,6 @@ public class Product implements Serializable {
         return info;
     }
 
-
     public void editProductName(String productName) {
         this.productName = productName;
         saveProduct();
@@ -77,7 +97,8 @@ public class Product implements Serializable {
         saveProduct();
     }
 
-    public void editAvailableQuantity(int availableQuantity) {     //directly editing this field should only be allowed to sellers
+    public void editAvailableQuantity(int availableQuantity) {     //directly editing this field should only be
+        // allowed to sellers
         this.availableQuantity = availableQuantity;
         saveProduct();
     }
@@ -101,17 +122,6 @@ public class Product implements Serializable {
             e.printStackTrace();
         }
     }
-
-    public static Product loadProduct(String productName) {
-        File file = new File(productName);
-        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
-            Product product = (Product) out.readObject();
-            return product;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }
 
 class ProductComparatorByPrice implements Comparator<Product> {
@@ -123,6 +133,9 @@ class ProductComparatorByPrice implements Comparator<Product> {
         int dif = (o1.getPrice() - o2.getPrice()) > 0 ? 1 : -1;
         return dif;
     }
+//    public static void addToShoppingCart(String productName, ArrayList<String> shoppingCart) {
+//        shoppingCart.add(productName);
+//    }
 }
 
 class ProductComparatorByAvailability implements Comparator<Product> {

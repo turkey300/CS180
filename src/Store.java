@@ -1,20 +1,25 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Comparator;
+
+/**
+ * Store class
+ * <p>
+ * creates store object that are owned by a seller
+ *
+ * @author Ryan Timmerman, Ekaterina Tszyao, Dimitri Paikos, Tyler Kei
+ * @version 04/10/23
+ */
 
 public class Store implements Serializable {
     private static final long serialVersionUID = 44L;
-    private String storeName;
-    private String seller;    //username of the associated seller
+    private final String storeName;
+    private final String seller;    //username of the associated seller
+    private final ArrayList<Integer> purchased = new ArrayList<>();
+    private final ArrayList<Double> revenue = new ArrayList<>(); //Revenue for each sale in a list for the store
+    private final ArrayList<String> custlist = new ArrayList<>();
     private ArrayList<Product> products = new ArrayList<>();//all products associated with this store
     //as Store contains Product(s) as a field, have to access the product through the store
     private int productsSold;//total number of products sold
-
-    private ArrayList<Integer> purchased = new ArrayList<>();
-
-    private ArrayList<Double> revenue = new ArrayList<>(); //Revenue for each sale in a list for the store
-
-    private ArrayList<String> custlist = new ArrayList<>();
 
     public Store(String storeName, String seller, ArrayList<Product> products) {
         this.storeName = storeName;
@@ -27,6 +32,31 @@ public class Store implements Serializable {
         this.storeName = storeName;
         this.seller = seller;
         saveStore();
+    }
+
+    //given store name, loads the store from file
+    public static Store loadStore(String storeName) {
+        File file = new File(storeName);
+        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
+            Store store = (Store) out.readObject();
+            return store;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ArrayList<Store> loadAllStores() {
+        ArrayList<Store> allStores = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("Stores.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allStores.add(loadStore(line));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return allStores;
     }
 
     public ArrayList<Product> getProducts() {
@@ -81,7 +111,6 @@ public class Store implements Serializable {
             this.revenue.add(product.getPrice() * amount);
             this.custlist.add(customer.getUsername());
             this.purchased.add(amount);
-            customer.addPurchaseHistory(product, amount);
             saveStore();
             return true;
         } else {
@@ -99,26 +128,7 @@ public class Store implements Serializable {
         }
     }
 
-    //given store name, loads the store from file
-    public static Store loadStore(String storeName) {
-        File file = new File(storeName);
-        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
-            Store store = (Store) out.readObject();
-            return store;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public String toString() {
         return String.format("%s,%s,%d\n%s", storeName, seller, productsSold, products.toString());
-    }
-}
-
-class StoreComparatorByProductsSold implements Comparator<Store> {
-    @Override
-    public int compare(Store o1, Store o2) {
-        return o1.getProductsSold() - o2.getProductsSold();
     }
 }

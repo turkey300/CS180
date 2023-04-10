@@ -1,15 +1,25 @@
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+/**
+ * Customer class
+ * <p>
+ * used to create customer objects
+ *
+ * @author Ryan Timmerman, Ekaterina Tszyao, Dimitri Paikos, Tyler Kei
+ * @version 04/10/23
+ */
 public class Customer implements Serializable {
     private static final long serialVersionUID = 43L;
+    private final ArrayList<ShoppingCart> shoppingCart = new ArrayList<>();
+    private final ArrayList<PurchaseHistory> purchaseHistory = new ArrayList<>();
     private String username;
     private String password;
-    private ArrayList<ShoppingCart> shoppingCart = new ArrayList<>();
-    private ArrayList<PurchaseHistory> purchaseHistory = new ArrayList<>();
 
     // sets up or makes sure account is correct
-    public Customer(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException {
+    public Customer(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException
+    {
         if (newUser) {
             if (Seller.checkIfSeller(username))
                 throw new OtherUserException("This is a seller account!\nTry logging in as a seller");
@@ -35,6 +45,49 @@ public class Customer implements Serializable {
             e.printStackTrace();
         }
         return allCustomers;
+    }
+
+    public static boolean checkIfCustomer(String username) { // checks if username is customer
+        File file = new File("customerList.txt"); // adds username to list
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.equals(username))
+                    return true;
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public static Customer loadCustomer(String username) {
+        File file = new File(username);
+        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
+            Customer customer = (Customer) out.readObject();
+            return customer;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static boolean checkAccount(String username, String password) {
+        File f = new File("customers.txt");
+        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.equals(username + ":" + password))
+                    return true;
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public void addShoppingCart(Product product, Seller seller, int amount) {
@@ -76,60 +129,6 @@ public class Customer implements Serializable {
                 shoppingCart.remove(delete.get(i));
             }
         }
-        saveCustomer();
-    }
-
-    public void setUsername(String username) {
-        File file = new File(this.username);
-        file.delete();
-
-        file = new File("customers.txt");
-        ArrayList<String> lines2 = new ArrayList<>();
-        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.substring(0, line.indexOf(":")).equals(this.username)) {
-                    lines2.add(username + ":" + password);
-                } else {
-                    lines2.add(line);
-                }
-                line = bfr.readLine();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
-            for (int i = 0; i < lines2.size(); i++) {
-                pw.println(lines2.get(i));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        file = new File("customerList.txt");
-        ArrayList<String> lines = new ArrayList<>();
-        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.equals(this.username)) {
-                    lines.add(username);
-                } else {
-                    lines.add(line);
-                }
-                line = bfr.readLine();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
-            for (int i = 0; i < lines.size(); i++) {
-                pw.println(lines.get(i));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        this.username = username;
         saveCustomer();
     }
 
@@ -210,20 +209,58 @@ public class Customer implements Serializable {
         return username;
     }
 
-    public static boolean checkIfCustomer(String username) { // checks if username is customer
-        File file = new File("customerList.txt"); // adds username to list
+    public void setUsername(String username) {
+        File file = new File(this.username);
+        file.delete();
+
+        file = new File("customers.txt");
+        ArrayList<String> lines2 = new ArrayList<>();
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
             String line = bfr.readLine();
             while (line != null) {
-                if (line.equals(username))
-                    return true;
+                if (line.substring(0, line.indexOf(":")).equals(this.username)) {
+                    lines2.add(username + ":" + password);
+                } else {
+                    lines2.add(line);
+                }
                 line = bfr.readLine();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines2.size(); i++) {
+                pw.println(lines2.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return false;
+        file = new File("customerList.txt");
+        ArrayList<String> lines = new ArrayList<>();
+        try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {
+            String line = bfr.readLine();
+            while (line != null) {
+                if (line.equals(this.username)) {
+                    lines.add(username);
+                } else {
+                    lines.add(line);
+                }
+                line = bfr.readLine();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, false))) {
+            for (int i = 0; i < lines.size(); i++) {
+                pw.println(lines.get(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        this.username = username;
+        saveCustomer();
     }
 
     public void writeCustomer() {
@@ -240,18 +277,6 @@ public class Customer implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public static Customer loadCustomer(String username) {
-        File file = new File(username);
-        try (ObjectInputStream out = new ObjectInputStream(new FileInputStream(file))) {
-            Customer customer = (Customer) out.readObject();
-            return customer;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     public void saveCustomer() { // saves state of customer USE THIS TO UPDATE CUSTOMER OBJECT FILE
@@ -282,21 +307,6 @@ public class Customer implements Serializable {
         }
 
         return true;
-    }
-
-    public static boolean checkAccount(String username, String password) {
-        File f = new File("customers.txt");
-        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-            String line = bfr.readLine();
-            while (line != null) {
-                if (line.equals(username + ":" + password))
-                    return true;
-                line = bfr.readLine();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     public HashMap<String, Integer> purchaseHistoryByStore(ArrayList<Store> stores) {
