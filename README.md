@@ -11,7 +11,7 @@ made a product, etc. it could mess up the test cases.
 To ensure the test cases run successfully, download the workspace, compile the program, and then run the test cases.
 This makes sure all the files are original and the test cases should succeed.
 #### Submission
-Tyler - Submitted report on Brightpace. Ekaterina - Submitted Vocareum workspace.
+Tyler - Submitted report on Brightpace. Dimitri - Submitted Vocareum workspace.
 #### Market Class
 The market class contains all the logic and the main method. Because of this, it contains the most code and is closely
 tied to all the classes. It sets up the user, displays the marketplace, and handles all the logic, whether that be for
