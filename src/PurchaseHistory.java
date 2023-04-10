@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class PurchaseHistory {
+public class PurchaseHistory implements Serializable {
+    private static final long serialVersionUID = 47L;
     private Product product;
     private int amount;
     public PurchaseHistory(Product product, int amount) {

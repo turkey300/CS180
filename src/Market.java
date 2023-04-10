@@ -1,7 +1,5 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Scanner;
+import java.util.*;
 
 public class Market {
     public static void main(String[] args) {
@@ -310,7 +308,53 @@ public class Market {
                             System.out.println("Press any key to return to main page.");
                             scanner.nextLine();
                         } else if (dashboardChoice.equals("2")) {
+                            //View a list of stores by the products purchased by this customer
+                            HashMap<String,Integer> historyByStore = customer.purchaseHistoryByStore(allStores);
+                            boolean validChoice2;
+                            do {
+                                validChoice2 = true;
+                                int index = 1;
+                                for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
+                                    System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
+                                            entry.getKey(), entry.getValue());
+                                    index++;
+                                }
+                                System.out.println();
+                                System.out.println("1. Sort by low - high.");
+                                System.out.println("2. Sort by high - low.");
+                                System.out.println("3. Back to main page.");
+                                dashboardChoice = scanner.nextLine();
+                                if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
+                                        dashboardChoice.equals("3"))) {
+                                    System.out.println("Please enter a valid option.");
+                                    validChoice2 = false;
+                                }
+                            }while (!validChoice2);
 
+                            ArrayList<Integer> purchasedProducts = new ArrayList<>();  //number of products purchased
+                            for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
+                                purchasedProducts.add(entry.getValue());
+                            }
+
+
+                            if (dashboardChoice.equals("1")) {   //sort low-to-high
+                                Collections.sort(purchasedProducts);
+                            } else if (dashboardChoice.equals("2")) {    //sort high-to-low
+                                Collections.sort(purchasedProducts);
+                                Collections.reverse(purchasedProducts);
+                            } else break;    //dashboardChoice = 3; return to main page
+                            int index = 1;
+                            for (int num : purchasedProducts) {
+                                for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
+                                    if (entry.getValue() == num) {
+                                        System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
+                                                entry.getKey(), entry.getValue());
+                                        index++;
+                                    }
+                                }
+                            }
+                            System.out.println("Press any key to return to main page.");
+                            scanner.nextLine();
                         } else {
                             System.out.println("Please enter a valid option.");
                             validChoice = false;
@@ -433,53 +477,46 @@ public class Market {
                     } else {
                         System.out.println("Purchase history: (Newest products purchased listed first)");
                         for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
-                            PurchaseHistory product = purchaseHistory.get(j);
-                            System.out.printf("Product: %s. Amount purchased: %d\n",
-                                    product.getProduct().getProductName(), product.getAmount());
+                            PurchaseHistory history = purchaseHistory.get(j);
+                            System.out.printf("Product: %s. Amount purchased: %d. Store: %s\n",
+                                    history.getProduct().getProductName(), history.getAmount(),history.getStoreName());
                         }
 
-                        System.out.println();
-                        System.out.println("1. Export purchase history.");
-                        System.out.println("2. Exit");
+                        System.out.println("\n1. Export purchase history.");
+                        System.out.println("2. Back to main page.");
 
                         while (true) {
-                            String input = scanner.nextLine();
-                            try {
-                                int option = Integer.parseInt(input);
-                                if (option == 1) {
-                                    System.out.println("Please enter the file path to export to.");
-                                    while (true) {
-                                        String file = scanner.nextLine();
-                                        File f = new File(file);
-                                        if (f.exists()) {
-                                            System.out.println("This file already exists! Try a new file path.");
-                                        } else {
-                                            try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
-                                                for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
-                                                    PurchaseHistory product = purchaseHistory.get(j);
-                                                    pw.printf("Product: %s. Amount purchased: %d\n",
-                                                            product.getProduct().getProductName(), product.getAmount());
-                                                }
-                                                System.out.println("Purchase history exported!");
-                                                break;
-                                            } catch (Exception e) {
-                                                System.out.println("Error writing to file!");
+                            String option = scanner.nextLine();
+                            if (option.equals("1")) {
+                                System.out.println("Please enter the file path to export to.");
+                                while (true) {
+                                    String file = scanner.nextLine();
+                                    File f = new File(file);
+                                    if (f.exists()) {
+                                        System.out.println("This file already exists! Try a new file path.");
+                                    } else {
+                                        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
+                                            for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
+                                                PurchaseHistory product = purchaseHistory.get(j);
+                                                pw.printf("Product: %s. Amount purchased: %d. Store: %s\n", product
+                                                        .getProduct().getProductName(), product.getAmount(),
+                                                        product.getStoreName());
                                             }
+                                            System.out.println("Purchase history exported!");
+                                            break;
+                                        } catch (Exception e) {
+                                            System.out.println("Error writing to file!");
                                         }
                                     }
-                                    break;
-                                } else if (option == 2) {
-                                    break;
-                                } else {
-                                    System.out.println("Please enter a number corresponding to an option.");
                                 }
-                            } catch (Exception e) {
+                                break;
+                            } else if (option.equals("2")) break;
+                            else {
                                 System.out.println("Please enter a number corresponding to an option.");
                             }
                         }
                     }
                 } else if (choice == i) return;
-
             }
         }
     }

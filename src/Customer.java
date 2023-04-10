@@ -1,6 +1,5 @@
-
-        import java.io.*;
-        import java.util.ArrayList;
+import java.io.*;
+import java.util.*;
 
 public class Customer implements Serializable {
     private static final long serialVersionUID = 43L;
@@ -8,6 +7,7 @@ public class Customer implements Serializable {
     private String password;
     private ArrayList<ShoppingCart> shoppingCart = new ArrayList<>();
     private ArrayList<PurchaseHistory> purchaseHistory = new ArrayList<>();
+
     // sets up or makes sure account is correct
     public Customer(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException {
         if (newUser) {
@@ -225,6 +225,7 @@ public class Customer implements Serializable {
 
         return false;
     }
+
     public void writeCustomer() {
         File f = new File(username); // writes customer to own file
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f))) {
@@ -295,7 +296,19 @@ public class Customer implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return false;
+    }
+
+    public HashMap<String, Integer> purchaseHistoryByStore(ArrayList<Store> stores) {
+        HashMap<String, Integer> storeHistory = new HashMap<String, Integer>();
+        for (int i = 0; i < stores.size(); i++) {
+            storeHistory.put(stores.get(i).getStoreName(), 0);
+        }
+        for (int i = 0; i < purchaseHistory.size(); i++) {
+            String currentStoreName = purchaseHistory.get(i).getStoreName();
+            int oldAmount = storeHistory.get(currentStoreName);
+            storeHistory.put(currentStoreName, (oldAmount + purchaseHistory.get(i).getAmount()));
+        }
+        return storeHistory;
     }
 }
