@@ -89,45 +89,102 @@ public class RunLocalTest {
         public static final String USERNAMELOGIN = "Please enter your username/email";
         public static final String PASSWORDLOGIN = "Please enter your password";
         public static final String LOGINERROR = "This account does not exist!";
+        public static final String LOGINSUCCESS = "Successfully logged in!";
+        public static final String SELLERQUESTION = "What would you like to do?";
+        public static final String SELLERDASHBOARD = "1. Modify products.\n" +
+                "2. View a list of sales by store.\n" +
+                "3. View a dashboard with statistics for each stores.\n" +
+                "4. View number of products in shopping carts.\n" +
+                "5. Modify Account.\n" +
+                "6. Create a store.\n" +
+                "7. Exit.";
+        public static final String RETURNMAINMENU = "Returning to main menu.";
+        public static final String GOODBYE = "Goodbye!";
+        public static final String STORENAME = "Please enter a store name:";
+        public static final String STOREMENU = "What would you like to do?\n" +
+                "1. Add a product\n" +
+                "2. Edit a product\n" +
+                "3. Delete a product\n" +
+                "4. Export products";
+        public static final String STOREEDIT = "Which store would you like to edit?";
+        public static final String ADDPRODUCT = "1. Import product from csv.\n" +
+                "2. Create product in terminal.";
+        public static final String PRODUCTNAME = "Please enter a product name:";
+        public static final String PRODUCTDESC = "Please enter a product description:";
+        public static final String PRODUCTQUANTITY = "Please enter an available quantity.";
+        public static final String PRODUCTPRICE = "Please enter a price for the product.";
+        public static final String PRODUCTADD = "Product added!";
+        public static final String PRODUCTIMPORT = "Please enter the file path to the csv file.";
 
 
         @Test(timeout = 1000)
-        public void testExpectedOne() {
+        public void testExpectedOne() { // makes a seller, creates one product, imports another
             // Set the input
-            String input = "2,2" + System.lineSeparator() +
-                    "true,true" + System.lineSeparator() +
-                    "true,true" + System.lineSeparator() +
-                    "1,1" + System.lineSeparator() +
-                    "Yes" + System.lineSeparator() +
-                    "Up" + System.lineSeparator() +
-                    "Right" + System.lineSeparator();
+            String input = "1" + System.lineSeparator() +
+                    "2" + System.lineSeparator() +
+                    "seller1" + System.lineSeparator() +
+                    "pass" + System.lineSeparator() +
+                    "seller1" + System.lineSeparator() +
+                    "pass" + System.lineSeparator() +
+                    "6" + System.lineSeparator() +
+                    "store1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "2" + System.lineSeparator() +
+                    "prod1" + System.lineSeparator() +
+                    "desc" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "1" + System.lineSeparator() +
+                    "testImport.csv" + System.lineSeparator() +
+                    "7" + System.lineSeparator();
 
             // Pair the input with the expected result
             String expected = WELCOME + System.lineSeparator() +
-                    INITIALIZE_MAZE + System.lineSeparator() +
-                    MAZE_DIMENSIONS + System.lineSeparator() +
-                    String.format(MAZE_VALUES,0) + System.lineSeparator() +
-                    String.format(MAZE_VALUES,1) + System.lineSeparator() +
-                    TREASURE_LOCATION + System.lineSeparator() +
-                    READY + System.lineSeparator() +
-                    String.format(CURRENT_POSITION,0,0) + System.lineSeparator() +
-                    MOVE_SELECT + System.lineSeparator() +
-                    "1. " + MOVES[0] + System.lineSeparator() +
-                    "2. " + MOVES[1] + System.lineSeparator() +
-                    "3. " + MOVES[2] + System.lineSeparator() +
-                    "4. " + MOVES[3] + System.lineSeparator() +
-                    String.format(CURRENT_POSITION,1,0) + System.lineSeparator() +
-                    MOVE_SELECT + System.lineSeparator() +
-                    "1. " + MOVES[0] + System.lineSeparator() +
-                    "2. " + MOVES[1] + System.lineSeparator() +
-                    "3. " + MOVES[2] + System.lineSeparator() +
-                    "4. " + MOVES[3] + System.lineSeparator() +
-                    TREASURE_FOUND + System.lineSeparator() +
-                    FAREWELL + System.lineSeparator();
+                    SELLERCUSTOMER + System.lineSeparator() +
+                    LOGINCREATEACCOUNT + System.lineSeparator() +
+                    ENTERUSERNAME + System.lineSeparator() +
+                    ENTERPASSWORD + System.lineSeparator() +
+                    USERCREATED + System.lineSeparator() +
+                    PLEASELOGIN + System.lineSeparator() +
+                    USERNAMELOGIN + System.lineSeparator() +
+                    PASSWORDLOGIN + System.lineSeparator() +
+                    LOGINSUCCESS + System.lineSeparator() +
+                    SELLERQUESTION + System.lineSeparator() +
+                    SELLERDASHBOARD + System.lineSeparator() +
+                    STORENAME + System.lineSeparator() +
+                    SELLERQUESTION + System.lineSeparator() +
+                    SELLERDASHBOARD + System.lineSeparator() +
+                    STOREEDIT + System.lineSeparator() +
+                    "1. store1" + System.lineSeparator() +
+                    STOREMENU + System.lineSeparator() +
+                    ADDPRODUCT + System.lineSeparator() +
+                    PRODUCTNAME + System.lineSeparator() +
+                    PRODUCTDESC + System.lineSeparator() +
+                    PRODUCTQUANTITY + System.lineSeparator() +
+                    PRODUCTPRICE + System.lineSeparator() +
+                    PRODUCTADD + System.lineSeparator() +
+                    RETURNMAINMENU + System.lineSeparator() +
+                    SELLERQUESTION + System.lineSeparator() +
+                    SELLERDASHBOARD + System.lineSeparator() +
+                    STOREEDIT + System.lineSeparator() +
+                    "1. store1" + System.lineSeparator() +
+                    STOREMENU + System.lineSeparator() +
+                    ADDPRODUCT + System.lineSeparator() +
+                    PRODUCTIMPORT + System.lineSeparator() +
+                    PRODUCTADD + System.lineSeparator() +
+                    RETURNMAINMENU + System.lineSeparator() +
+                    SELLERQUESTION + System.lineSeparator() +
+                    SELLERDASHBOARD + System.lineSeparator() +
+                    GOODBYE + System.lineSeparator();
 
             // Runs the program with the input values
             receiveInput(input);
-            MazeNavigator.main(new String[0]);
+            Market.main(new String[0]);
 
             // Retrieves the output from the program
             String output = getOutput();
@@ -135,96 +192,62 @@ public class RunLocalTest {
             // Trims the output and verifies it is correct.
             expected = expected.replaceAll("\r\n","\n");
             output = output.replaceAll("\r\n","\n");
-            assertEquals("Make sure players can navigate the maze successfully!",
+            assertEquals("Error in expected output!",
                     expected.trim(), output.trim());
         }
 
-        @Test(timeout = 1000)
-        public void testExpectedTwo() {
-            // Set the input
-            String input = "1,1" + System.lineSeparator() +
-                    "true" + System.lineSeparator() +
-                    "0,0" + System.lineSeparator() +
-                    "No" + System.lineSeparator();
-
-            // Pair the input with the expected result
-            String expected = WELCOME + System.lineSeparator() +
-                    INITIALIZE_MAZE + System.lineSeparator() +
-                    MAZE_DIMENSIONS + System.lineSeparator() +
-                    String.format(MAZE_VALUES,0) + System.lineSeparator() +
-                    TREASURE_LOCATION + System.lineSeparator() +
-                    READY + System.lineSeparator() +
-                    FAREWELL + System.lineSeparator();
-
-            // Runs the program with the input values
-            receiveInput(input);
-            MazeNavigator.main(new String[0]);
-
-            // Retrieves the output from the program
-            String output = getOutput();
-
-            // Trims the output and verifies it is correct.
-            expected = expected.replaceAll("\r\n","\n");
-            output = output.replaceAll("\r\n","\n");
-            assertEquals("Make sure players can exit before starting the game!",
-                    expected.trim(), output.trim());
-        }
-
-        @Test(timeout = 1000)
-        public void testExpectedThree() {
-            // Set the input
-            String input = "2,2" + System.lineSeparator() +
-                    "true,false" + System.lineSeparator() +
-                    "true,false" + System.lineSeparator() +
-                    "1,0" + System.lineSeparator() +
-                    "Yes" + System.lineSeparator() +
-                    "Right" + System.lineSeparator() +
-                    "Left" + System.lineSeparator() +
-                    "Down" + System.lineSeparator();
-
-            // Pair the input with the expected result
-            String expected = WELCOME + System.lineSeparator() +
-                    INITIALIZE_MAZE + System.lineSeparator() +
-                    MAZE_DIMENSIONS + System.lineSeparator() +
-                    String.format(MAZE_VALUES,0) + System.lineSeparator() +
-                    String.format(MAZE_VALUES,1) + System.lineSeparator() +
-                    TREASURE_LOCATION + System.lineSeparator() +
-                    READY + System.lineSeparator() +
-                    String.format(CURRENT_POSITION,0,0) + System.lineSeparator() +
-                    MOVE_SELECT + System.lineSeparator() +
-                    "1. " + MOVES[0] + System.lineSeparator() +
-                    "2. " + MOVES[1] + System.lineSeparator() +
-                    "3. " + MOVES[2] + System.lineSeparator() +
-                    "4. " + MOVES[3] + System.lineSeparator() +
-                    INVALID_MOVE + System.lineSeparator() +
-                    String.format(CURRENT_POSITION,0,0) + System.lineSeparator() +
-                    MOVE_SELECT + System.lineSeparator() +
-                    "1. " + MOVES[0] + System.lineSeparator() +
-                    "2. " + MOVES[1] + System.lineSeparator() +
-                    "3. " + MOVES[2] + System.lineSeparator() +
-                    "4. " + MOVES[3] + System.lineSeparator() +
-                    INVALID_MOVE + System.lineSeparator() +
-                    String.format(CURRENT_POSITION,0,0) + System.lineSeparator() +
-                    MOVE_SELECT + System.lineSeparator() +
-                    "1. " + MOVES[0] + System.lineSeparator() +
-                    "2. " + MOVES[1] + System.lineSeparator() +
-                    "3. " + MOVES[2] + System.lineSeparator() +
-                    "4. " + MOVES[3] + System.lineSeparator() +
-                    TREASURE_FOUND + System.lineSeparator() +
-                    FAREWELL + System.lineSeparator();
-
-            // Runs the program with the input values
-            receiveInput(input);
-            MazeNavigator.main(new String[0]);
-
-            // Retrieves the output from the program
-            String output = getOutput();
-
-            // Trims the output and verifies it is correct.
-            expected = expected.replaceAll("\r\n","\n");
-            output = output.replaceAll("\r\n","\n");
-            assertEquals("Make sure players can navigate the maze successfully, as well as handle invalid moves!",
-                    expected.trim(), output.trim());
-        }
+//        @Test(timeout = 1000)
+//        public void testExpectedTwo() {
+//            // Set the input
+//            String input = "1,1" + System.lineSeparator() +
+//                    "true" + System.lineSeparator() +
+//                    "0,0" + System.lineSeparator() +
+//                    "No" + System.lineSeparator();
+//
+//            // Pair the input with the expected result
+//            String expected = WELCOME;
+//
+//            // Runs the program with the input values
+//            receiveInput(input);
+//            Market.main(new String[0]);
+//
+//            // Retrieves the output from the program
+//            String output = getOutput();
+//
+//            // Trims the output and verifies it is correct.
+//            expected = expected.replaceAll("\r\n","\n");
+//            output = output.replaceAll("\r\n","\n");
+//            assertEquals("Error in expected output!",
+//                    expected.trim(), output.trim());
+//        }
+//
+//        @Test(timeout = 1000)
+//        public void testExpectedThree() {
+//            // Set the input
+//            String input = "2,2" + System.lineSeparator() +
+//                    "true,false" + System.lineSeparator() +
+//                    "true,false" + System.lineSeparator() +
+//                    "1,0" + System.lineSeparator() +
+//                    "Yes" + System.lineSeparator() +
+//                    "Right" + System.lineSeparator() +
+//                    "Left" + System.lineSeparator() +
+//                    "Down" + System.lineSeparator();
+//
+//            // Pair the input with the expected result
+//            String expected = WELCOME;
+//
+//            // Runs the program with the input values
+//            receiveInput(input);
+//            Market.main(new String[0]);
+//
+//            // Retrieves the output from the program
+//            String output = getOutput();
+//
+//            // Trims the output and verifies it is correct.
+//            expected = expected.replaceAll("\r\n","\n");
+//            output = output.replaceAll("\r\n","\n");
+//            assertEquals("Error in expected output!",
+//                    expected.trim(), output.trim());
+//        }
     }
 }
