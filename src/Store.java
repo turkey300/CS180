@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Store implements Serializable {
     private static final long serialVersionUID = 44L;
@@ -48,13 +49,21 @@ public class Store implements Serializable {
         return seller;
     }
 
-    public int getProductsSold() { return productsSold;}
+    public int getProductsSold() {
+        return productsSold;
+    }
 
-   public ArrayList<Double> getRevenue() { return revenue;}
+    public ArrayList<Double> getRevenue() {
+        return revenue;
+    }
 
-    public ArrayList<String> getCustList() { return custlist;}
+    public ArrayList<String> getCustList() {
+        return custlist;
+    }
 
-    public ArrayList<Integer> getPurchased() { return purchased;}
+    public ArrayList<Integer> getPurchased() {
+        return purchased;
+    }
 
     public void addProduct(Product product) {//adds a new product to the store
         products.add(product);
@@ -105,17 +114,11 @@ public class Store implements Serializable {
     public String toString() {
         return String.format("%s,%s,%d\n%s", storeName, seller, productsSold, products.toString());
     }
+}
 
-    public static ArrayList<Store> loadAllStores() {
-        ArrayList<Store> allStores = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("Stores.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                allStores.add(loadStore(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return allStores;
+class StoreComparatorByProductsSold implements Comparator<Store> {
+    @Override
+    public int compare(Store o1, Store o2) {
+        return o1.getProductsSold() - o2.getProductsSold();
     }
 }
