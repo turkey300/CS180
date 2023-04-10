@@ -1,7 +1,7 @@
 # Marketplace
 ### By Dimitri Paikos, Tyler Kei, Ryan Timmerman, and Ekaterina Tszyao
 #### Instructions
-To compile and run the program, all files must be in the same directory as they were in GitHub/Vocarium. 
+To compile and run the program, all files must be the same way as they were in GitHub/Vocarium. 
 Additionally, all the java files must be compiled. 
 The Market file has the main method so that file must be run to access the program.
 Finally, run RunLocalTest to check the test cases. The test cases assume the program has never been run before,
