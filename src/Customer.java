@@ -1,11 +1,13 @@
-import java.io.*;
-import java.util.ArrayList;
+
+        import java.io.*;
+        import java.util.ArrayList;
 
 public class Customer implements Serializable {
     private static final long serialVersionUID = 43L;
     private String username;
     private String password;
     private ArrayList<ShoppingCart> shoppingCart = new ArrayList<>();
+    private ArrayList<PurchaseHistory> purchaseHistory = new ArrayList<>();
     // sets up or makes sure account is correct
     public Customer(String username, String password, boolean newUser) throws AlreadyUserException, OtherUserException {
         if (newUser) {
@@ -38,6 +40,15 @@ public class Customer implements Serializable {
     public void addShoppingCart(Product product, Seller seller, int amount) {
         shoppingCart.add(new ShoppingCart(product, seller, amount));
         saveCustomer();
+    }
+
+    public void addPurchaseHistory(Product product, int amount) {
+        purchaseHistory.add(new PurchaseHistory(product, amount));
+        saveCustomer();
+    }
+
+    public ArrayList<PurchaseHistory> getPurchaseHistory() {
+        return purchaseHistory;
     }
 
     public ArrayList<ShoppingCart> getShoppingCart() {
