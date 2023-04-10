@@ -33,6 +33,8 @@ public class Product implements Serializable {
         return storeName;
     }
 
+    public int getSale() { return sale; }
+
     public String getProductName() {
         return productName;
     }
