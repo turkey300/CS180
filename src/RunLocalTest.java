@@ -2,12 +2,11 @@ import org.junit.Test;
 import org.junit.After;
 import org.junit.Before;
 
-
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import java.io.*;
 
+import java.io.*;
 
 import static org.junit.Assert.*;
 
@@ -26,7 +25,7 @@ public class RunLocalTest {
         if (result.wasSuccessful()) {
             System.out.println("Excellent - all local tests ran successfully.");
         } else {
-            System.out.printf("Tests failed: %d.\n",result.getFailureCount());
+            System.out.printf("Tests failed: %d.\n", result.getFailureCount());
             for (Failure failure : result.getFailures()) {
                 System.out.println(failure.getMessage());
                 System.out.println(failure.getTestHeader());
@@ -116,7 +115,14 @@ public class RunLocalTest {
         public static final String PRODUCTADD = "Product added!";
         public static final String PRODUCTIMPORT = "Please enter the file path to the csv file.";
 
-
+        /**
+         * Test cases modified for this program.
+         *
+         * <p>Purdue University -- CS18000 -- Fall 2022</p>
+         *
+         * @author Purdue CS, Dimitri Paikos, Lab12
+         * @version 4/10/2023
+         */
         @Test(timeout = 1000)
         public void testExpectedOne() { // makes a seller, creates one product, imports another
             // Set the input
@@ -190,8 +196,8 @@ public class RunLocalTest {
             String output = getOutput();
 
             // Trims the output and verifies it is correct.
-            expected = expected.replaceAll("\r\n","\n");
-            output = output.replaceAll("\r\n","\n");
+            expected = expected.replaceAll("\r\n", "\n");
+            output = output.replaceAll("\r\n", "\n");
             assertEquals("Error in expected output!",
                     expected.trim(), output.trim());
         }
@@ -384,8 +390,8 @@ public class RunLocalTest {
             String output = getOutput();
 
             // Trims the output and verifies it is correct.
-            expected = expected.replaceAll("\r\n","\n");
-            output = output.replaceAll("\r\n","\n");
+            expected = expected.replaceAll("\r\n", "\n");
+            output = output.replaceAll("\r\n", "\n");
             assertEquals("Error in expected output!",
                     expected.trim(), output.trim());
         }

@@ -1,7 +1,13 @@
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * This is Product class, which contains information about the product and provides methods related methods to be
+ * called from the Market.
+ *
+ * @author Ekaterina Tszyao, Dimitri Paikos, Lab12
+ * @version 4/10/2023
+ */
 public class Product implements Serializable {
     private static final long serialVersionUID = 45L;
     private String productName;
@@ -37,7 +43,9 @@ public class Product implements Serializable {
         return productName;
     }
 
-    public int getSale() {return sale;}
+    public int getSale() {
+        return sale;
+    }
 
     public double getPrice() {
         return price;
@@ -115,6 +123,13 @@ public class Product implements Serializable {
     }
 }
 
+/**
+ * This is a comparator which compares Product objects by comparing their price. It's used to sort an ArrayList
+ * of products by their price.
+ *
+ * @author Ekaterina Tszyao, Lab12
+ * @version 4/10/2023
+ */
 class ProductComparatorByPrice implements Comparator<Product> {
     @Override
     public int compare(Product o1, Product o2) {
@@ -126,6 +141,13 @@ class ProductComparatorByPrice implements Comparator<Product> {
     }
 }
 
+/**
+ * This is a comparator which compares Product objects by comparing their available quantity. It's used to
+ * sort an ArrayList of products by their available quantity.
+ *
+ * @author Ekaterina Tszyao, Lab12
+ * @version 4/10/2023
+ */
 class ProductComparatorByAvailability implements Comparator<Product> {
     @Override
     public int compare(Product o1, Product o2) {

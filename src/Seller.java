@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * This is a Seller class which sorts the user info of a seller, as well as thw stores they own.
+ * It provides methods related methods to be called from the Market.
+ *
+ * @author Dimitri Paikos,Ekaterina Tszyao, Ryan Timmerman, Lab12
+ * @version 4/10/2023
+ */
 public class Seller implements Serializable {
     private static final long serialVersionUID = 42L;
     private String username;
@@ -149,6 +156,7 @@ public class Seller implements Serializable {
             e.printStackTrace();
         }
     }
+
     public static boolean checkIfSeller(String username) { // checks if username is seller
         File file = new File("sellerList.txt"); // adds username to list
         try (BufferedReader bfr = new BufferedReader(new FileReader(file))) {

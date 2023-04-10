@@ -2,6 +2,13 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * This is Store class, which contains information about a store, a list of products in the store and lists keeping
+ * track of statistics for this store. It provides methods related methods to be called from the Market.
+ *
+ * @author Ekaterina Tszyao, Dimitri Paikos, Rayan Timmerman, Lab12
+ * @version 4/10/2023
+ */
 public class Store implements Serializable {
     private static final long serialVersionUID = 44L;
     private String storeName;
@@ -116,6 +123,13 @@ public class Store implements Serializable {
     }
 }
 
+/**
+ * This is a comparator which compares Store objects by comparing their sales (products sold). It's used
+ * to sort an ArrayList of stores by their sales (products sold).
+ *
+ * @author Ekaterina Tszyao, Lab12
+ * @version 4/10/2023
+ */
 class StoreComparatorByProductsSold implements Comparator<Store> {
     @Override
     public int compare(Store o1, Store o2) {

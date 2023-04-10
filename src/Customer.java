@@ -1,6 +1,13 @@
 import java.io.*;
 import java.util.*;
 
+/**
+ * This is Customer class, which sorts the user info of a customer, their shopping cart and purchase history.
+ * It provides methods related methods to be called from the Market.
+ *
+ * @author Dimitri Paikos, Rayan Timmerman, Ekaterina Tszyao, Lab12
+ * @version 4/10/2023
+ */
 public class Customer implements Serializable {
     private static final long serialVersionUID = 43L;
     private String username;

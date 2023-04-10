@@ -1,6 +1,12 @@
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * This is a Shopping Cart records the product, its seller and amount a customer had put into their shopping cart.
+ *
+ * @author Dimitri Paikos, Lab12
+ * @version 4/10/2023
+ */
 public class ShoppingCart implements Serializable {
     private static final long serialVersionUID = 46L;
     private Product product;
@@ -43,6 +49,7 @@ public class ShoppingCart implements Serializable {
 
         return 0;
     }
+
     public Product getProduct() {
         return product;
     }

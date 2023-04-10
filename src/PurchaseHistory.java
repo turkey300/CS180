@@ -1,5 +1,11 @@
 import java.io.Serializable;
 
+/**
+ * This is Purchase History which records the product and amount a user has bought.
+ *
+ * @author Dimitri Paikos, Lab12
+ * @version 4/10/2023
+ */
 public class PurchaseHistory implements Serializable {
     private static final long serialVersionUID = 47L;
     private Product product;

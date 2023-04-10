@@ -1,7 +1,13 @@
 import java.io.*;
-import java.nio.channels.SeekableByteChannel;
 import java.util.*;
 
+/**
+ * This is the Market class containing a main method to run the program. It contains customer marketplace and seller
+ * market, which contain functions customer or seller can select from.
+ *
+ * @author Ekaterina Tszyao, Dimitri Paikos, Tyler Kei, Ryan Timmerman, Lab12
+ * @version 4/10/2023
+ */
 public class Market {
     public static void main(String[] args) {
         // logging in/creating account
@@ -310,7 +316,7 @@ public class Market {
                             scanner.nextLine();
                         } else if (dashboardChoice.equals("2")) {
                             //View a list of stores by the products purchased by this customer
-                            HashMap<String,Integer> historyByStore = customer.purchaseHistoryByStore(allStores);
+                            HashMap<String, Integer> historyByStore = customer.purchaseHistoryByStore(allStores);
                             boolean validChoice2;
                             do {
                                 validChoice2 = true;
@@ -330,7 +336,7 @@ public class Market {
                                     System.out.println("Please enter a valid option.");
                                     validChoice2 = false;
                                 }
-                            }while (!validChoice2);
+                            } while (!validChoice2);
 
                             ArrayList<Integer> purchasedProducts = new ArrayList<>();  //number of products purchased
                             for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
@@ -496,7 +502,7 @@ public class Market {
                         for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
                             PurchaseHistory history = purchaseHistory.get(j);
                             System.out.printf("Product: %s. Amount purchased: %d. Store: %s\n",
-                                    history.getProduct().getProductName(), history.getAmount(),history.getStoreName());
+                                    history.getProduct().getProductName(), history.getAmount(), history.getStoreName());
                         }
 
                         System.out.println("\n1. Export purchase history.");
@@ -516,7 +522,7 @@ public class Market {
                                             for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
                                                 PurchaseHistory product = purchaseHistory.get(j);
                                                 pw.printf("Product: %s. Amount purchased: %d. Store: %s\n", product
-                                                        .getProduct().getProductName(), product.getAmount(),
+                                                                .getProduct().getProductName(), product.getAmount(),
                                                         product.getStoreName());
                                             }
                                             System.out.println("Purchase history exported!");
