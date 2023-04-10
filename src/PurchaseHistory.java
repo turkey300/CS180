@@ -1,4 +1,4 @@
-@@ -0,0 +1,21 @@
+
 public class PurchaseHistory {
     private Product product;
     private int amount;
