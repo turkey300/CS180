@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import javax.swing.*;
 
 /**
  * This is the Market class containing a main method to run the program. It contains customer marketplace and seller
@@ -631,26 +632,30 @@ public class Market {
 
     public static void sellerMarketplace(Scanner scanner, Seller seller) {
         do {
-            int choice = 0;
-            System.out.println("What would you like to do?");
-            do {
-                System.out.println("1. Modify products.");
-                System.out.println("2. View a list of sales by store.");
-                System.out.println("3. View a dashboard with statistics for each stores.");
-                System.out.println("4. View number of products in shopping carts.");
-                System.out.println("5. Modify Account.");
-                System.out.println("6. Create a store.");
-                System.out.println("7. Exit.");
-                try {    //if input is not Integer, catch exception and repeat main page prompt
-                    choice = Integer.parseInt(scanner.nextLine());
-                    if (choice < 1 || choice > 7)
-                        System.out.println("Please enter an available option.");
-                } catch (NumberFormatException e) {
-                    System.out.println("Please enter an available option.");
-                }
-            } while (!(choice >= 1 && choice <= 7));
+            //int choice = 0;
+            //System.out.println("What would you like to do?");
+            //do {
+             //   System.out.println("1. Modify products.");
+              //  System.out.println("2. View a list of sales by store.");
+               // System.out.println("3. View a dashboard with statistics for each stores.");
+               // System.out.println("4. View number of products in shopping carts.");
+               // System.out.println("5. Modify Account.");
+               // System.out.println("6. Create a store.");
+               // System.out.println("7. Exit.");
+                String[] selloptions = {"Modify Products", "View a list of sales by store", "View a dashboard with statistics for each stores", "View number of products in shopping carts", "Modify Account", "Create a store", "Exit"};
+                String choice;
+                choice = (String) JOptionPane.showInputDialog(null, "What would you like to do", "Action", JOptionPane.QUESTION_MESSAGE, null, selloptions, selloptions[0]);
 
-            if (choice == 1) { // Modify products
+                //  try {    //if input is not Integer, catch exception and repeat main page prompt
+                //    choice = Integer.parseInt(scanner.nextLine());
+                  //  if (choice < 1 || choice > 7)
+                    //    System.out.println("Please enter an available option.");
+                //} catch (NumberFormatException e) {
+                  //  System.out.println("Please enter an available option.");
+                //}
+        //    } while (!(choice >= 1 && choice <= 7));
+
+            if (choice.equals("Modify Products")) { // Modify products
                 boolean valid;
                 int storeNum = 0;
                 System.out.println("Which store would you like to edit?");
@@ -907,7 +912,7 @@ public class Market {
                 }
 
                 System.out.println("Returning to main menu.");
-            } else if (choice == 2) {
+            } else if (choice.equals("View a list of sales by store")) {
                 ArrayList<Store> sellstore = new ArrayList<>();
                 sellstore = seller.getStores();
                 Store[] storelist = new Store[sellstore.size()];
@@ -950,7 +955,7 @@ public class Market {
                 }
 
                 System.out.println("Returning to main menu.");
-            } else if (choice == 3) {    //choice = 3, statistics
+            } else if (choice.equals("View a dashboard with statistics for each stores")) {    //choice = 3, statistics
                 System.out.println("What would you like Statistics of?");
                 boolean validate;
                 int stats = 0;
@@ -1303,7 +1308,7 @@ public class Market {
                 }
 
                 System.out.println("Returning to main menu.");
-            } else if (choice == 4) { // view shopping carts
+            } else if (choice.equals("View number of products in shopping carts")) { // view shopping carts
                 // this code is really really really bad but i sure hope it works
                 // gotta test this
                 ArrayList<Customer> customers = Customer.loadAllCustomers();
@@ -1325,7 +1330,7 @@ public class Market {
                 }
 
                 System.out.println("Returning to main menu.");
-            } else if (choice == 5) { // modify account
+            } else if (choice.equals("Modify Account")) { // modify account
                 String input;
                 do {
                     System.out.println("1. Edit username.");
@@ -1358,13 +1363,14 @@ public class Market {
                     }
                 }
                 System.out.println("Success! Returning to main menu.");
-            } else if (choice == 6) {
+            } else if (choice.equals("Create a store")) {
                 System.out.println("Please enter a store name:");
                 String name = scanner.nextLine();
                 Store store = new Store(name, seller.getUsername());
                 seller.addStore(store);
-            } else if (choice == 7) return;
+            } else if (choice.equals("Exit")) {return;}
         } while (true);
+
     }
 }
 
