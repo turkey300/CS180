@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
+
 /**
  * This is the Market class containing a main method to run the program. It contains customer marketplace and seller
  * market, which contain functions customer or seller can select from.
@@ -656,14 +657,20 @@ public class Market {
         //    } while (!(choice >= 1 && choice <= 7));
 
             if (choice.equals("Modify Products")) { // Modify products
-                boolean valid;
+               boolean valid;
                 int storeNum = 0;
-                System.out.println("Which store would you like to edit?");
-                do {
+               //System.out.println("Which store would you like to edit?");
+                //do {
                     valid = true;
-                    for (int i = 0; i < seller.getStores().size(); i++) {
-                        System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
+                    ArrayList<Store> astores = seller.getStores();
+                    Store[] stores = new Store[astores.size()];
+                    String[] names = new String[astores.size()];
+                    for (int i = 0; i < astores.size(); i++) {
+                        // System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
+                        stores[i] = astores.get(i);
+                        names[i] = stores[i].getStoreName();
                     }
+                    /**
                     try {
                         storeNum = Integer.parseInt(scanner.nextLine());
                         if (!(storeNum >= 1 && storeNum <= seller.getStores().size())) {
@@ -674,13 +681,28 @@ public class Market {
                         System.out.println("Please enter a number corresponding to a store.");
                         valid = false;
                     }
-                } while (!valid);
-                Store currentStore = seller.getStore((storeNum - 1));
+                     */
+                    String currentStores;
+                   //  System.out.println(stores[0]); just testing
+                    currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?" , "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
+                    int j;
+                    j = Arrays.asList(names).indexOf(currentStores);
+                    Store currentStore = stores[j];
+                   // currentStore = stores[j];
+                    // System.out.println(currentStore); more tests
+               // } while (!valid);
+               // Store currentStore = seller.getStore((storeNum - 1));
+                /**
                 System.out.println("What would you like to do?");
                 System.out.println("1. Add a product");
                 System.out.println("2. Edit a product");
                 System.out.println("3. Delete a product");
                 System.out.println("4. Export products");
+                 */
+                String[] choices = {"1. Add a product", "2. Edit a product", "3. Delete a product", "4. Export products"};
+                String action;
+                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?", JOptionPane.QUESTION_MESSAGE, null , choices, choices[0]);
+                /**
                 int modifyOption = 0;
                 do {
                     valid = true;
@@ -695,7 +717,8 @@ public class Market {
                         valid = false;
                     }
                 } while (!valid);
-                if (modifyOption == 1) {    //add a product
+                 */
+                if (action.equals("1. Add a product")) {    //add a product
                     String input;
                     do {
                         System.out.println("1. Import product from csv.\n2. Create product in terminal.");
@@ -793,7 +816,7 @@ public class Market {
                         currentStore.saveStore();
                         seller.saveSeller();
                     }
-                } else if (modifyOption == 2) {    //edit a product
+                } else if (action.equals("2. Edit a product")) {    //edit a product
                     int productNum = -1;
                     do {
                         valid = true;
@@ -862,7 +885,7 @@ public class Market {
                         }
                     } while (!valid);
                     seller.saveSeller();
-                } else if (modifyOption == 3) {    //modify option = 3;delete a product
+                } else if (action.equals("3. Delete a product")) {    //modify option = 3;delete a product
                     int productNum = -1;
                     do {
                         valid = true;
@@ -885,7 +908,7 @@ public class Market {
                     Product currentProduct = currentStore.getProduct(productNum);
                     currentStore.deleteProduct(currentProduct);
                     seller.saveSeller();
-                } else if (modifyOption == 4) { //modify option = 4; export products
+                } else if (action.equals("4. Export products")) { //modify option = 4; export products
                     while (true) {
                         System.out.println("Please enter the file path to export to.");
                         String file = scanner.nextLine();
