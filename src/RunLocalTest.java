@@ -1,4 +1,4 @@
-/**
+
 import org.junit.Test;
 
 import org.junit.After;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
  *
  * @author Purdue CS
  * @version August 22, 2022
-
+*/
 public class RunLocalTest {
     public static void main(String[] args) {
         Result result = JUnitCore.runClasses(TestCase.class);
@@ -44,7 +44,7 @@ public class RunLocalTest {
      *
      * @author Purdue CS
      * @version August 22, 2022
-
+     */
     public static class TestCase {
         private final PrintStream originalOutput = System.out;
         private final InputStream originalSysin = System.in;
@@ -124,7 +124,7 @@ public class RunLocalTest {
          *
          * @author Purdue CS, Dimitri Paikos, Lab12
          * @version 4/10/2023
-
+         */
         @Test(timeout = 1000)
         public void testExpectedOne() { // makes a seller, creates one product, imports another
             // Set the input
@@ -399,4 +399,3 @@ public class RunLocalTest {
         }
     }
 }
-*/
