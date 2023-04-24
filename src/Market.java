@@ -25,78 +25,104 @@ public class Market implements Runnable {
 
     public void run() {
         // logging in/creating account
-        Scanner scanner = new Scanner(System.in);
-        String userType;    //1 for Seller, 2 for Customer
-        String accountType; //1 for login or 2 for creating account
-        String username;
-        String password;
-        Customer customer = null; // customer account if they select customer
-        Seller seller = null;
-        // add name if we want
-        System.out.println("Welcome to the marketplace!");
-        System.out.println("Please select your account type");
-        do {
-            System.out.print("1. Seller\n2. Customer\n");
-            userType = scanner.nextLine();
-            if (!userType.equals("1") && !userType.equals("2"))
-                System.out.println("Please enter 1 for seller or 2 for customer");
-        } while (!userType.equals("1") && !userType.equals("2"));
+        Scanner scanner = new Scanner(System.in);//TODO:delete this
+        try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+            String userType;    //1 for Seller, 2 for Customer
+            String accountType; //1 for login or 2 for creating account
+            String username;
+            String password;
+            Customer customer = null; // customer account if they select customer
+            Seller seller = null;
+            JOptionPane.showMessageDialog(null, "Welcome to the marketplace!", "Welcome",
+                    JOptionPane.INFORMATION_MESSAGE);
+            String[] userTypeOptions = {"Seller", "Customer"};
+            do {
+                userType = (String) JOptionPane.showInputDialog(null, "Please select your user type."
+                        , "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
+                if (userType == null)
+                    JOptionPane.showMessageDialog(null, "Please select your user type!", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+            } while (userType == null);
 
-        do {
-            System.out.print("1. Login\n2. Create an account\n");
-            accountType = scanner.nextLine();
-            if (!accountType.equals("1") && !accountType.equals("2"))
-                System.out.println("Please enter 1 to login or 2 to create an account");
-        } while (!accountType.equals("1") && !accountType.equals("2"));
+            userTypeOptions = new String[]{"Log in", "Create an account"};
+            do {
+                accountType = (String) JOptionPane.showInputDialog(null, "Please select your account type."
+                        , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
+                if (accountType == null)
+                    JOptionPane.showMessageDialog(null, "Please select your account type!", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+            } while (accountType == null);
+            oos.writeObject(accountType);
+            oos.writeObject(userType);
 
-        // creating account
-        if (accountType.equals("2")) {
-            System.out.println("Please enter a username/email");
-            username = scanner.nextLine();
-            System.out.println("Please enter a password");
-            password = scanner.nextLine();
-            if (userType.equals("2")) {    //Creating customer account
-                try {
-                    Customer newCustomer = new Customer(username, password, true);
-                } catch (AlreadyUserException e) {
-                    System.out.println(e.getMessage());
-                } catch (OtherUserException e) {
-                    System.out.println(e.getMessage());
-                    return;
+            username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                    , "Username", JOptionPane.QUESTION_MESSAGE);
+            password = JOptionPane.showInputDialog(null, "Please enter your password."
+                    , "Username", JOptionPane.QUESTION_MESSAGE);
+            oos.writeObject(username);
+            oos.writeObject(password);
+
+            // creating account
+            if (accountType.equals("Create an account")) {
+                if (userType.equals("2")) {    //Creating customer account
+//                    try {
+//                        Customer newCustomer = new Customer(username, password, true);
+//                    } catch (AlreadyUserException e) {
+//                        System.out.println(e.getMessage());
+//                    } catch (OtherUserException e) {
+//                        System.out.println(e.getMessage());
+//                        return;
+//                    }
+                    Object newCustomer = ois.readObject();
+                    //didn't test so not sure if this will work
+                    if(newCustomer instanceof Customer){
+                        System.out.println("Please login"); // logging in now
+                        customer = customerLogin(scanner);   //delete scanner here
+                    } else {
+                        JOptionPane.showMessageDialog(null, newCustomer, "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
+
+                } else if (userType.equals("1")) {    //creating Seller account
+//                    try {
+//                        Seller newSeller = new Seller(username, password, true);
+//                    } catch (AlreadyUserException e) {
+//                        System.out.println(e.getMessage());
+//                    } catch (OtherUserException e) {
+//                        System.out.println(e.getMessage());
+//                        return;
+//                    }
+                    Object newSeller = ois.readObject();
+                    //didn't test so not sure if this will work
+                    if(newSeller instanceof Seller){
+                        System.out.println("Please login"); // logging in now
+                        seller = sellerLogin(scanner);   //delete scanner here
+                    } else {
+                        JOptionPane.showMessageDialog(null, newSeller, "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 }
-
-                System.out.println("Please login"); // logging in now
-                customer = customerLogin(scanner);
-            } else if (userType.equals("1")) {    //creating Seller account
-                try {
-                    Seller newSeller = new Seller(username, password, true);
-                } catch (AlreadyUserException e) {
-                    System.out.println(e.getMessage());
-                } catch (OtherUserException e) {
-                    System.out.println(e.getMessage());
-                    return;
+            } else if (accountType.equals("1")) { // if they want to login
+                if (userType.equals("2")) {    //log in as a customer
+                    customer = customerLogin(scanner);
+                } else if (userType.equals("1")) {    //log in as a seller
+                    seller = sellerLogin(scanner);
                 }
-
-                System.out.println("Please login"); // logging in now
-                seller = sellerLogin(scanner);
             }
-        } else if (accountType.equals("1")) { // if they want to login
-            if (userType.equals("2")) {    //log in as a customer
-                customer = customerLogin(scanner);
-            } else if (userType.equals("1")) {    //log in as a seller
-                seller = sellerLogin(scanner);
+            System.out.println("Successfully logged in!");
+            // main marketplace
+            if (customer != null) {
+                // marketplace for customer
+                customerMarketplace(scanner, customer);
+            } else {
+                // marketplace for seller
+                sellerMarketplace(scanner, seller);
             }
+            System.out.println("Goodbye!");
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
-        System.out.println("Successfully logged in!");
-        // main marketplace
-        if (customer != null) {
-            // marketplace for customer
-            customerMarketplace(scanner, customer);
-        } else {
-            // marketplace for seller
-            sellerMarketplace(scanner, seller);
-        }
-        System.out.println("Goodbye!");
     }
 
     // establish connection with server
@@ -1426,9 +1452,7 @@ public class Market implements Runnable {
                 String name = scanner.nextLine();
                 Store store = new Store(name, seller.getUsername());
                 seller.addStore(store);
-            } else if (choice.equals("Exit")) {
-                return;
-            }
+            } else if (choice.equals("Exit")) return;
         } while (true);
 
     }
