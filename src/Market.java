@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.*;
+import java.net.Socket;
 import javax.swing.*;
 
 
@@ -10,8 +11,19 @@ import javax.swing.*;
  * @author Ekaterina Tszyao, Dimitri Paikos, Tyler Kei, Ryan Timmerman, Lab12
  * @version 4/10/2023
  */
-public class Market {
-    public static void main(String[] args) {
+public class Market implements Runnable {
+    private Socket socket;
+
+    public Market(Socket socket) {
+        this.socket = socket;
+    }
+
+    public static void main(String[] args) throws IOException {
+        Market market = new Market(connect());
+        new Thread(market).start();
+    }
+
+    public void run() {
         // logging in/creating account
         Scanner scanner = new Scanner(System.in);
         String userType;    //1 for Seller, 2 for Customer
@@ -87,6 +99,29 @@ public class Market {
         System.out.println("Goodbye!");
     }
 
+    // establish connection with server
+    public static Socket connect() {
+        String input;
+        input = JOptionPane.showInputDialog(null, "Enter hostname", "Server?",
+                JOptionPane.QUESTION_MESSAGE);
+        while (true) {
+            while (input == null || input.equals("-1") || input.isBlank()) {
+                if (input == null || input.isBlank())
+                    JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
+                            JOptionPane.ERROR_MESSAGE);
+                input = JOptionPane.showInputDialog(null, "Enter hostname", "Server?",
+                        JOptionPane.QUESTION_MESSAGE);
+            }
+            try {
+                Socket socket1 = new Socket(input, 4242);
+                return socket1;
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Error connecting to host!", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+                input = "-1";
+            }
+        }
+    }
 
     //log in as a customer
     public static Customer customerLogin(Scanner scanner) {
@@ -636,87 +671,87 @@ public class Market {
             //int choice = 0;
             //System.out.println("What would you like to do?");
             //do {
-             //   System.out.println("1. Modify products.");
-              //  System.out.println("2. View a list of sales by store.");
-               // System.out.println("3. View a dashboard with statistics for each stores.");
-               // System.out.println("4. View number of products in shopping carts.");
-               // System.out.println("5. Modify Account.");
-               // System.out.println("6. Create a store.");
-               // System.out.println("7. Exit.");
-                String[] selloptions = {"Modify Products", "View a list of sales by store", "View a dashboard with statistics for each stores", "View number of products in shopping carts", "Modify Account", "Create a store", "Exit"};
-                String choice;
-                choice = (String) JOptionPane.showInputDialog(null, "What would you like to do", "Action", JOptionPane.QUESTION_MESSAGE, null, selloptions, selloptions[0]);
+            //   System.out.println("1. Modify products.");
+            //  System.out.println("2. View a list of sales by store.");
+            // System.out.println("3. View a dashboard with statistics for each stores.");
+            // System.out.println("4. View number of products in shopping carts.");
+            // System.out.println("5. Modify Account.");
+            // System.out.println("6. Create a store.");
+            // System.out.println("7. Exit.");
+            String[] selloptions = {"Modify Products", "View a list of sales by store", "View a dashboard with statistics for each stores", "View number of products in shopping carts", "Modify Account", "Create a store", "Exit"};
+            String choice;
+            choice = (String) JOptionPane.showInputDialog(null, "What would you like to do", "Action", JOptionPane.QUESTION_MESSAGE, null, selloptions, selloptions[0]);
 
-                //  try {    //if input is not Integer, catch exception and repeat main page prompt
-                //    choice = Integer.parseInt(scanner.nextLine());
-                  //  if (choice < 1 || choice > 7)
-                    //    System.out.println("Please enter an available option.");
-                //} catch (NumberFormatException e) {
-                  //  System.out.println("Please enter an available option.");
-                //}
-        //    } while (!(choice >= 1 && choice <= 7));
+            //  try {    //if input is not Integer, catch exception and repeat main page prompt
+            //    choice = Integer.parseInt(scanner.nextLine());
+            //  if (choice < 1 || choice > 7)
+            //    System.out.println("Please enter an available option.");
+            //} catch (NumberFormatException e) {
+            //  System.out.println("Please enter an available option.");
+            //}
+            //    } while (!(choice >= 1 && choice <= 7));
 
             if (choice.equals("Modify Products")) { // Modify products
-               boolean valid;
+                boolean valid;
                 int storeNum = 0;
-               //System.out.println("Which store would you like to edit?");
+                //System.out.println("Which store would you like to edit?");
                 //do {
-                    valid = true;
-                    ArrayList<Store> astores = seller.getStores();
-                    Store[] stores = new Store[astores.size()];
-                    String[] names = new String[astores.size()];
-                    for (int i = 0; i < astores.size(); i++) {
-                        // System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
-                        stores[i] = astores.get(i);
-                        names[i] = stores[i].getStoreName();
-                    }
-                    /**
-                    try {
-                        storeNum = Integer.parseInt(scanner.nextLine());
-                        if (!(storeNum >= 1 && storeNum <= seller.getStores().size())) {
-                            System.out.println("Please enter a number corresponding to a store.");
-                            valid = false;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Please enter a number corresponding to a store.");
-                        valid = false;
-                    }
-                     */
-                    String currentStores;
-                   //  System.out.println(stores[0]); just testing
-                    currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?" , "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
-                    int j;
-                    j = Arrays.asList(names).indexOf(currentStores);
-                    Store currentStore = stores[j];
-                   // currentStore = stores[j];
-                    // System.out.println(currentStore); more tests
-               // } while (!valid);
-               // Store currentStore = seller.getStore((storeNum - 1));
+                valid = true;
+                ArrayList<Store> astores = seller.getStores();
+                Store[] stores = new Store[astores.size()];
+                String[] names = new String[astores.size()];
+                for (int i = 0; i < astores.size(); i++) {
+                    // System.out.printf("%d. %s\n", i + 1, seller.getStores().get(i).getStoreName());
+                    stores[i] = astores.get(i);
+                    names[i] = stores[i].getStoreName();
+                }
                 /**
-                System.out.println("What would you like to do?");
-                System.out.println("1. Add a product");
-                System.out.println("2. Edit a product");
-                System.out.println("3. Delete a product");
-                System.out.println("4. Export products");
+                 try {
+                 storeNum = Integer.parseInt(scanner.nextLine());
+                 if (!(storeNum >= 1 && storeNum <= seller.getStores().size())) {
+                 System.out.println("Please enter a number corresponding to a store.");
+                 valid = false;
+                 }
+                 } catch (NumberFormatException e) {
+                 System.out.println("Please enter a number corresponding to a store.");
+                 valid = false;
+                 }
+                 */
+                String currentStores;
+                //  System.out.println(stores[0]); just testing
+                currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?", "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
+                int j;
+                j = Arrays.asList(names).indexOf(currentStores);
+                Store currentStore = stores[j];
+                // currentStore = stores[j];
+                // System.out.println(currentStore); more tests
+                // } while (!valid);
+                // Store currentStore = seller.getStore((storeNum - 1));
+                /**
+                 System.out.println("What would you like to do?");
+                 System.out.println("1. Add a product");
+                 System.out.println("2. Edit a product");
+                 System.out.println("3. Delete a product");
+                 System.out.println("4. Export products");
                  */
                 String[] choices = {"1. Add a product", "2. Edit a product", "3. Delete a product", "4. Export products"};
                 String action;
-                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?", JOptionPane.QUESTION_MESSAGE, null , choices, choices[0]);
+                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
                 /**
-                int modifyOption = 0;
-                do {
-                    valid = true;
-                    try {
-                        modifyOption = Integer.parseInt(scanner.nextLine());
-                        if (modifyOption < 1 || modifyOption > 4) {
-                            System.out.println("Please enter an available option.");
-                            valid = false;
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Please enter an available option.");
-                        valid = false;
-                    }
-                } while (!valid);
+                 int modifyOption = 0;
+                 do {
+                 valid = true;
+                 try {
+                 modifyOption = Integer.parseInt(scanner.nextLine());
+                 if (modifyOption < 1 || modifyOption > 4) {
+                 System.out.println("Please enter an available option.");
+                 valid = false;
+                 }
+                 } catch (NumberFormatException e) {
+                 System.out.println("Please enter an available option.");
+                 valid = false;
+                 }
+                 } while (!valid);
                  */
                 if (action.equals("1. Add a product")) {    //add a product
                     String input;
@@ -1391,7 +1426,9 @@ public class Market {
                 String name = scanner.nextLine();
                 Store store = new Store(name, seller.getUsername());
                 seller.addStore(store);
-            } else if (choice.equals("Exit")) {return;}
+            } else if (choice.equals("Exit")) {
+                return;
+            }
         } while (true);
 
     }
