@@ -122,10 +122,10 @@ public class Market implements Runnable {
             // main marketplace
             if (customer != null) {
                 // marketplace for customer
-                customerMarketplace(scanner, customer);
+                customerMarketplace(customer, oos, ois);
             } else {
                 // marketplace for seller
-                sellerMarketplace(scanner, seller);
+                sellerMarketplace(seller, oos, ois);
             }
             JOptionPane.showMessageDialog(null, "Goodbye!"
                     , "Farewell", JOptionPane.INFORMATION_MESSAGE);
@@ -270,12 +270,20 @@ public class Market implements Runnable {
         return seller;
     }
 
-    public static void customerMarketplace(Scanner scanner, Customer customer) {
+    public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois) {
         //checks shopping cart for updated products
         customer.checkShoppingCart();
         //display of products
-        ArrayList<Seller> sellers = Seller.loadAllSellers();
+        ArrayList<Seller> sellers = new ArrayList<>();
+//        ArrayList<Seller> sellers = Seller.loadAllSellers();
         while (true) {   //loop for the main page
+            try { // moved get sellers inside loop so it refreshes
+                oos.writeObject("List of sellers");
+                oos.flush();
+                sellers = (ArrayList<Seller>) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             int i = 1;   //index used to number products and other choices
             ArrayList<Product> allProducts = new ArrayList<>();
             ArrayList<Store> allStores = new ArrayList<>();
@@ -611,17 +619,47 @@ public class Market implements Runnable {
                     if (input.equals("1")) {
                         System.out.println("What is your new username?");
                         input = scanner.nextLine();
-                        customer.setUsername(input);
+                        try {
+                            oos.writeObject("Change username");
+                            oos.writeObject("Customer");
+                            oos.writeObject(customer);
+                            oos.writeObject(input);
+                            oos.flush();
+
+                            customer = (Customer) ois.readObject();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+//                        customer.setUsername(input);
                     } else if (input.equals("2")) {
                         System.out.println("What is your new password?");
                         input = scanner.nextLine();
-                        customer.setPassword(input);
+                        try {
+                            oos.writeObject("Change password");
+                            oos.writeObject("Customer");
+                            oos.writeObject(customer);
+                            oos.writeObject(input);
+                            oos.flush();
+
+                            customer = (Customer) ois.readObject();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+//                        customer.setPassword(input);
                     } else {
                         System.out.println("Are you sure you want to delete your account?");
                         System.out.println("1. Yes\n2. No");
                         input = scanner.nextLine();
                         if (input.equals("1")) {
-                            customer.deleteAccount();
+                            try {
+                                oos.writeObject("Delete account");
+                                oos.writeObject("Customer");
+                                oos.writeObject(customer);
+                                oos.flush();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+//                            customer.deleteAccount();
                             System.out.println("Account has been deleted.");
                             return;
                         } else {
@@ -767,7 +805,7 @@ public class Market implements Runnable {
         }
     }
 
-    public static void sellerMarketplace(Scanner scanner, Seller seller) {
+    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois) {
         do {
             //int choice = 0;
             //System.out.println("What would you like to do?");
@@ -1503,17 +1541,47 @@ public class Market implements Runnable {
                 if (input.equals("1")) {
                     System.out.println("What is your new username?");
                     input = scanner.nextLine();
-                    seller.setUsername(input);
+                    try {
+                        oos.writeObject("Change username");
+                        oos.writeObject("Seller");
+                        oos.writeObject(seller);
+                        oos.writeObject(input);
+                        oos.flush();
+
+                        seller = (Seller) ois.readObject();
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+//                    seller.setUsername(input);
                 } else if (input.equals("2")) {
                     System.out.println("What is your new password?");
                     input = scanner.nextLine();
-                    seller.setPassword(input);
+                    try {
+                        oos.writeObject("Change password");
+                        oos.writeObject("Seller");
+                        oos.writeObject(seller);
+                        oos.writeObject(input);
+                        oos.flush();
+
+                        seller = (Seller) ois.readObject();
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+//                    seller.setPassword(input);
                 } else if (input.equals("3")) {
                     System.out.println("Are you sure you want to delete your account?");
                     System.out.println("1. Yes\n2. No");
                     input = scanner.nextLine();
                     if (input.equals("1")) {
-                        seller.deleteAccount();
+                        try {
+                            oos.writeObject("Delete account");
+                            oos.writeObject("Seller");
+                            oos.writeObject(seller);
+                            oos.flush();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+//                        seller.deleteAccount();
                         System.out.println("Account has been deleted.");
                         return;
                     } else {

@@ -77,6 +77,52 @@ public class Server implements Runnable {
                         }
                         oos.flush();
                     }
+                } else if (command.equals("List of Sellers")) { // sends list of sellers
+                    oos.writeObject(Seller.loadAllSellers());
+                    oos.flush();
+                } else if (command.equals("Change username")) {
+                    String userType = (String) ois.readObject();
+                    if (userType.equals("Customer")) {
+                        Customer customer = (Customer) ois.readObject();
+                        String username = (String) ois.readObject();
+
+                        customer.setUsername(username);
+                        oos.writeObject(customer);
+                        oos.flush();
+                    } else {
+                        Seller seller = (Seller) ois.readObject();
+                        String username = (String) ois.readObject();
+
+                        seller.setUsername(username);
+                        oos.writeObject(seller);
+                        oos.flush();
+                    }
+                } else if (command.equals("Change password")) {
+                    String userType = (String) ois.readObject();
+                    if (userType.equals("Customer")) {
+                        Customer customer = (Customer) ois.readObject();
+                        String pass = (String) ois.readObject();
+
+                        customer.setPassword(pass);
+                        oos.writeObject(customer);
+                        oos.flush();
+                    } else {
+                        Seller seller = (Seller) ois.readObject();
+                        String pass = (String) ois.readObject();
+
+                        seller.setPassword(pass);
+                        oos.writeObject(seller);
+                        oos.flush();
+                    }
+                } else if (command.equals("Delete account")) {
+                    String userType = (String) ois.readObject();
+                    if (userType.equals("Customer")) {
+                        Customer customer = (Customer) ois.readObject();
+                        customer.deleteAccount();
+                    } else {
+                        Seller seller = (Seller) ois.readObject();
+                        seller.deleteAccount();
+                    }
                 }
                 //other commands
 
