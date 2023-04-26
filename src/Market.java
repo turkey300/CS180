@@ -26,10 +26,11 @@ public class Market implements Runnable {
     public void run() {
         // logging in/creating account
         Scanner scanner = new Scanner(System.in);//TODO:delete this
-        try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
-            String userType;    //1 for Seller, 2 for Customer
-            String accountType; //1 for login or 2 for creating account
+        try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
+            oos.flush();
+            String userType;    //Seller or Customer
+            String accountType; //log in or create an account
             String username;
             String password;
             Customer customer = null; // customer account if they select customer
@@ -53,19 +54,20 @@ public class Market implements Runnable {
                     JOptionPane.showMessageDialog(null, "Please select your account type!", "Error",
                             JOptionPane.ERROR_MESSAGE);
             } while (accountType == null);
-            oos.writeObject(accountType);
-            oos.writeObject(userType);
 
-            username = JOptionPane.showInputDialog(null, "Please enter your username/email."
-                    , "Username", JOptionPane.QUESTION_MESSAGE);
-            password = JOptionPane.showInputDialog(null, "Please enter your password."
-                    , "Username", JOptionPane.QUESTION_MESSAGE);
-            oos.writeObject(username);
-            oos.writeObject(password);
 
             // creating account
             if (accountType.equals("Create an account")) {
-                if (userType.equals("2")) {    //Creating customer account
+                username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                password = JOptionPane.showInputDialog(null, "Please enter your password."
+                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                oos.writeObject(accountType);
+                oos.writeObject(userType);
+                oos.writeObject(username);
+                oos.writeObject(password);
+                oos.flush();
+                if (userType.equals("Customer")) {    //Creating customer account
 //                    try {
 //                        Customer newCustomer = new Customer(username, password, true);
 //                    } catch (AlreadyUserException e) {
@@ -76,15 +78,17 @@ public class Market implements Runnable {
 //                    }
                     Object newCustomer = ois.readObject();
                     //didn't test so not sure if this will work
-                    if(newCustomer instanceof Customer){
-                        System.out.println("Please login"); // logging in now
-                        customer = customerLogin(scanner);   //delete scanner here
+                    if (newCustomer instanceof Customer) {
+                        JOptionPane.showMessageDialog(null, "Account created. Please log in."
+                                , "Log in", JOptionPane.INFORMATION_MESSAGE); // logging in now
+                        customer = customerLogin(oos, ois);   //delete scanner here
                     } else {
                         JOptionPane.showMessageDialog(null, newCustomer, "Error",
                                 JOptionPane.ERROR_MESSAGE);
+                        return;   //if failed to create an account(AlreadyUser or OtherUser), program ends
                     }
 
-                } else if (userType.equals("1")) {    //creating Seller account
+                } else if (userType.equals("Seller")) {    //creating Seller account
 //                    try {
 //                        Seller newSeller = new Seller(username, password, true);
 //                    } catch (AlreadyUserException e) {
@@ -95,22 +99,26 @@ public class Market implements Runnable {
 //                    }
                     Object newSeller = ois.readObject();
                     //didn't test so not sure if this will work
-                    if(newSeller instanceof Seller){
-                        System.out.println("Please login"); // logging in now
-                        seller = sellerLogin(scanner);   //delete scanner here
+                    if (newSeller instanceof Seller) {
+                        JOptionPane.showMessageDialog(null, "Account created. Please log in."
+                                , "Log in", JOptionPane.INFORMATION_MESSAGE); // logging in now
+                        seller = sellerLogin(oos, ois);   //delete scanner here
                     } else {
                         JOptionPane.showMessageDialog(null, newSeller, "Error",
                                 JOptionPane.ERROR_MESSAGE);
+                        return;   //if failed to create an account(AlreadyUser or OtherUser), program ends
                     }
                 }
-            } else if (accountType.equals("1")) { // if they want to login
-                if (userType.equals("2")) {    //log in as a customer
-                    customer = customerLogin(scanner);
-                } else if (userType.equals("1")) {    //log in as a seller
-                    seller = sellerLogin(scanner);
+            } else if (accountType.equals("Log in")) { // if they want to log in
+                if (userType.equals("Customer")) {    //log in as a customer
+                    customer = customerLogin(oos, ois);
+                } else if (userType.equals("Seller")) {    //log in as a seller
+                    seller = sellerLogin(oos, ois);
                 }
             }
-            System.out.println("Successfully logged in!");
+
+            JOptionPane.showMessageDialog(null, "Successfully logged in!"
+                    , "Successful Log In", JOptionPane.INFORMATION_MESSAGE);
             // main marketplace
             if (customer != null) {
                 // marketplace for customer
@@ -119,7 +127,8 @@ public class Market implements Runnable {
                 // marketplace for seller
                 sellerMarketplace(scanner, seller);
             }
-            System.out.println("Goodbye!");
+            JOptionPane.showMessageDialog(null, "Goodbye!"
+                    , "Farewell", JOptionPane.INFORMATION_MESSAGE);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -150,22 +159,39 @@ public class Market implements Runnable {
     }
 
     //log in as a customer
-    public static Customer customerLogin(Scanner scanner) {
+    public static Customer customerLogin(ObjectOutputStream oos, ObjectInputStream ois) {
         Customer customer;
         while (true) {
-            System.out.println("Please enter your username/email");
-            String username = scanner.nextLine();
-            System.out.println("Please enter your password");
-            String password = scanner.nextLine();
             try {
-                if (Customer.checkAccount(username, password)) {
-                    customer = Customer.loadCustomer(username);
+                String username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                String password = JOptionPane.showInputDialog(null, "Please enter your password."
+                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                oos.writeObject("Log in");
+                oos.writeObject("Customer");
+                oos.writeObject(username);
+                oos.writeObject(password);
+                oos.flush();
+                Object newCustomer = ois.readObject();
+//            try {
+//                if (Customer.checkAccount(username, password)) {
+//                    customer = Customer.loadCustomer(username);
+//                    break;
+//                } else { // if account details are wrong throws error
+//                    throw new NoUserException("This account does not exist!");
+//                }
+//            } catch (NoUserException e) {
+//                System.out.println(e.getMessage());
+//            }
+                if (newCustomer instanceof Customer) {
+                    customer = (Customer) newCustomer;
                     break;
-                } else { // if account details are wrong throws error
-                    throw new NoUserException("This account does not exist!");
+                } else {
+                    JOptionPane.showMessageDialog(null, newCustomer, "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (NoUserException e) {
-                System.out.println(e.getMessage());
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
 
@@ -173,22 +199,39 @@ public class Market implements Runnable {
     }
 
     //log in as a seller
-    public static Seller sellerLogin(Scanner scanner) {
+    public static Seller sellerLogin(ObjectOutputStream oos, ObjectInputStream ois) {
         Seller seller;
         while (true) {
-            System.out.println("Please enter your username/email");
-            String username = scanner.nextLine();
-            System.out.println("Please enter your password");
-            String password = scanner.nextLine();
             try {
-                if (Seller.checkAccount(username, password)) {
-                    seller = Seller.loadSeller(username);
+                String username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                String password = JOptionPane.showInputDialog(null, "Please enter your password."
+                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                oos.writeObject("Log in");
+                oos.writeObject("Seller");
+                oos.writeObject(username);
+                oos.writeObject(password);
+                oos.flush();
+                Object newSeller = ois.readObject();
+//                try {
+//                    if (Seller.checkAccount(username, password)) {
+//                        seller = Seller.loadSeller(username);
+//                        break;
+//                    } else { // if account details are wrong throws error
+//                        throw new NoUserException("This account does not exist!");
+//                    }
+//                } catch (NoUserException e) {
+//                    System.out.println(e.getMessage());
+//                }
+                if (newSeller instanceof Seller) {
+                    seller = (Seller) newSeller;
                     break;
-                } else { // if account details are wrong throws error
-                    throw new NoUserException("This account does not exist!");
+                } else {
+                    JOptionPane.showMessageDialog(null, newSeller, "Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (NoUserException e) {
-                System.out.println(e.getMessage());
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
         }
 

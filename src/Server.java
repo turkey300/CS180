@@ -1,8 +1,10 @@
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Server implements Runnable {
     private Socket socket;
@@ -17,6 +19,7 @@ public class Server implements Runnable {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
+                System.out.println("Connected"); //this line is only for testing
                 Server server = new Server(socket);
                 new Thread(server).start();
             } catch (IOException e) {
@@ -39,15 +42,17 @@ public class Server implements Runnable {
                             Seller newSeller = new Seller(username, password, true);
                             oos.writeObject(newSeller);
                         } catch (AlreadyUserException | OtherUserException e) {
-                            oos.writeObject(e);
+                            oos.writeObject(e.getMessage());
                         }
+                        oos.flush();
                     } else if (userType.equals("Customer")) {    //create customer account
                         try {
                             Customer newCustomer = new Customer(username, password, true);
                             oos.writeObject(newCustomer);
                         } catch (AlreadyUserException | OtherUserException e) {
-                            oos.writeObject(e);
+                            oos.writeObject(e.getMessage());
                         }
+                        oos.flush();
                     }
                 } else if (command.equals("Log in")) {
                     String userType = (String) ois.readObject();
@@ -61,6 +66,7 @@ public class Server implements Runnable {
 //                            oos.writeObject(new NoUserException("This account does not exist!"));
                             oos.writeObject("This account does not exist!");
                         }
+                        oos.flush();
                     } else if (userType.equals("Customer")) {    //log in as customer
                         if (Customer.checkAccount(username, password)) {
                             Customer customer = Customer.loadCustomer(username);
@@ -69,12 +75,15 @@ public class Server implements Runnable {
 //                            oos.writeObject(new NoUserException("This account does not exist!"));
                             oos.writeObject("This account does not exist!");
                         }
+                        oos.flush();
                     }
                 }
                 //other commands
 
 
             }
+        } catch (SocketException | EOFException e) {
+            //SocketException catches "Connection reset"; I cannot solve EOFException, but seems like everything is working fine
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
