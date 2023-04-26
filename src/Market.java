@@ -137,25 +137,43 @@ public class Market implements Runnable {
     // establish connection with server
     public static Socket connect() {
         String input;
-        input = JOptionPane.showInputDialog(null, "Enter hostname", "Server?",
-                JOptionPane.QUESTION_MESSAGE);
+//        input = JOptionPane.showInputDialog(null, "Enter hostname", "Server?",
+//                JOptionPane.QUESTION_MESSAGE);
         while (true) {
-            while (input == null || input.equals("-1") || input.isBlank()) {
-                if (input == null || input.isBlank())
-                    JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
-                            JOptionPane.ERROR_MESSAGE);
-                input = JOptionPane.showInputDialog(null, "Enter hostname", "Server?",
-                        JOptionPane.QUESTION_MESSAGE);
-            }
+            input = showInputDialog("Enter hostname");
+//            while (input == null || input.equals("-1") || input.isBlank()) {
+//                if (input == null) {
+//
+//                }
+//                if (input.isBlank())
+//                    JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
+//                            JOptionPane.ERROR_MESSAGE);
+//                input = JOptionPane.showInputDialog(null, "Enter hostname", "Server?",
+//                        JOptionPane.QUESTION_MESSAGE);
+//            }
             try {
                 Socket socket1 = new Socket(input, 4242);
                 return socket1;
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Error connecting to host!", "Error!",
                         JOptionPane.ERROR_MESSAGE);
-                input = "-1";
+//                input = "-1";
             }
         }
+    }
+
+    public static String showInputDialog(String message) {
+        String input;
+        input = JOptionPane.showInputDialog(null, message, "Marketplace",
+                JOptionPane.QUESTION_MESSAGE);
+        while (input == null || input.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
+                    JOptionPane.ERROR_MESSAGE);
+            input = JOptionPane.showInputDialog(null, message, "Marketplace",
+                    JOptionPane.QUESTION_MESSAGE);
+        }
+
+        return input;
     }
 
     //log in as a customer
