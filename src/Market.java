@@ -46,7 +46,7 @@ public class Market implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
             } while (userType == null);
 
-            userTypeOptions = new String[]{"Log in", "Create an account"};
+            userTypeOptions = new String[] {"Log in", "Create an account"};
             do {
                 accountType = (String) JOptionPane.showInputDialog(null, "Please select your account type."
                         , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
@@ -162,6 +162,20 @@ public class Market implements Runnable {
         }
     }
 
+    // if you want to do an input with the dropdown
+    public static String showInputDialog(String message, String[] options) {
+        String input;
+        input = (String) JOptionPane.showInputDialog(null, message
+                , "Marketplace", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        while (input == null || input.isBlank()) {
+            JOptionPane.showMessageDialog(null, message + "!", "Error!",
+                    JOptionPane.ERROR_MESSAGE);
+            input = (String) JOptionPane.showInputDialog(null, message
+                    , "Marketplace", JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        }
+
+        return input;
+    }
     public static String showInputDialog(String message) {
         String input;
         input = JOptionPane.showInputDialog(null, message, "Marketplace",
