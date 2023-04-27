@@ -607,18 +607,21 @@ public class Market implements Runnable {
 
                 } else if (choice == (i - 2)) {    //Modify account
                     String input;
-                    do {
-                        System.out.println("1. Edit username.");
-                        System.out.println("2. Edit password.");
-                        System.out.println("3. Delete account.");
-                        input = scanner.nextLine();
-                        if (!(input.equals("1") || input.equals("2") || input.equals("3")))
-                            System.out.println("Please enter a number corresponding to an option.");
-                    } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
+                    String[] options = {"Edit username", "Edit password", "Delete account", "Exit"};
+                    input = (String) showInputDialog("How would you like to modify your account?", options);
+//                    do {
+//                        System.out.println("1. Edit username.");
+//                        System.out.println("2. Edit password.");
+//                        System.out.println("3. Delete account.");
+//                        input = scanner.nextLine();
+//                        if (!(input.equals("1") || input.equals("2") || input.equals("3")))
+//                            System.out.println("Please enter a number corresponding to an option.");
+//                    } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
 
-                    if (input.equals("1")) {
-                        System.out.println("What is your new username?");
-                        input = scanner.nextLine();
+                    if (input.equals("Edit username")) {
+//                        System.out.println("What is your new username?");
+//                        input = scanner.nextLine();
+                        input = showInputDialog("What is your new username?");
                         try {
                             oos.writeObject("Change username");
                             oos.writeObject("Customer");
@@ -631,9 +634,10 @@ public class Market implements Runnable {
                             e.printStackTrace();
                         }
 //                        customer.setUsername(input);
-                    } else if (input.equals("2")) {
-                        System.out.println("What is your new password?");
-                        input = scanner.nextLine();
+                    } else if (input.equals("Edit password")) {
+//                        System.out.println("What is your new password?");
+//                        input = scanner.nextLine();
+                        input = showInputDialog("What is your new password");
                         try {
                             oos.writeObject("Change password");
                             oos.writeObject("Customer");
@@ -646,11 +650,14 @@ public class Market implements Runnable {
                             e.printStackTrace();
                         }
 //                        customer.setPassword(input);
-                    } else {
-                        System.out.println("Are you sure you want to delete your account?");
-                        System.out.println("1. Yes\n2. No");
-                        input = scanner.nextLine();
-                        if (input.equals("1")) {
+                    } else if (input.equals("Delete account")){
+//                        System.out.println("Are you sure you want to delete your account?");
+//                        System.out.println("1. Yes\n2. No");
+//                        input = scanner.nextLine();
+                        int delete = JOptionPane.showConfirmDialog(null,
+                                "Are you sure you want to delete your account?",
+                                "Marketplace", JOptionPane.YES_NO_OPTION);
+                        if (delete == JOptionPane.YES_OPTION) {
                             try {
                                 oos.writeObject("Delete account");
                                 oos.writeObject("Customer");
@@ -660,14 +667,21 @@ public class Market implements Runnable {
                                 e.printStackTrace();
                             }
 //                            customer.deleteAccount();
-                            System.out.println("Account has been deleted.");
+//                            System.out.println("Account has been deleted.");
+                            JOptionPane.showMessageDialog(null, "Account has been deleted",
+                                    "Marketplace", JOptionPane.INFORMATION_MESSAGE);
                             return;
                         } else {
-                            System.out.println("You chose not to delete this account! Returning to main page...");
+//                            System.out.println("You chose not to delete this account! Returning to main page...");
+                            JOptionPane.showMessageDialog(null,
+                                    "You chose not to delete this account! Returning to main page...",
+                                    "Marketplace", JOptionPane.INFORMATION_MESSAGE);
                             continue;
                         }
                     }
-                    System.out.println("Success! Returning to main page...");
+//                    System.out.println("Success! Returning to main page...");
+                    JOptionPane.showMessageDialog(null, "Returning to main page...",
+                            "Marketplace", JOptionPane.INFORMATION_MESSAGE);
                 } else if (choice == (i - 1)) {
                     ArrayList<PurchaseHistory> purchaseHistory = customer.getPurchaseHistory();
                     if (purchaseHistory.isEmpty()) {
@@ -1529,18 +1543,21 @@ public class Market implements Runnable {
                 System.out.println("Returning to main menu.");
             } else if (choice.equals("Modify Account")) { // modify account
                 String input;
-                do {
-                    System.out.println("1. Edit username.");
-                    System.out.println("2. Edit password.");
-                    System.out.println("3. Delete account.");
-                    input = scanner.nextLine();
-                    if (!(input.equals("1") || input.equals("2") || input.equals("3")))
-                        System.out.println("Please enter a number corresponding to an option.");
-                } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
+                String[] options = {"Edit username", "Edit password", "Delete account", "Exit"};
+                input = (String) showInputDialog("How would you like to modify your account?", options);
+//                do {
+//                    System.out.println("1. Edit username.");
+//                    System.out.println("2. Edit password.");
+//                    System.out.println("3. Delete account.");
+//                    input = scanner.nextLine();
+//                    if (!(input.equals("1") || input.equals("2") || input.equals("3")))
+//                        System.out.println("Please enter a number corresponding to an option.");
+//                } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
 
-                if (input.equals("1")) {
-                    System.out.println("What is your new username?");
-                    input = scanner.nextLine();
+                if (input.equals("Edit username")) {
+//                    System.out.println("What is your new username?");
+//                    input = scanner.nextLine();
+                    input = (String) showInputDialog("What is your new username?");
                     try {
                         oos.writeObject("Change username");
                         oos.writeObject("Seller");
@@ -1553,9 +1570,10 @@ public class Market implements Runnable {
                         e.printStackTrace();
                     }
 //                    seller.setUsername(input);
-                } else if (input.equals("2")) {
-                    System.out.println("What is your new password?");
-                    input = scanner.nextLine();
+                } else if (input.equals("Edit password")) {
+//                    System.out.println("What is your new password?");
+//                    input = scanner.nextLine();
+                    input = (String) showInputDialog("What is your new password?");
                     try {
                         oos.writeObject("Change password");
                         oos.writeObject("Seller");
@@ -1568,11 +1586,14 @@ public class Market implements Runnable {
                         e.printStackTrace();
                     }
 //                    seller.setPassword(input);
-                } else if (input.equals("3")) {
-                    System.out.println("Are you sure you want to delete your account?");
-                    System.out.println("1. Yes\n2. No");
-                    input = scanner.nextLine();
-                    if (input.equals("1")) {
+                } else if (input.equals("Delete account")) {
+//                    System.out.println("Are you sure you want to delete your account?");
+//                    System.out.println("1. Yes\n2. No");
+//                    input = scanner.nextLine();
+                    int delete = JOptionPane.showConfirmDialog(null,
+                            "Are you sure you want to delete your account?",
+                            "Marketplace", JOptionPane.YES_NO_OPTION);
+                    if (delete == JOptionPane.YES_OPTION) {
                         try {
                             oos.writeObject("Delete account");
                             oos.writeObject("Seller");
@@ -1582,14 +1603,21 @@ public class Market implements Runnable {
                             e.printStackTrace();
                         }
 //                        seller.deleteAccount();
-                        System.out.println("Account has been deleted.");
+//                        System.out.println("Account has been deleted.");
+                        JOptionPane.showMessageDialog(null, "Account has been deleted",
+                                "Marketplace", JOptionPane.INFORMATION_MESSAGE);
                         return;
                     } else {
-                        System.out.println("You chose not to delete this account! Returning to main menu...");
+//                        System.out.println("You chose not to delete this account! Returning to main menu...");
+                        JOptionPane.showMessageDialog(null,
+                                "You chose not to delete this account! Returning to main menu...",
+                                "Marketplace", JOptionPane.INFORMATION_MESSAGE);
                         continue;
                     }
                 }
-                System.out.println("Success! Returning to main menu.");
+//                System.out.println("Success! Returning to main menu.");
+                JOptionPane.showMessageDialog(null, "Returning to main menu",
+                        "Marketplace", JOptionPane.INFORMATION_MESSAGE);
             } else if (choice.equals("Create a store")) {
                 System.out.println("Please enter a store name:");
                 String name = scanner.nextLine();
