@@ -1,4 +1,5 @@
 import java.io.*;
+import java.sql.Array;
 import java.util.*;
 import java.net.Socket;
 import javax.swing.*;
@@ -287,6 +288,7 @@ public class Market implements Runnable {
             int i = 1;   //index used to number products and other choices
             ArrayList<Product> allProducts = new ArrayList<>();
             ArrayList<Store> allStores = new ArrayList<>();
+            ArrayList<String> prodstring = new ArrayList<>();
             for (int j = 0; j < sellers.size(); j++) {
                 ArrayList<Store> stores = sellers.get(j).getStores();
                 allStores.addAll(stores);
@@ -294,64 +296,80 @@ public class Market implements Runnable {
                     ArrayList<Product> products = stores.get(k).getProducts();
                     allProducts.addAll(products);
                     for (int l = 0; l < products.size(); l++) {
-                        System.out.print(i + ". ");   //display product number
-                        System.out.println(products.get(l).marketplaceDisplay());   //display product info
+                        //System.out.print(i + ". ");   //display product number
+                        //System.out.println(products.get(l).marketplaceDisplay());   //display product info
+                        String temp = i + ". " + products.get(l).marketplaceDisplay();
+                        prodstring.add(temp);
                         i++;
+
                     }
                 }
             }
-            System.out.println((i++) + ". Search for specific products.");
-            System.out.println((i++) + ". Sort the marketplace on price.");
-            System.out.println((i++) + ". Sort the marketplace on quantity available.");
-            System.out.println((i++) + ". View a dashboard with store and seller information.");
-            System.out.println((i++) + ". View shopping cart.");
-            System.out.println((i++) + ". Modify account.");
-            System.out.println((i++) + ". View purchase history.");
-            System.out.println((i) + ". Exit.");
-            System.out.println("Please select a number to visit product's page or option you want to perform.");
+           // prodstring.add((i++) + ". Search for specific products.");
+            //prodstring.add((i++) + ". Sort the marketplace on price.");
+           // prodstring.add((i++) + ". Sort the marketplace on quantity available.");
+           // prodstring.add((i++) + ". View a dashboard with store and seller information.");
+           // prodstring.add((i++) + ". View shopping cart.");
+           // prodstring.add((i++) + ". Modify account.");
+           // prodstring.add((i++) + ". View purchase history.");
+          //  prodstring.add((i) + ". Exit.");
+           // prodstring.add("Please select a number to visit product's page or option you want to perform.");
             int choice;
-            try {    //if input is not Integer, catch exception and repeat main page prompt
-                choice = Integer.parseInt(scanner.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("You didn't input an integer number.");
-                continue;   //start the main page prompts again
-            }
-            if (choice > i || choice <= 0) {    //user chose a number not from the list
-                System.out.println("Please enter an existing option.");
-                continue;    //start the main page prompts again
-            } else if (choice <= (i - 8)) {    //user selected a product
+            String choyce;
+            String[] choices = prodstring.toArray(new String[0]);
+            choyce = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product page or perform an action", "Option?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+            choyce = Character.toString(choyce.charAt(0));
+            choice = Integer.parseInt(choyce);
+          //  try {    //if input is not Integer, catch exception and repeat main page prompt
+               // choice = Integer.parseInt(scanner.nextLine());
+           // } catch (NumberFormatException e) {
+              //  System.out.println("You didn't input an integer number.");
+               // continue;   //start the main page prompts again
+           // }
+           // if (choice > i || choice <= 0) {    //user chose a number not from the list
+              //  System.out.println("Please enter an existing option.");
+              //  continue;    //start the main page prompts again
+              if (choice <= (i - 8)) {    //user selected a product
                 Product currentProduct = allProducts.get((choice - 1));
                 productPage(scanner, currentProduct, allStores, sellers, customer);
 
             } else {    //user selected an option below listed products
                 if (choice == (i - 7)) {   //Search for specific products
-                    System.out.println("Please enter a term to search for.");
-                    String term = scanner.nextLine().toLowerCase();
+                   String term = showInputDialog("Please enter a term to search for.");
+
 
                     boolean toMainPage = false;
                     while (!toMainPage) {
                         i = 1;
                         ArrayList<Product> filteredProducts = new ArrayList<>();
+                        ArrayList<String> allprodlist = new ArrayList<>();
                         for (int j = 0; j < allProducts.size(); j++) {
                             if (allProducts.get(j).toString().toLowerCase().contains(term)) {
                                 filteredProducts.add(allProducts.get(j));
-                                System.out.print(i + ". ");
-                                System.out.println(allProducts.get(j).marketplaceDisplay());
+                               // System.out.print(i + ". ");
+                               // System.out.println(allProducts.get(j).marketplaceDisplay());
+                                String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
+                                allprodlist.add(temp);
                                 i++;
                             }
                         }
-                        System.out.println(i + ". Back to main page.");
-                        System.out.println("Please select a number to visit product's page.");
-                        try {    //if input is not Integer, catch exception and repeat main page prompt
-                            choice = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("You didn't input an integer number.");
-                            continue;   //start the main page prompts again
-                        }
-                        if (choice > i || choice <= 0) {    //user chose a number not from the list
-                            System.out.println("Please enter an existing option.");
-                            continue;    //start the main page prompts again
-                        } else if (choice == i) {   //user selected to go back to main page
+                        allprodlist.add(i + ". Back to main page.");
+                        String[] markchoice = prodstring.toArray(new String[0]);
+                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
+                        chosen = Character.toString(chosen.charAt(0));
+                        choice = Integer.parseInt(chosen);
+                        // System.out.println(i + ". Back to main page.");
+                        // System.out.println("Please select a number to visit product's page.");
+                       // try {    //if input is not Integer, catch exception and repeat main page prompt
+                       /     choice = Integer.parseInt(scanner.nextLine());
+                     //   } catch (NumberFormatException e) {
+                      //      System.out.println("You didn't input an integer number.");
+                      //      continue;   //start the main page prompts again
+                     //   }
+                     //   if (choice > i || choice <= 0) {    //user chose a number not from the list
+                       //     System.out.println("Please enter an existing option.");
+                        //    continue;    //start the main page prompts again
+                        if (choice == i) {   //user selected to go back to main page
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = filteredProducts.get((choice - 1));
@@ -365,23 +383,31 @@ public class Market implements Runnable {
                     boolean toMainPage = false;
                     while (!toMainPage) {
                         i = 1;
+                        ArrayList<String> sortprodlist = new ArrayList<>();
                         for (int j = 0; j < allProducts.size(); j++) {
-                            System.out.print(i + ". ");
-                            System.out.println(allProducts.get(j).marketplaceDisplay());
+                            //System.out.print(i + ". ");
+                           // System.out.println(allProducts.get(j).marketplaceDisplay());
+                            String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
+                            sortprodlist.add(temp);
                             i++;
                         }
-                        System.out.println(i + ". Back to main page.");
-                        System.out.println("Please select a number to visit product's page.");
-                        try {    //if input is not Integer, catch exception and repeat main page prompt
-                            choice = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("You didn't input an integer number.");
-                            continue;   //start the main page prompts again
-                        }
-                        if (choice > i || choice <= 0) {    //user chose a number not from the list
-                            System.out.println("Please enter an existing option.");
-                            continue;    //start the main page prompts again
-                        } else if (choice == i) {   //user selected to go back to main page
+                        sortprodlist.add(i + ". Back to main page.");
+                        String[] markchoice = prodstring.toArray(new String[0]);
+                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
+                        chosen = Character.toString(chosen.charAt(0));
+                        choice = Integer.parseInt(chosen);
+                      //  System.out.println(i + ". Back to main page.");
+                      //  System.out.println("Please select a number to visit product's page.");
+                      //  try {    //if input is not Integer, catch exception and repeat main page prompt
+                       //     choice = Integer.parseInt(scanner.nextLine());
+                      //  } catch (NumberFormatException e) {
+                         //   System.out.println("You didn't input an integer number.");
+                       //     continue;   //start the main page prompts again
+                       // }
+                       // if (choice > i || choice <= 0) {    //user chose a number not from the list
+                       //     System.out.println("Please enter an existing option.");
+                      //      continue;    //start the main page prompts again
+                         if (choice == i) {   //user selected to go back to main page
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
@@ -397,23 +423,31 @@ public class Market implements Runnable {
                     boolean toMainPage = false;
                     while (!toMainPage) {
                         i = 1;
+                        ArrayList<String> anothersortlist = new ArrayList<>();
                         for (int j = 0; j < allProducts.size(); j++) {
-                            System.out.print(i + ". ");
-                            System.out.println(allProducts.get(j).marketplaceDisplay());
+                           // System.out.print(i + ". ");
+                           // System.out.println(allProducts.get(j).marketplaceDisplay());
+                            String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
+                            anothersortlist.add(temp);
                             i++;
                         }
-                        System.out.println(i + ". Back to main page.");
-                        System.out.println("Please select a number to visit product's page.");
-                        try {    //if input is not Integer, catch exception and repeat main page prompt
-                            choice = Integer.parseInt(scanner.nextLine());
-                        } catch (NumberFormatException e) {
-                            System.out.println("You didn't input an integer number.");
-                            continue;   //start the main page prompts again
-                        }
-                        if (choice > i || choice <= 0) {    //user chose a number not from the list
-                            System.out.println("Please enter an existing option.");
-                            continue;    //start the main page prompts again
-                        } else if (choice == i) {   //user selected to go back to main page
+                        anothersortlist.add(i + ". Back to main page.");
+                        String[] markchoice = prodstring.toArray(new String[0]);
+                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
+                        chosen = Character.toString(chosen.charAt(0));
+                        choice = Integer.parseInt(chosen);
+                      //  System.out.println(i + ". Back to main page.");
+                      //  System.out.println("Please select a number to visit product's page.");
+                     //   try {    //if input is not Integer, catch exception and repeat main page prompt
+                      //      choice = Integer.parseInt(scanner.nextLine());
+                     //   } catch (NumberFormatException e) {
+                       //     System.out.println("You didn't input an integer number.");
+                      //      continue;   //start the main page prompts again
+                      //  }
+                     //   if (choice > i || choice <= 0) {    //user chose a number not from the list
+                    //        System.out.println("Please enter an existing option.");
+                     //       continue;    //start the main page prompts again
+                         if (choice == i) {   //user selected to go back to main page
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
