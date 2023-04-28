@@ -131,6 +131,9 @@ public class Server implements Runnable {
                     }
                 } else if (command.equals("Purchase product")) {
                     synchronized (sync) {
+                        oos.writeObject("Waiting");
+                        oos.flush();
+                        ois.readObject();
                         String stillProduct = (String) ois.readObject();
                         if (stillProduct.equals("True")) {
                             Store store = (Store) ois.readObject();

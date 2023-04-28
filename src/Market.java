@@ -849,6 +849,9 @@ public class Market implements Runnable {
                     try {
                         oos.writeObject("Purchase product");
                         oos.flush();
+                        ois.readObject();
+                        oos.writeObject("Waiting");
+                        oos.flush();
                         try { // grabs sellers again
                             oos.writeObject("List of sellers");
                             oos.flush();
