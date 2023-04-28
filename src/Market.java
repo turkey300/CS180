@@ -47,7 +47,7 @@ public class Market implements Runnable {
                             JOptionPane.ERROR_MESSAGE);
             } while (userType == null);
 
-            userTypeOptions = new String[] {"Log in", "Create an account"};
+            userTypeOptions = new String[]{"Log in", "Create an account"};
             do {
                 accountType = (String) JOptionPane.showInputDialog(null, "Please select your account type."
                         , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
@@ -177,6 +177,7 @@ public class Market implements Runnable {
 
         return input;
     }
+
     public static String showInputDialog(String message) {
         String input;
         input = JOptionPane.showInputDialog(null, message, "Marketplace",
@@ -313,29 +314,29 @@ public class Market implements Runnable {
             prodstring.add((i++) + ". Modify account.");
             prodstring.add((i++) + ". View purchase history.");
             prodstring.add((i) + ". Exit.");
-           // prodstring.add("Please select a number to visit product's page or option you want to perform.");
+            // prodstring.add("Please select a number to visit product's page or option you want to perform.");
             int choice;
             String choyce;
             String[] choices = prodstring.toArray(new String[0]);
             choyce = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product page or perform an action", "Option?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
             choyce = choyce.substring(0, choyce.indexOf(".")); // if they press X this errors because its null
             choice = Integer.parseInt(choyce);
-          //  try {    //if input is not Integer, catch exception and repeat main page prompt
-               // choice = Integer.parseInt(scanner.nextLine());
-           // } catch (NumberFormatException e) {
-              //  System.out.println("You didn't input an integer number.");
-               // continue;   //start the main page prompts again
-           // }
-           // if (choice > i || choice <= 0) {    //user chose a number not from the list
-              //  System.out.println("Please enter an existing option.");
-              //  continue;    //start the main page prompts again
-              if (choice <= (i - 8)) {    //user selected a product
+            //  try {    //if input is not Integer, catch exception and repeat main page prompt
+            // choice = Integer.parseInt(scanner.nextLine());
+            // } catch (NumberFormatException e) {
+            //  System.out.println("You didn't input an integer number.");
+            // continue;   //start the main page prompts again
+            // }
+            // if (choice > i || choice <= 0) {    //user chose a number not from the list
+            //  System.out.println("Please enter an existing option.");
+            //  continue;    //start the main page prompts again
+            if (choice <= (i - 8)) {    //user selected a product
                 Product currentProduct = allProducts.get((choice - 1));
-                productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
+                productPage(scanner, currentProduct, allStores, sellers, customer, oos, ois);
 
             } else {    //user selected an option below listed products
                 if (choice == (i - 7)) {   //Search for specific products
-                   String term = showInputDialog("Please enter a term to search for.");
+                    String term = showInputDialog("Please enter a term to search for.");
 
 
                     boolean toMainPage = false;
@@ -346,8 +347,8 @@ public class Market implements Runnable {
                         for (int j = 0; j < allProducts.size(); j++) {
                             if (allProducts.get(j).toString().toLowerCase().contains(term)) {
                                 filteredProducts.add(allProducts.get(j));
-                               // System.out.print(i + ". ");
-                               // System.out.println(allProducts.get(j).marketplaceDisplay());
+                                // System.out.print(i + ". ");
+                                // System.out.println(allProducts.get(j).marketplaceDisplay());
                                 String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
                                 allprodlist.add(temp);
                                 i++;
@@ -360,20 +361,20 @@ public class Market implements Runnable {
                         choice = Integer.parseInt(chosen);
                         // System.out.println(i + ". Back to main page.");
                         // System.out.println("Please select a number to visit product's page.");
-                       // try {    //if input is not Integer, catch exception and repeat main page prompt
-                       //     choice = Integer.parseInt(scanner.nextLine());
-                     //   } catch (NumberFormatException e) {
-                      //      System.out.println("You didn't input an integer number.");
-                      //      continue;   //start the main page prompts again
-                     //   }
-                     //   if (choice > i || choice <= 0) {    //user chose a number not from the list
-                       //     System.out.println("Please enter an existing option.");
+                        // try {    //if input is not Integer, catch exception and repeat main page prompt
+                        //     choice = Integer.parseInt(scanner.nextLine());
+                        //   } catch (NumberFormatException e) {
+                        //      System.out.println("You didn't input an integer number.");
+                        //      continue;   //start the main page prompts again
+                        //   }
+                        //   if (choice > i || choice <= 0) {    //user chose a number not from the list
+                        //     System.out.println("Please enter an existing option.");
                         //    continue;    //start the main page prompts again
                         if (choice == i) {   //user selected to go back to main page
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = filteredProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
+                            productPage(scanner, currentProduct, allStores, sellers, customer, oos, ois);
                             toMainPage = true;
                         }
                     }
@@ -386,7 +387,7 @@ public class Market implements Runnable {
                         ArrayList<String> sortprodlist = new ArrayList<>();
                         for (int j = 0; j < allProducts.size(); j++) {
                             //System.out.print(i + ". ");
-                           // System.out.println(allProducts.get(j).marketplaceDisplay());
+                            // System.out.println(allProducts.get(j).marketplaceDisplay());
                             String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
                             sortprodlist.add(temp);
                             i++;
@@ -396,22 +397,22 @@ public class Market implements Runnable {
                         String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
                         chosen = Character.toString(chosen.charAt(0));
                         choice = Integer.parseInt(chosen);
-                      //  System.out.println(i + ". Back to main page.");
-                      //  System.out.println("Please select a number to visit product's page.");
-                      //  try {    //if input is not Integer, catch exception and repeat main page prompt
-                       //     choice = Integer.parseInt(scanner.nextLine());
-                      //  } catch (NumberFormatException e) {
-                         //   System.out.println("You didn't input an integer number.");
-                       //     continue;   //start the main page prompts again
-                       // }
-                       // if (choice > i || choice <= 0) {    //user chose a number not from the list
-                       //     System.out.println("Please enter an existing option.");
-                      //      continue;    //start the main page prompts again
-                         if (choice == i) {   //user selected to go back to main page
+                        //  System.out.println(i + ". Back to main page.");
+                        //  System.out.println("Please select a number to visit product's page.");
+                        //  try {    //if input is not Integer, catch exception and repeat main page prompt
+                        //     choice = Integer.parseInt(scanner.nextLine());
+                        //  } catch (NumberFormatException e) {
+                        //   System.out.println("You didn't input an integer number.");
+                        //     continue;   //start the main page prompts again
+                        // }
+                        // if (choice > i || choice <= 0) {    //user chose a number not from the list
+                        //     System.out.println("Please enter an existing option.");
+                        //      continue;    //start the main page prompts again
+                        if (choice == i) {   //user selected to go back to main page
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
+                            productPage(scanner, currentProduct, allStores, sellers, customer, oos, ois);
                             toMainPage = true;
                         }
                     }
@@ -425,8 +426,8 @@ public class Market implements Runnable {
                         i = 1;
                         ArrayList<String> anothersortlist = new ArrayList<>();
                         for (int j = 0; j < allProducts.size(); j++) {
-                           // System.out.print(i + ". ");
-                           // System.out.println(allProducts.get(j).marketplaceDisplay());
+                            // System.out.print(i + ". ");
+                            // System.out.println(allProducts.get(j).marketplaceDisplay());
                             String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
                             anothersortlist.add(temp);
                             i++;
@@ -436,22 +437,22 @@ public class Market implements Runnable {
                         String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
                         chosen = Character.toString(chosen.charAt(0));
                         choice = Integer.parseInt(chosen);
-                      //  System.out.println(i + ". Back to main page.");
-                      //  System.out.println("Please select a number to visit product's page.");
-                     //   try {    //if input is not Integer, catch exception and repeat main page prompt
-                      //      choice = Integer.parseInt(scanner.nextLine());
-                     //   } catch (NumberFormatException e) {
-                       //     System.out.println("You didn't input an integer number.");
-                      //      continue;   //start the main page prompts again
-                      //  }
-                     //   if (choice > i || choice <= 0) {    //user chose a number not from the list
-                    //        System.out.println("Please enter an existing option.");
-                     //       continue;    //start the main page prompts again
-                         if (choice == i) {   //user selected to go back to main page
+                        //  System.out.println(i + ". Back to main page.");
+                        //  System.out.println("Please select a number to visit product's page.");
+                        //   try {    //if input is not Integer, catch exception and repeat main page prompt
+                        //      choice = Integer.parseInt(scanner.nextLine());
+                        //   } catch (NumberFormatException e) {
+                        //     System.out.println("You didn't input an integer number.");
+                        //      continue;   //start the main page prompts again
+                        //  }
+                        //   if (choice > i || choice <= 0) {    //user chose a number not from the list
+                        //        System.out.println("Please enter an existing option.");
+                        //       continue;    //start the main page prompts again
+                        if (choice == i) {   //user selected to go back to main page
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
+                            productPage(scanner, currentProduct, allStores, sellers, customer, oos, ois);
                             toMainPage = true;
                         }
                     }
@@ -464,32 +465,32 @@ public class Market implements Runnable {
                         String[] choicest = {"1. View a list of stores by number of products sold.", "2. View a list of stores by the products purchased by you."};
                         String chosen = showInputDialog("View a list of stores by number of products sold or products purchased by you", choicest);
                         String dashboardChoice = Character.toString(chosen.charAt(0));
-                       //  String dashboardChoice = scanner.nextLine();
+                        //  String dashboardChoice = scanner.nextLine();
                         if (dashboardChoice.equals("1")) {
                             boolean validChoice2;
                             ArrayList<String> prods = new ArrayList<>();
-                          //  do {
-                                validChoice2 = true;
-                               // for (int j = 0; j < allStores.size(); j++) {
-                              //      System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
-                               //             allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
-                              //      String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
-                             //       prods.add(temp);
+                            //  do {
+                            validChoice2 = true;
+                            // for (int j = 0; j < allStores.size(); j++) {
+                            //      System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
+                            //             allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
+                            //      String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
+                            //       prods.add(temp);
                             //    }
-                              //  String[] markchoice = prods.toArray(new String[0]);
-                              //  System.out.println();
-                              //  System.out.println("1. Sort by low - high.");
-                              //  System.out.println("2. Sort by high - low.");
-                              //  System.out.println("3. Back to main page.");
-                                String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
-                                String sortdec = showInputDialog("Would you like to sort the data?");
-                               // dashboardChoice = scanner.nextLine();
-                                //if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
-                               //         dashboardChoice.equals("3"))) {
-                               //     System.out.println("Please enter a valid option.");
-                               //     validChoice2 = false;
-                              //  }
-                           // } while (!validChoice2);
+                            //  String[] markchoice = prods.toArray(new String[0]);
+                            //  System.out.println();
+                            //  System.out.println("1. Sort by low - high.");
+                            //  System.out.println("2. Sort by high - low.");
+                            //  System.out.println("3. Back to main page.");
+                            String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
+                            String sortdec = showInputDialog("Would you like to sort the data?");
+                            // dashboardChoice = scanner.nextLine();
+                            //if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
+                            //         dashboardChoice.equals("3"))) {
+                            //     System.out.println("Please enter a valid option.");
+                            //     validChoice2 = false;
+                            //  }
+                            // } while (!validChoice2);
                             if (sortdec.equals("1. Sort by low - high.")) {
                                 Collections.sort(allStores, new StoreComparatorByProductsSold());
                             } else if (sortdec.equals("2")) {
@@ -501,13 +502,13 @@ public class Market implements Runnable {
                             for (int j = 0; j < allStores.size(); j++) {
                                 System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
                                         allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
-                                String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
+                                String temp = (j + 1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
                                 prods.add(temp);
                             }
                             String[] markchoice = prods.toArray(new String[0]);
                             JOptionPane.showMessageDialog(null, markchoice, "Proudcts", JOptionPane.INFORMATION_MESSAGE);
-                           // System.out.println("Press any key to return to main page.");
-                           // scanner.nextLine();
+                            // System.out.println("Press any key to return to main page.");
+                            // scanner.nextLine();
                         } else if (dashboardChoice.equals("2")) {
                             //View a list of stores by the products purchased by this customer
                             HashMap<String, Integer> historyByStore = customer.purchaseHistoryByStore(allStores);
@@ -699,7 +700,7 @@ public class Market implements Runnable {
                             e.printStackTrace();
                         }
 //                        customer.setPassword(input);
-                    } else if (input.equals("Delete account")){
+                    } else if (input.equals("Delete account")) {
 //                        System.out.println("Are you sure you want to delete your account?");
 //                        System.out.println("1. Yes\n2. No");
 //                        input = scanner.nextLine();
@@ -783,15 +784,36 @@ public class Market implements Runnable {
     }
 
     public static void productPage(Scanner scanner, Product currentProduct, ArrayList<Store> stores,
-                                   ArrayList<Seller> sellers, Customer customer, ObjectOutputStream oos, ObjectInputStream ois) {
+                                   ArrayList<Seller> sellers, Customer customer, ObjectOutputStream oos,
+                                   ObjectInputStream ois) {
         //this is a separated method used to display product's page and realize further operations
         //it ends and returns void only when user selects "back to main page"
         Store currentStore = null;
+        try { // grabs sellers again
+            oos.writeObject("List of sellers");
+            oos.flush();
+            sellers = (ArrayList<Seller>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        stores = new ArrayList<>(); // grabbing stores again
+        for (int j = 0; j < sellers.size(); j++) {
+            ArrayList<Store> store = sellers.get(j).getStores();
+            stores.addAll(stores);
+        }
+
         for (int j = 0; j < stores.size(); j++) {
             if (stores.get(j).getStoreName().equals(currentProduct.getStoreName())) {
                 currentStore = stores.get(j);
             }
         }
+        if (currentStore == null) {
+            JOptionPane.showMessageDialog(null, "Could not find store! It may have been deleted.",
+                    "Marketplace", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
         while (true) {
             String input = showInputDialog(currentProduct.productPageDisplay(), new String[]{"1. Purchase this product.",
                     "2. Add this product to shopping cart.", "3. Back to main page."});
@@ -809,47 +831,91 @@ public class Market implements Runnable {
 //                        System.out.println("What amount would you like to purchase?");
                         try {
                             amount = Integer.parseInt(input);
+                            if (amount < 0) {
+                                JOptionPane.showMessageDialog(null, "Please input valid number.",
+                                        "Error!", JOptionPane.ERROR_MESSAGE);
+//                            System.out.println("Please input valid number.");
+                                continue;
+                            } else {
+                                break;
+                            }
                         } catch (NumberFormatException e) {
                             JOptionPane.showMessageDialog(null, "Please input valid number.",
                                     "Error!", JOptionPane.ERROR_MESSAGE);
 //                            System.out.println("Please input valid number.");
                             continue;
                         }
-                        if (amount < 0) {
-                            JOptionPane.showMessageDialog(null, "Please input valid number.",
-                                    "Error!", JOptionPane.ERROR_MESSAGE);
-//                            System.out.println("Please input valid number.");
-                            continue;
-                        }
-                        //logic with server which I'm working on and will implement later
-//                        String message = "";
-//                        try {
-//                            oos.writeObject("purchase");
-//                            oos.writeObject(currentProduct);
-//                            oos.writeObject(amount);
-//                            oos.writeObject(customer);
-//                            message = (String) ois.readObject();
-//                        } catch (IOException | ClassNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
-//                        message += "Click OK to return to main page.\n";
-//                        JOptionPane.showMessageDialog(null,message,"Purchase Status", JOptionPane.INFORMATION_MESSAGE);
-//                        break;
-                        if (currentStore.purchaseProductFromStore(currentProduct, amount, customer)) {
-                            System.out.println("Purchased successfully!");
-                            System.out.println("Returning to product's page...\n");
-                            for (int i = 0; i < sellers.size(); i++) {
-                                if (sellers.get(i).getUsername().equals(currentStore.getSeller())) {
-                                    sellers.get(i).saveSeller();
-                                }
-                            }
-                            break;
-                        } else {
-                            System.out.println("Sorry, we don't have enough items available.");
-                            System.out.println("Returning to product's page...\n");
-                            break;
-                        }
                     }
+                    try {
+                        oos.writeObject("Purchase product");
+                        oos.flush();
+                        try { // grabs sellers again
+                            oos.writeObject("List of sellers");
+                            oos.flush();
+                            sellers = (ArrayList<Seller>) ois.readObject();
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        stores = new ArrayList<>(); // grabbing stores again
+                        for (int j = 0; j < sellers.size(); j++) {
+                            ArrayList<Store> store = sellers.get(j).getStores();
+                            stores.addAll(stores);
+                        }
+
+                        boolean stillProduct = false;
+                        for (int k = 0; k < stores.size(); k++) { // checking if product is in store
+                            if (currentProduct.getStoreName().equals(stores.get(k).getStoreName())) {
+                                stillProduct = true;
+                                currentStore = stores.get(k);
+                            }
+                        }
+
+                        if (stillProduct) { // if product is still valid
+                            oos.writeObject("True");
+                            oos.writeObject(currentStore);
+                            oos.writeObject(currentProduct);
+                            oos.writeObject(amount);
+                            oos.writeObject(customer);
+                            oos.flush();
+
+                            String message = (String) ois.readObject();
+                            if (message.equals("Success")) {
+                                JOptionPane.showMessageDialog(null, "Purchased " +
+                                                "successfully!",
+                                        "Marketplace", JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Sorry, there were" +
+                                                " not enough items available.",
+                                        "Marketplace", JOptionPane.INFORMATION_MESSAGE);
+                            }
+
+                        } else { // product cannot be found
+                            JOptionPane.showMessageDialog(null, "Could not find product! " +
+                                            "It may have been deleted.",
+                                    "Marketplace", JOptionPane.INFORMATION_MESSAGE);
+                            oos.writeObject("False");
+                            oos.flush();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
+//                        if (currentStore.purchaseProductFromStore(currentProduct, amount, customer)) {
+//                            System.out.println("Purchased successfully!");
+//                            System.out.println("Returning to product's page...\n");
+//                            for (int i = 0; i < sellers.size(); i++) {
+//                                if (sellers.get(i).getUsername().equals(currentStore.getSeller())) {
+//                                    sellers.get(i).saveSeller();
+//                                }
+//                            }
+//                            break;
+//                        } else {
+//                            System.out.println("Sorry, we don't have enough items available.");
+//                            System.out.println("Returning to product's page...\n");
+//                            break;
+//                        }
                     break;
                 case '2':    // Add this product to shopping cart
                     int amount1;
@@ -882,7 +948,7 @@ public class Market implements Runnable {
                             break;
                         } else {
                             String message = "Sorry, we don't have enough items available.\nReturning to product's page...\n";
-                            JOptionPane.showMessageDialog(null,message,"Purchase Status", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, message, "Purchase Status", JOptionPane.INFORMATION_MESSAGE);
 //                            System.out.println("Sorry, we don't have enough items available.");
 //                            System.out.println("Returning to product's page...\n");
                             break;

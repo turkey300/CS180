@@ -5,9 +5,11 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 public class Server implements Runnable {
     private Socket socket;
+    public static Object sync = new Object(); // this will be the synchronize object
 
     public Server(Socket socket) {
         this.socket = socket;
@@ -81,21 +83,23 @@ public class Server implements Runnable {
                     oos.writeObject(Seller.loadAllSellers());
                     oos.flush();
                 } else if (command.equals("Change username")) {
-                    String userType = (String) ois.readObject();
-                    if (userType.equals("Customer")) {
-                        Customer customer = (Customer) ois.readObject();
-                        String username = (String) ois.readObject();
+                    synchronized (sync) { // added sync so you cant change name of seller while someone is buying
+                        String userType = (String) ois.readObject();
+                        if (userType.equals("Customer")) {
+                            Customer customer = (Customer) ois.readObject();
+                            String username = (String) ois.readObject();
 
-                        customer.setUsername(username);
-                        oos.writeObject(customer);
-                        oos.flush();
-                    } else {
-                        Seller seller = (Seller) ois.readObject();
-                        String username = (String) ois.readObject();
+                            customer.setUsername(username);
+                            oos.writeObject(customer);
+                            oos.flush();
+                        } else {
+                            Seller seller = (Seller) ois.readObject();
+                            String username = (String) ois.readObject();
 
-                        seller.setUsername(username);
-                        oos.writeObject(seller);
-                        oos.flush();
+                            seller.setUsername(username);
+                            oos.writeObject(seller);
+                            oos.flush();
+                        }
                     }
                 } else if (command.equals("Change password")) {
                     String userType = (String) ois.readObject();
@@ -115,13 +119,42 @@ public class Server implements Runnable {
                         oos.flush();
                     }
                 } else if (command.equals("Delete account")) {
-                    String userType = (String) ois.readObject();
-                    if (userType.equals("Customer")) {
-                        Customer customer = (Customer) ois.readObject();
-                        customer.deleteAccount();
-                    } else {
-                        Seller seller = (Seller) ois.readObject();
-                        seller.deleteAccount();
+                    synchronized (sync) { // sync so you cant buy product from account thats deleted
+                        String userType = (String) ois.readObject();
+                        if (userType.equals("Customer")) {
+                            Customer customer = (Customer) ois.readObject();
+                            customer.deleteAccount();
+                        } else {
+                            Seller seller = (Seller) ois.readObject();
+                            seller.deleteAccount();
+                        }
+                    }
+                } else if (command.equals("Purchase product")) {
+                    synchronized (sync) {
+                        String stillProduct = (String) ois.readObject();
+                        if (stillProduct.equals("True")) {
+                            Store store = (Store) ois.readObject();
+                            Product product = (Product) ois.readObject();
+                            int amount = (Integer) ois.readObject();
+                            Customer customer = (Customer) ois.readObject();
+
+                            ArrayList<Seller> sellers = Seller.loadAllSellers();
+                            if (store.purchaseProductFromStore(product, amount, customer)) {
+                                for (int i = 0; i < sellers.size(); i++) {
+                                    if (sellers.get(i).getUsername().equals(store.getSeller())) {
+                                        sellers.get(i).saveSeller();
+                                    }
+                                }
+                                oos.writeObject("Success");
+                                oos.flush();
+                                break;
+                            } else {
+                                oos.writeObject("Fail");
+                                oos.flush();
+                                break;
+                            }
+
+                        }
                     }
                 }
                 //other commands
