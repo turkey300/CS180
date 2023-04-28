@@ -331,7 +331,7 @@ public class Market implements Runnable {
               //  continue;    //start the main page prompts again
               if (choice <= (i - 8)) {    //user selected a product
                 Product currentProduct = allProducts.get((choice - 1));
-                productPage(scanner, currentProduct, allStores, sellers, customer);
+                productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
 
             } else {    //user selected an option below listed products
                 if (choice == (i - 7)) {   //Search for specific products
@@ -373,7 +373,7 @@ public class Market implements Runnable {
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = filteredProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers, customer);
+                            productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
                             toMainPage = true;
                         }
                     }
@@ -411,7 +411,7 @@ public class Market implements Runnable {
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers, customer);
+                            productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
                             toMainPage = true;
                         }
                     }
@@ -451,7 +451,7 @@ public class Market implements Runnable {
                             toMainPage = true;
                         } else {    //user selected a product
                             Product currentProduct = allProducts.get((choice - 1));
-                            productPage(scanner, currentProduct, allStores, sellers, customer);
+                            productPage(scanner, currentProduct, allStores, sellers, customer,oos,ois);
                             toMainPage = true;
                         }
                     }
@@ -783,7 +783,7 @@ public class Market implements Runnable {
     }
 
     public static void productPage(Scanner scanner, Product currentProduct, ArrayList<Store> stores,
-                                   ArrayList<Seller> sellers, Customer customer) {
+                                   ArrayList<Seller> sellers, Customer customer, ObjectOutputStream oos, ObjectInputStream ois) {
         //this is a separated method used to display product's page and realize further operations
         //it ends and returns void only when user selects "back to main page"
         Store currentStore = null;
@@ -793,26 +793,48 @@ public class Market implements Runnable {
             }
         }
         while (true) {
-            System.out.println(currentProduct.productPageDisplay());
-            System.out.println("1. Purchase this product.");
-            System.out.println("2. Add this product to shopping cart.");
-            System.out.println("3. Back to main page.");
-            String choiceOnProductPage = scanner.nextLine();
+            String input = showInputDialog(currentProduct.productPageDisplay(), new String[]{"1. Purchase this product.",
+                    "2. Add this product to shopping cart.", "3. Back to main page."});
+//            System.out.println(currentProduct.productPageDisplay());
+//            System.out.println("1. Purchase this product.");
+//            System.out.println("2. Add this product to shopping cart.");
+//            System.out.println("3. Back to main page.");
+//            String choiceOnProductPage = scanner.nextLine();
+            char choiceOnProductPage = input.charAt(0);
             switch (choiceOnProductPage) {
-                case "1":   //purchase this product
+                case '1':   //purchase this product
                     int amount;
                     while (true) {
-                        System.out.println("What amount would you like to purchase?");
+                        input = showInputDialog("What amount would you like to purchase?");
+//                        System.out.println("What amount would you like to purchase?");
                         try {
-                            amount = Integer.parseInt(scanner.nextLine());
+                            amount = Integer.parseInt(input);
                         } catch (NumberFormatException e) {
-                            System.out.println("Please input valid number.");
+                            JOptionPane.showMessageDialog(null, "Please input valid number.",
+                                    "Error!", JOptionPane.ERROR_MESSAGE);
+//                            System.out.println("Please input valid number.");
                             continue;
                         }
                         if (amount < 0) {
-                            System.out.println("Please input valid number.");
+                            JOptionPane.showMessageDialog(null, "Please input valid number.",
+                                    "Error!", JOptionPane.ERROR_MESSAGE);
+//                            System.out.println("Please input valid number.");
                             continue;
                         }
+                        //logic with server which I'm working on and will implement later
+//                        String message = "";
+//                        try {
+//                            oos.writeObject("purchase");
+//                            oos.writeObject(currentProduct);
+//                            oos.writeObject(amount);
+//                            oos.writeObject(customer);
+//                            message = (String) ois.readObject();
+//                        } catch (IOException | ClassNotFoundException e) {
+//                            e.printStackTrace();
+//                        }
+//                        message += "Click OK to return to main page.\n";
+//                        JOptionPane.showMessageDialog(null,message,"Purchase Status", JOptionPane.INFORMATION_MESSAGE);
+//                        break;
                         if (currentStore.purchaseProductFromStore(currentProduct, amount, customer)) {
                             System.out.println("Purchased successfully!");
                             System.out.println("Returning to product's page...\n");
@@ -829,18 +851,23 @@ public class Market implements Runnable {
                         }
                     }
                     break;
-                case "2":    // Add this product to shopping cart
+                case '2':    // Add this product to shopping cart
                     int amount1;
                     while (true) {
-                        System.out.println("What amount would you like to put into shopping cart?");
+                        input = showInputDialog("What amount would you like to put into shopping cart?");
+//                        System.out.println("What amount would you like to put into shopping cart?");
                         try {
-                            amount1 = Integer.parseInt(scanner.nextLine());
+                            amount1 = Integer.parseInt(input);
                         } catch (NumberFormatException e) {
-                            System.out.println("Please input valid number.");
+                            JOptionPane.showMessageDialog(null, "Please input valid number.",
+                                    "Error!", JOptionPane.ERROR_MESSAGE);
+//                            System.out.println("Please input valid number.");
                             continue;
                         }
                         if (amount1 < 0) {
-                            System.out.println("Please input valid number.");
+                            JOptionPane.showMessageDialog(null, "Please input valid number.",
+                                    "Error!", JOptionPane.ERROR_MESSAGE);
+//                            System.out.println("Please input valid number.");
                             continue;
                         }
                         if (amount1 <= currentProduct.getAvailableQuantity()) {
@@ -854,16 +881,18 @@ public class Market implements Runnable {
                             }
                             break;
                         } else {
-                            System.out.println("Sorry, we don't have enough items available.");
-                            System.out.println("Returning to product's page...\n");
+                            String message = "Sorry, we don't have enough items available.\nReturning to product's page...\n";
+                            JOptionPane.showMessageDialog(null,message,"Purchase Status", JOptionPane.INFORMATION_MESSAGE);
+//                            System.out.println("Sorry, we don't have enough items available.");
+//                            System.out.println("Returning to product's page...\n");
                             break;
                         }
                     }
                     break;
-                case "3":
+                case '3':
                     return;   //returns to main page
-                default:
-                    System.out.println("Please enter an existing option.");
+//                default:
+//                    System.out.println("Please enter an existing option.");
             }
         }
     }
