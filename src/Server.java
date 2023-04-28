@@ -77,7 +77,7 @@ public class Server implements Runnable {
                         }
                         oos.flush();
                     }
-                } else if (command.equals("List of Sellers")) { // sends list of sellers
+                } else if (command.equals("List of sellers")) { // sends list of sellers
                     oos.writeObject(Seller.loadAllSellers());
                     oos.flush();
                 } else if (command.equals("Change username")) {

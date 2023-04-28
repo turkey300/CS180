@@ -123,10 +123,10 @@ public class Market implements Runnable {
             // main marketplace
             if (customer != null) {
                 // marketplace for customer
-                customerMarketplace(customer, oos, ois);
+                customerMarketplace(customer, oos, ois, scanner);
             } else {
                 // marketplace for seller
-                sellerMarketplace(seller, oos, ois);
+                sellerMarketplace(seller, oos, ois, scanner);
             }
             JOptionPane.showMessageDialog(null, "Goodbye!"
                     , "Farewell", JOptionPane.INFORMATION_MESSAGE);
@@ -271,7 +271,7 @@ public class Market implements Runnable {
         return seller;
     }
 
-    public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
         //checks shopping cart for updated products
         customer.checkShoppingCart();
         //display of products
@@ -305,20 +305,20 @@ public class Market implements Runnable {
                     }
                 }
             }
-           // prodstring.add((i++) + ". Search for specific products.");
-            //prodstring.add((i++) + ". Sort the marketplace on price.");
-           // prodstring.add((i++) + ". Sort the marketplace on quantity available.");
-           // prodstring.add((i++) + ". View a dashboard with store and seller information.");
-           // prodstring.add((i++) + ". View shopping cart.");
-           // prodstring.add((i++) + ". Modify account.");
-           // prodstring.add((i++) + ". View purchase history.");
-          //  prodstring.add((i) + ". Exit.");
+            prodstring.add((i++) + ". Search for specific products.");
+            prodstring.add((i++) + ". Sort the marketplace on price.");
+            prodstring.add((i++) + ". Sort the marketplace on quantity available.");
+            prodstring.add((i++) + ". View a dashboard with store and seller information.");
+            prodstring.add((i++) + ". View shopping cart.");
+            prodstring.add((i++) + ". Modify account.");
+            prodstring.add((i++) + ". View purchase history.");
+            prodstring.add((i) + ". Exit.");
            // prodstring.add("Please select a number to visit product's page or option you want to perform.");
             int choice;
             String choyce;
             String[] choices = prodstring.toArray(new String[0]);
             choyce = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product page or perform an action", "Option?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
-            choyce = Character.toString(choyce.charAt(0));
+            choyce = choyce.substring(0, choyce.indexOf(".")); // if they press X this errors because its null
             choice = Integer.parseInt(choyce);
           //  try {    //if input is not Integer, catch exception and repeat main page prompt
                // choice = Integer.parseInt(scanner.nextLine());
@@ -361,7 +361,7 @@ public class Market implements Runnable {
                         // System.out.println(i + ". Back to main page.");
                         // System.out.println("Please select a number to visit product's page.");
                        // try {    //if input is not Integer, catch exception and repeat main page prompt
-                       /     choice = Integer.parseInt(scanner.nextLine());
+                       //     choice = Integer.parseInt(scanner.nextLine());
                      //   } catch (NumberFormatException e) {
                       //      System.out.println("You didn't input an integer number.");
                       //      continue;   //start the main page prompts again
@@ -868,7 +868,7 @@ public class Market implements Runnable {
         }
     }
 
-    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois) {
+    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
         do {
             //int choice = 0;
             //System.out.println("What would you like to do?");
