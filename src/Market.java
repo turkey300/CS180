@@ -461,38 +461,53 @@ public class Market implements Runnable {
                         validChoice = true;
                         System.out.println("1. View a list of stores by number of products sold.");
                         System.out.println("2. View a list of stores by the products purchased by you.");
-                        String dashboardChoice = scanner.nextLine();
+                        String[] choicest = {"1. View a list of stores by number of products sold.", "2. View a list of stores by the products purchased by you."};
+                        String chosen = showInputDialog("View a list of stores by number of products sold or products purchased by you", choicest);
+                        String dashboardChoice = Character.toString(chosen.charAt(0));
+                       //  String dashboardChoice = scanner.nextLine();
                         if (dashboardChoice.equals("1")) {
                             boolean validChoice2;
-                            do {
+                            ArrayList<String> prods = new ArrayList<>();
+                          //  do {
                                 validChoice2 = true;
-                                for (int j = 0; j < allStores.size(); j++) {
-                                    System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
-                                            allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
-                                }
-                                System.out.println();
-                                System.out.println("1. Sort by low - high.");
-                                System.out.println("2. Sort by high - low.");
-                                System.out.println("3. Back to main page.");
-                                dashboardChoice = scanner.nextLine();
-                                if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
-                                        dashboardChoice.equals("3"))) {
-                                    System.out.println("Please enter a valid option.");
-                                    validChoice2 = false;
-                                }
-                            } while (!validChoice2);
-                            if (dashboardChoice.equals("1")) {
+                               // for (int j = 0; j < allStores.size(); j++) {
+                              //      System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
+                               //             allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
+                              //      String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
+                             //       prods.add(temp);
+                            //    }
+                              //  String[] markchoice = prods.toArray(new String[0]);
+                              //  System.out.println();
+                              //  System.out.println("1. Sort by low - high.");
+                              //  System.out.println("2. Sort by high - low.");
+                              //  System.out.println("3. Back to main page.");
+                                String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
+                                String sortdec = showInputDialog("Would you like to sort the data?");
+                               // dashboardChoice = scanner.nextLine();
+                                //if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
+                               //         dashboardChoice.equals("3"))) {
+                               //     System.out.println("Please enter a valid option.");
+                               //     validChoice2 = false;
+                              //  }
+                           // } while (!validChoice2);
+                            if (sortdec.equals("1. Sort by low - high.")) {
                                 Collections.sort(allStores, new StoreComparatorByProductsSold());
-                            } else if (dashboardChoice.equals("2")) {
+                            } else if (sortdec.equals("2")) {
                                 Collections.sort(allStores, new StoreComparatorByProductsSold());
                                 Collections.reverse(allStores);
-                            } else break;    //dashboardChoice = 3; return to main page
+                            } else if (sortdec.equals("3. Back to main page.")) {
+                                break;//dashboardChoice = 3; return to main page
+                            }
                             for (int j = 0; j < allStores.size(); j++) {
                                 System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
                                         allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
+                                String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
+                                prods.add(temp);
                             }
-                            System.out.println("Press any key to return to main page.");
-                            scanner.nextLine();
+                            String[] markchoice = prods.toArray(new String[0]);
+                            JOptionPane.showMessageDialog(null, markchoice, "Proudcts", JOptionPane.INFORMATION_MESSAGE);
+                           // System.out.println("Press any key to return to main page.");
+                           // scanner.nextLine();
                         } else if (dashboardChoice.equals("2")) {
                             //View a list of stores by the products purchased by this customer
                             HashMap<String, Integer> historyByStore = customer.purchaseHistoryByStore(allStores);
