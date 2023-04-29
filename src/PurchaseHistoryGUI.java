@@ -18,6 +18,7 @@ public class PurchaseHistoryGUI extends JFrame {
 
         setTitle("Purchase History");
         setSize(400, 300);
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
