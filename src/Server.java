@@ -209,6 +209,7 @@ public class Server implements Runnable {
                             if (product.getStoreName().equals(stores.get(k).getStoreName())) {
                                 stillProduct = true;
                                 store = stores.get(k);
+                                product = store.getProduct(product.getProductName());
                             }
                         }
                         oos.writeObject(stillProduct);
@@ -216,6 +217,7 @@ public class Server implements Runnable {
                         if (stillProduct) {
                             int amount = (Integer) ois.readObject();
                             Customer customer = (Customer) ois.readObject();
+                            customer = Customer.loadCustomer(customer.getUsername());
                             String message = "";
                             if (amount <= product.getAvailableQuantity()) {
                                 for (int i = 0; i < sellers.size(); i++) {
