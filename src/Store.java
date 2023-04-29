@@ -44,6 +44,15 @@ public class Store implements Serializable {
         return (products.get(i));
     }
 
+    public Product getProduct(String name) {
+        for (int i = 0; i < products.size(); i++) {
+            if (products.get(i).getProductName().equals(name))
+                return (products.get(i));
+        }
+
+        return null;
+    }
+
     public int getProductIndex(Product product) {
         return (products.indexOf(product));
     }

@@ -157,6 +157,7 @@ public class Server implements Runnable {
                             if (product.getStoreName().equals(stores.get(k).getStoreName())) {
                                 stillProduct = true;
                                 store = stores.get(k);
+                                product = store.getProduct(product.getProductName());
                             }
                         }
                         oos.writeObject(stillProduct);
