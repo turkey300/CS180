@@ -12,7 +12,7 @@ public class PurchaseHistoryGUI extends JFrame {
 
     private JLabel textLabel;
 
-    private boolean willbreak;
+    private boolean willbreak = false;
 
     public PurchaseHistoryGUI(ArrayList<PurchaseHistory> purchaseHistory, String[] purhist) {
 
