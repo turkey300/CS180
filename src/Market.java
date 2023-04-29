@@ -458,10 +458,10 @@ public class Market implements Runnable {
                     }
                 } else if (choice == (i - 4)) {
                     boolean validChoice;
-                    do {
+                    //do {
                         validChoice = true;
-                        System.out.println("1. View a list of stores by number of products sold.");
-                        System.out.println("2. View a list of stores by the products purchased by you.");
+                       // System.out.println("1. View a list of stores by number of products sold.");
+                       // System.out.println("2. View a list of stores by the products purchased by you.");
                         String[] choicest = {"1. View a list of stores by number of products sold.", "2. View a list of stores by the products purchased by you."};
                         String chosen = showInputDialog("View a list of stores by number of products sold or products purchased by you", choicest);
                         String dashboardChoice = Character.toString(chosen.charAt(0));
@@ -483,7 +483,7 @@ public class Market implements Runnable {
                             //  System.out.println("2. Sort by high - low.");
                             //  System.out.println("3. Back to main page.");
                             String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
-                            String sortdec = showInputDialog("Would you like to sort the data?");
+                            String sortdec = showInputDialog("Would you like to sort the data?", sort);
                             // dashboardChoice = scanner.nextLine();
                             //if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
                             //         dashboardChoice.equals("3"))) {
@@ -500,8 +500,8 @@ public class Market implements Runnable {
                                 break;//dashboardChoice = 3; return to main page
                             }
                             for (int j = 0; j < allStores.size(); j++) {
-                                System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
-                                        allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
+                               // System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
+                                    //    allStores.get(j).getStoreName(), allStores.get(j).getProductsSold();
                                 String temp = (j + 1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
                                 prods.add(temp);
                             }
@@ -513,25 +513,29 @@ public class Market implements Runnable {
                             //View a list of stores by the products purchased by this customer
                             HashMap<String, Integer> historyByStore = customer.purchaseHistoryByStore(allStores);
                             boolean validChoice2;
-                            do {
-                                validChoice2 = true;
-                                int index = 1;
-                                for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
-                                    System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
-                                            entry.getKey(), entry.getValue());
-                                    index++;
-                                }
-                                System.out.println();
-                                System.out.println("1. Sort by low - high.");
-                                System.out.println("2. Sort by high - low.");
-                                System.out.println("3. Back to main page.");
-                                dashboardChoice = scanner.nextLine();
-                                if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
-                                        dashboardChoice.equals("3"))) {
-                                    System.out.println("Please enter a valid option.");
-                                    validChoice2 = false;
-                                }
-                            } while (!validChoice2);
+                            ArrayList<String> storeprods = new ArrayList<>();
+                           // do {
+                            validChoice2 = true;
+                            int index = 1;
+                               // for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
+                                  //  System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
+                                   //         entry.getKey(), entry.getValue());
+
+                                 //   index++;
+                             //   }
+                              //  System.out.println();
+                              //  System.out.println("1. Sort by low - high.");
+                              //  System.out.println("2. Sort by high - low.");
+                               // System.out.println("3. Back to main page.");
+                              //  dashboardChoice = scanner.nextLine();
+                                String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
+                                String sortdec = showInputDialog("Would you like to sort the data?", sort);
+                              //  if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
+                              //          dashboardChoice.equals("3"))) {
+                              //      System.out.println("Please enter a valid option.");
+                              //      validChoice2 = false;
+                             //   }
+                          //  } while (!validChoice2);
 
                             ArrayList<Integer> purchasedProducts = new ArrayList<>();  //number of products purchased
                             for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
@@ -539,120 +543,57 @@ public class Market implements Runnable {
                             }
 
 
-                            if (dashboardChoice.equals("1")) {   //sort low-to-high
+                            if (sortdec.equals("1. Sort by low - high.")) {   //sort low-to-high
                                 Collections.sort(purchasedProducts);
-                            } else if (dashboardChoice.equals("2")) {    //sort high-to-low
+                            } else if (sortdec.equals("2. Sort by high - low.")) {    //sort high-to-low
                                 Collections.sort(purchasedProducts);
                                 Collections.reverse(purchasedProducts);
-                            } else break;    //dashboardChoice = 3; return to main page
-                            int index = 1;
+                            } else if (sortdec.equals("3. Back to main page.")){
+                                break;    //dashboardChoice = 3; return to main page
+                            }
+
+                             index = 1;
                             for (int num : purchasedProducts) {
                                 for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
                                     if (entry.getValue() == num) {
-                                        System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
-                                                entry.getKey(), entry.getValue());
+                                       // System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
+                                        //        entry.getKey(), entry.getValue());
+                                        String temp = index + ". Store Name: " + entry.getKey() + ", products purchased by you" + entry.getValue();
+                                        storeprods.add(temp);
                                         index++;
                                     }
                                 }
                             }
-                            System.out.println("Press any key to return to main page.");
-                            scanner.nextLine();
-                        } else {
-                            System.out.println("Please enter a valid option.");
-                            validChoice = false;
+                          //  System.out.println("Press any key to return to main page.");
+                           // scanner.nextLine();
                         }
-                    } while (!validChoice);
+                      //  else {
+                           // System.out.println("Please enter a valid option.");
+                          //  validChoice = false;
+                        //}
+                   // } while (!validChoice);
 
                 } else if (choice == (i - 3)) {    //view shopping cart
                     do {
                         ArrayList<ShoppingCart> shoppingCart = customer.getShoppingCart();
                         if (shoppingCart.isEmpty()) {
-                            System.out.println("Shopping cart is empty!");
+                         //   System.out.println("Shopping cart is empty!");
+                            JOptionPane.showMessageDialog(null, "Shopping Cart is Empty!", "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
                             break;
                         }
                         System.out.println("Products in your shopping cart:");
+                        ArrayList<String> shopprod = new ArrayList<>();
+                        shopprod.add("Products in your shopping cart:");
                         for (int a = 0; a < shoppingCart.size(); a++) {
                             System.out.printf("%d. Product: %s. Amount: %d.\n",
                                     a + 1, shoppingCart.get(a).getProduct().getProductName(),
                                     shoppingCart.get(a).getAmount());
+                            String temp = (a+1) + ". Product: " + shoppingCart.get(a).getProduct().getProductName() + ". Amount: " + shoppingCart.get(a).getAmount();
+                            shopprod.add(temp);
                         }
-
+                        String[] cartproducts = shopprod.toArray(new String[0]);
                         String input;
-                        System.out.println();
-                        do {
-                            System.out.println("1. Purchase all products.");
-                            System.out.println("2. Delete product from shopping cart.");
-                            System.out.println("3. Leave shopping cart.");
-                            input = scanner.nextLine();
-                            if (!(input.equals("1") || input.equals("2") || input.equals("3")))
-                                System.out.println("Please enter a number corresponding to an option.");
-                        } while (!(input.equals("1") || input.equals("2") || input.equals("3")));
-
-                        if (input.equals("1")) { // this seems bad but idk of a better way
-                            ArrayList<Integer> delete = new ArrayList<>();
-                            for (int b = 0; b < shoppingCart.size(); b++) {
-                                // loops through all products, if one matches name purchases products
-                                for (int e = 0; e < sellers.size(); e++) {
-                                    ArrayList<Store> stores = sellers.get(e).getStores();
-                                    for (int f = 0; f < stores.size(); f++) {
-                                        ArrayList<Product> products = stores.get(f).getProducts();
-                                        for (int k = 0; k < products.size(); k++) {
-                                            if (products.get(k).getProductName().equals(
-                                                    shoppingCart.get(b).getProduct().getProductName())) {
-                                                if (stores.get(f).purchaseProductFromStore(
-                                                        products.get(k), shoppingCart.get(b).getAmount(), customer)) {
-                                                    //shoppingCart.remove(shoppingCart.get(b));
-                                                    //this would sometimes crash,
-                                                    //it removes something from shopping cart
-                                                    //changing the size of shopping cart which is not good
-                                                    delete.add(b);
-                                                    System.out.printf("Purchased %s successfully!\n",
-                                                            products.get(k).getProductName());
-                                                    customer.saveCustomer();
-                                                    for (int o = 0; o < sellers.size(); o++) {
-                                                        if (sellers.get(o).getUsername().equals(
-                                                                stores.get(f).getSeller())) {
-                                                            sellers.get(o).saveSeller();
-                                                        }
-                                                    }
-                                                } else {
-                                                    System.out.printf("Sorry, we don't have enough items of %s " +
-                                                            "available.\n", products.get(k).getProductName());
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            for (int b = 0; b < delete.size(); b++) {
-                                shoppingCart.remove(shoppingCart.get(delete.get(b)));
-                            }
-
-                            System.out.println("Purchased all available products, leaving shopping cart!");
-                            break;
-                        } else if (input.equals("2")) { // deletes product
-                            do {
-                                System.out.println("Which product would you like to delete?");
-                                input = scanner.nextLine();
-                                try {
-                                    int intInput = Integer.parseInt(input);
-                                    if (intInput > 0 && intInput <= shoppingCart.size()) {
-                                        shoppingCart.remove(intInput - 1);
-                                        System.out.println("Product removed from shopping cart!");
-                                        customer.saveCustomer();
-                                        break;
-                                    } else {
-                                        System.out.println("Please enter an option corresponding to a product.");
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println("Please enter an option corresponding to a product.");
-                                }
-                            } while (true);
-                        } else if (input.equals("3")) { // leaves shopping cart
-                            System.out.println("Leaving shopping cart!");
-                            break;
-                        }
+                        ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
                     } while (true);
 
                 } else if (choice == (i - 2)) {    //Modify account
