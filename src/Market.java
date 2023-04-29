@@ -574,7 +574,7 @@ public class Market implements Runnable {
                     // } while (!validChoice);
 
                 } else if (choice == (i - 3)) {    //view shopping cart
-                    do {
+                   // do {
                         ArrayList<ShoppingCart> shoppingCart = customer.getShoppingCart();
                         if (shoppingCart.isEmpty()) {
                             //   System.out.println("Shopping cart is empty!");
@@ -595,7 +595,7 @@ public class Market implements Runnable {
                         String input;
                         ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
                         gui.setVisible(true);
-                    } while (true);
+                   // } while (true);
 
                 } else if (choice == (i - 2)) {    //Modify account
                     String input;
@@ -679,20 +679,24 @@ public class Market implements Runnable {
                     if (purchaseHistory.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "No purchase history.", "Purhcase history", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        System.out.println("Purchase history: (Newest products purchased listed first)");
+                        //System.out.println("Purchase history: (Newest products purchased listed first)");
                         ArrayList<String> phistory = new ArrayList<>();
                         for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
                             PurchaseHistory history = purchaseHistory.get(j);
-                            System.out.printf("Product: %s. Amount purchased: %d. Store: %s\n",
-                                    history.getProduct().getProductName(), history.getAmount(), history.getStoreName());
+                         //   System.out.printf("Product: %s. Amount purchased: %d. Store: %s\n",
+                         //           history.getProduct().getProductName(), history.getAmount(), history.getStoreName());
                             String temp = "Product: " + history.getProduct().getProductName() + ". Amount purchased: " + history.getAmount() + ". Store: " + history.getStoreName();
                             phistory.add(temp);
                         }
                         String[] purhist = phistory.toArray(new String[0]);
                         PurchaseHistoryGUI phist = new PurchaseHistoryGUI(purchaseHistory, purhist);
-                        if (phist.breakloop()) {
-                            break;
-                        }
+                       do {
+                           phist.setVisible(true);
+                       } while(!phist.breakloop());
+                      //  if (phist.breakloop()) {
+                        //    break;
+                      //  }
+                        System.out.println(phist.breakloop());
                     }
                 } else if (choice == i) return;
             }
