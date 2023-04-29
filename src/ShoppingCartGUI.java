@@ -87,7 +87,7 @@ public class ShoppingCartGUI extends JFrame {
         leaveButton = new JButton("Leave Shopping Cart");
         leaveButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                dispose(); // close the window
+                dispose();
             }
         });
 

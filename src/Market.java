@@ -581,19 +581,20 @@ public class Market implements Runnable {
                             JOptionPane.showMessageDialog(null, "Shopping Cart is Empty!", "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
                             break;
                         }
-                        System.out.println("Products in your shopping cart:");
+                    //    System.out.println("Products in your shopping cart:");
                         ArrayList<String> shopprod = new ArrayList<>();
                         shopprod.add("Products in your shopping cart:");
                         for (int a = 0; a < shoppingCart.size(); a++) {
-                            System.out.printf("%d. Product: %s. Amount: %d.\n",
-                                    a + 1, shoppingCart.get(a).getProduct().getProductName(),
-                                    shoppingCart.get(a).getAmount());
+                         //   System.out.printf("%d. Product: %s. Amount: %d.\n",
+                          //          a + 1, shoppingCart.get(a).getProduct().getProductName(),
+                            //        shoppingCart.get(a).getAmount();
                             String temp = (a+1) + ". Product: " + shoppingCart.get(a).getProduct().getProductName() + ". Amount: " + shoppingCart.get(a).getAmount();
                             shopprod.add(temp);
                         }
                         String[] cartproducts = shopprod.toArray(new String[0]);
                         String input;
                         ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
+                        gui.setVisible(true);
                     } while (true);
 
                 } else if (choice == (i - 2)) {    //Modify account
@@ -676,47 +677,21 @@ public class Market implements Runnable {
                 } else if (choice == (i - 1)) {
                     ArrayList<PurchaseHistory> purchaseHistory = customer.getPurchaseHistory();
                     if (purchaseHistory.isEmpty()) {
-                        System.out.println("No purchase history.");
+                        JOptionPane.showMessageDialog(null, "No purchase history.", "Purhcase history", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         System.out.println("Purchase history: (Newest products purchased listed first)");
+                        ArrayList<String> phistory = new ArrayList<>();
                         for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
                             PurchaseHistory history = purchaseHistory.get(j);
                             System.out.printf("Product: %s. Amount purchased: %d. Store: %s\n",
                                     history.getProduct().getProductName(), history.getAmount(), history.getStoreName());
+                            String temp = "Product: " + history.getProduct().getProductName() + ". Amount purchased: " + history.getAmount() + ". Store: " + history.getStoreName();
+                            phistory.add(temp);
                         }
-
-                        System.out.println("\n1. Export purchase history.");
-                        System.out.println("2. Back to main page.");
-
-                        while (true) {
-                            String option = scanner.nextLine();
-                            if (option.equals("1")) {
-                                System.out.println("Please enter the file path to export to.");
-                                while (true) {
-                                    String file = scanner.nextLine();
-                                    File f = new File(file);
-                                    if (f.exists()) {
-                                        System.out.println("This file already exists! Try a new file path.");
-                                    } else {
-                                        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
-                                            for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
-                                                PurchaseHistory product = purchaseHistory.get(j);
-                                                pw.printf("Product: %s. Amount purchased: %d. Store: %s\n", product
-                                                                .getProduct().getProductName(), product.getAmount(),
-                                                        product.getStoreName());
-                                            }
-                                            System.out.println("Purchase history exported!");
-                                            break;
-                                        } catch (Exception e) {
-                                            System.out.println("Error writing to file!");
-                                        }
-                                    }
-                                }
-                                break;
-                            } else if (option.equals("2")) break;
-                            else {
-                                System.out.println("Please enter a number corresponding to an option.");
-                            }
+                        String[] purhist = phistory.toArray(new String[0]);
+                        PurchaseHistoryGUI phist = new PurchaseHistoryGUI(purchaseHistory, purhist);
+                        if (phist.breakloop()) {
+                            break;
                         }
                     }
                 } else if (choice == i) return;
