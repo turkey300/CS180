@@ -1237,119 +1237,150 @@ public class Market implements Runnable {
 //                    System.out.println("3. Edit product available quantity.");
 //                    System.out.println("4. Edit product price.");
 //                    do {
-                        valid = true;
+                    valid = true;
 //                        String editOption = scanner.nextLine();
-                        String editOption = showInputDialog(currentProduct.productPageDisplay(), new String[]{"1. Edit " +
-                                "product name.", "2. Edit product description.", "3. Edit product available quantity."
-                                , "4. Edit product price."}, "Edit Product");
-                        editOption = editOption.substring(0, 1);
-                        if (editOption.equals("1")) {
-                            String name = showInputDialog("Please enter a new product name:", "Edit Product");
+                    String editOption = showInputDialog(currentProduct.productPageDisplay(), new String[]{"1. Edit " +
+                            "product name.", "2. Edit product description.", "3. Edit product available quantity."
+                            , "4. Edit product price."}, "Edit Product");
+                    editOption = editOption.substring(0, 1);
+                    if (editOption.equals("1")) {
+                        String name = showInputDialog("Please enter a new product name:", "Edit Product");
 //                            System.out.println("Please enter a new product name:");
 //                            String name = scanner.nextLine();
-                            //TODO move this line to server??
-                            currentProduct.editProductName(name);
-                        } else if (editOption.equals("2")) {
-                            String description = showInputDialog("Please enter a new product description:", "Edit Product");
+                        //TODO move this line to server??
+                        currentProduct.editProductName(name);
+                    } else if (editOption.equals("2")) {
+                        String description = showInputDialog("Please enter a new product description:", "Edit Product");
 //                            System.out.println("Please enter a new product description:");
 //                            String description = scanner.nextLine();
-                            //TODO move this line to server??
-                            currentProduct.editDescription(description);
-                        } else if (editOption.equals("3")) {
-                            int availableQuantity = -1;
-                            do {
-                                String quantityStr = showInputDialog("Please enter a new available quantity:",
-                                        "Edit Product");
+                        //TODO move this line to server??
+                        currentProduct.editDescription(description);
+                    } else if (editOption.equals("3")) {
+                        int availableQuantity = -1;
+                        do {
+                            String quantityStr = showInputDialog("Please enter a new available quantity:",
+                                    "Edit Product");
 //                                System.out.println("Please enter a new available quantity:");
-                                try {
-                                    availableQuantity = Integer.parseInt(quantityStr);
-                                    if (availableQuantity < 0)
-                                        JOptionPane.showMessageDialog(null, "Please enter a " +
-                                                "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
+                            try {
+                                availableQuantity = Integer.parseInt(quantityStr);
+                                if (availableQuantity < 0)
+                                    JOptionPane.showMessageDialog(null, "Please enter a " +
+                                            "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
 //                                        System.out.println("Please enter a non-negative integer.");
-                                } catch (NumberFormatException e) {
-                                    JOptionPane.showMessageDialog(null, "Please enter a " +
-                                            "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(null, "Please enter a " +
+                                        "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
 //                                    System.out.println("Please enter a non-negative integer.");
-                                }
-                            } while (availableQuantity < 0);
-                            //TODO move this line to server??
-                            currentProduct.editAvailableQuantity(availableQuantity);
-                        } else if (editOption.equals("4")) {
-                            double price = -1;
-                            do {
-                                String priceStr = showInputDialog("Please enter a new price:", "Edit Product");
+                            }
+                        } while (availableQuantity < 0);
+                        //TODO move this line to server??
+                        currentProduct.editAvailableQuantity(availableQuantity);
+                    } else if (editOption.equals("4")) {
+                        double price = -1;
+                        do {
+                            String priceStr = showInputDialog("Please enter a new price:", "Edit Product");
 //                                System.out.println("Please enter a new price:");
-                                try {
-                                    price = Double.parseDouble(priceStr);
-                                    if (price < 0)
-                                        JOptionPane.showMessageDialog(null, "Please enter a " +
-                                                "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
-//                                        System.out.println("Please enter a non-negative number.");
-                                } catch (NumberFormatException e) {
+                            try {
+                                price = Double.parseDouble(priceStr);
+                                if (price < 0)
                                     JOptionPane.showMessageDialog(null, "Please enter a " +
                                             "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
+//                                        System.out.println("Please enter a non-negative number.");
+                            } catch (NumberFormatException e) {
+                                JOptionPane.showMessageDialog(null, "Please enter a " +
+                                        "non-negative integer.", "Error!", JOptionPane.ERROR_MESSAGE);
 //                                    System.out.println("Please enter a non-negative number.");
-                                }
-                            } while (price < 0);
-                            //TODO move this line to server??
-                            currentProduct.editPrice(price);
-                        } //else {
+                            }
+                        } while (price < 0);
+                        //TODO move this line to server??
+                        currentProduct.editPrice(price);
+                    } //else {
 //                            System.out.println("Please enter an available option.");
 //                            valid = false;
 //                        }
 //                    } while (!valid);
                     seller.saveSeller();
                 } else if (action.equals("3. Delete a product")) {    //modify option = 3;delete a product
-                    int productNum = -1;
-                    do {
-                        valid = true;
-                        for (int i = 0; i < currentStore.getProducts().size(); i++) {
-                            System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
-                                    .getProductName(), currentStore.getProduct(i).getProductName());
-                        }
-                        System.out.println("Please select a product to edit.");
-                        try {
-                            productNum = Integer.parseInt(scanner.nextLine());
-                            if (productNum < 0 || productNum > currentStore.getProducts().size()) {
-                                System.out.println("Please enter a number corresponding to a product.");
-                                valid = false;
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println("Please enter a number corresponding to a product.");
-                            valid = false;
-                        }
-                    } while (!valid);
+                    int productNum;
+                    if (currentStore.getProducts() == null || currentStore.getProducts().size() == 0) {
+                        JOptionPane.showMessageDialog(null, "There's no products in this store! " +
+                                "Please add products or choose another store!", "No Products", JOptionPane.ERROR_MESSAGE);
+                        continue;
+                    }
+//                    do {
+//                        valid = true;
+                    ArrayList<String> productArrList = new ArrayList<>();
+                    for (int i = 0; i < currentStore.getProducts().size(); i++) {
+//                            System.out.printf("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
+//                                    .getProductName(), currentStore.getProduct(i).getProductName());
+                        String tmp = String.format("%d. %s, description: %s\n", i + 1, currentStore.getProduct(i)
+                                .getProductName(), currentStore.getProduct(i).getProductName());
+                        productArrList.add(tmp);
+                    }
+                    String[] productArr = productArrList.toArray(new String[0]);
+                    String productChoice = showInputDialog("Please select a product to delete.", productArr, "Delete Product");
+//                        System.out.println("Please select a product to edit.");
+                    productNum = Integer.parseInt(productChoice.substring(0, productChoice.indexOf('.')));
+//                        try {
+//                            productNum = Integer.parseInt(scanner.nextLine());
+//                            if (productNum < 0 || productNum > currentStore.getProducts().size()) {
+//                                System.out.println("Please enter a number corresponding to a product.");
+//                                valid = false;
+//                            }
+//                        } catch (NumberFormatException e) {
+//                            System.out.println("Please enter a number corresponding to a product.");
+//                            valid = false;
+//                        }
+//                    } while (!valid);
+                    //TODO connect to server
                     Product currentProduct = currentStore.getProduct(productNum);
                     currentStore.deleteProduct(currentProduct);
                     seller.saveSeller();
                 } else if (action.equals("4. Export products")) { //modify option = 4; export products
                     while (true) {
-                        System.out.println("Please enter the file path to export to.");
-                        String file = scanner.nextLine();
-                        File f = new File(file);
-                        if (f.exists()) {
-                            System.out.println("This file already exists! Try a new file path.");
-                        } else {
-                            ArrayList<Product> products = currentStore.getProducts();
-                            try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
-                                for (int i = 0; i < products.size(); i++) {
-//                productName;description;int availableQuantity;double price;String storeName
-                                    Product product = products.get(i);
-                                    pw.printf("%s,%s,%d,%f,%s\n", product.getProductName(), product.getDescription(),
-                                            product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Error exporting file!");
+                        String file = showInputDialog("Please enter the file path to export to.","Export products");
+//                        System.out.println("Please enter the file path to export to.");
+//                        String file = scanner.nextLine();
+                        try {
+                            oos.writeObject("Export products");
+                            oos.writeObject(seller.getUsername());
+                            oos.writeObject(currentStore.getStoreName());
+                            oos.writeObject(file);
+                            String message = (String) ois.readObject();
+                            if(message.equals("Products exported!")){
+                                JOptionPane.showMessageDialog(null,message,
+                                        "Export Products",JOptionPane.INFORMATION_MESSAGE);
+                                break;
+                            }else {
+                                JOptionPane.showMessageDialog(null,message,
+                                        "Error!",JOptionPane.ERROR_MESSAGE);
                             }
-
-                            System.out.println("Products exported!");
-                            break;
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
+//                        File f = new File(file);
+//                        if (f.exists()) {
+//                            System.out.println("This file already exists! Try a new file path.");
+//                        } else {
+//                            ArrayList<Product> products = currentStore.getProducts();
+//                            try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
+//                                for (int i = 0; i < products.size(); i++) {
+////                productName;description;int availableQuantity;double price;String storeName
+//                                    Product product = products.get(i);
+//                                    pw.printf("%s,%s,%d,%f,%s\n", product.getProductName(), product.getDescription(),
+//                                            product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
+//                                }
+//                            } catch (Exception e) {
+//                                System.out.println("Error exporting file!");
+//                            }
+//
+//                            System.out.println("Products exported!");
+//                            break;
+//                        }
                     }
                 }
 
-                System.out.println("Returning to main menu.");
+//                System.out.println("Returning to main menu.");
             } else if (choice.equals("View a list of sales by store")) {
                 ArrayList<Store> sellstore = new ArrayList<>();
                 sellstore = seller.getStores();
@@ -1774,7 +1805,7 @@ public class Market implements Runnable {
             } else if (choice.equals("Modify Account")) { // modify account
                 String input;
                 String[] options = {"Edit username", "Edit password", "Delete account", "Exit"};
-                input = (String) showInputDialog("How would you like to modify your account?", options);
+                input = showInputDialog("How would you like to modify your account?", options,"Modify account");
 //                do {
 //                    System.out.println("1. Edit username.");
 //                    System.out.println("2. Edit password.");
@@ -1787,7 +1818,7 @@ public class Market implements Runnable {
                 if (input.equals("Edit username")) {
 //                    System.out.println("What is your new username?");
 //                    input = scanner.nextLine();
-                    input = (String) showInputDialog("What is your new username?");
+                    input = showInputDialog("What is your new username?","Modify account");
                     try {
                         oos.writeObject("Change username");
                         oos.writeObject("Seller");
@@ -1803,7 +1834,7 @@ public class Market implements Runnable {
                 } else if (input.equals("Edit password")) {
 //                    System.out.println("What is your new password?");
 //                    input = scanner.nextLine();
-                    input = (String) showInputDialog("What is your new password?");
+                    input = showInputDialog("What is your new password?","Modify account");
                     try {
                         oos.writeObject("Change password");
                         oos.writeObject("Seller");
@@ -1822,7 +1853,7 @@ public class Market implements Runnable {
 //                    input = scanner.nextLine();
                     int delete = JOptionPane.showConfirmDialog(null,
                             "Are you sure you want to delete your account?",
-                            "Marketplace", JOptionPane.YES_NO_OPTION);
+                            "Delete Account?", JOptionPane.YES_NO_OPTION);
                     if (delete == JOptionPane.YES_OPTION) {
                         try {
                             oos.writeObject("Delete account");
@@ -1849,8 +1880,10 @@ public class Market implements Runnable {
                 JOptionPane.showMessageDialog(null, "Returning to main menu",
                         "Marketplace", JOptionPane.INFORMATION_MESSAGE);
             } else if (choice.equals("Create a store")) {
-                System.out.println("Please enter a store name:");
-                String name = scanner.nextLine();
+                String name = showInputDialog("Please enter a store name:","Create a Store");
+//                System.out.println("Please enter a store name:");
+//                String name = scanner.nextLine();
+                //TODO use server
                 Store store = new Store(name, seller.getUsername());
                 seller.addStore(store);
             } else if (choice.equals("Exit")) return;

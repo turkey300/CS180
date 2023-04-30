@@ -320,6 +320,38 @@ public class Server implements Runnable {
 //                        System.out.println("Error reading in product!");
                     }
                     oos.writeObject(message);
+                } else if(command.equals("Export products")){
+                    Seller seller = Seller.loadSeller((String) ois.readObject());
+                    String name = (String) ois.readObject();
+                    ArrayList<Store> stores = seller.getStores();
+                    Store currentStore = null;
+                    for (int i = 0; i < stores.size(); i++) {
+                        if(stores.get(i).getStoreName().equals(name)) currentStore = stores.get(i);
+                    }
+                    String file = (String) ois.readObject();
+                    File f = new File(file);
+                    String message;
+                    if (f.exists()) {
+                        message = "This file already exists! Try a new file path.";
+//                        System.out.println("This file already exists! Try a new file path.");
+                    } else {
+                        ArrayList<Product> products = currentStore.getProducts();
+                        try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
+                            for (int i = 0; i < products.size(); i++) {
+//                productName;description;int availableQuantity;double price;String storeName
+                                Product product = products.get(i);
+                                pw.printf("%s,%s,%d,%f,%s\n", product.getProductName(), product.getDescription(),
+                                        product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
+                            }
+                        } catch (Exception e) {
+                            message = "Error exporting file!";
+//                            System.out.println("Error exporting file!");
+                        }
+                        message = "Products exported!";
+//                        System.out.println("Products exported!");
+//                        break;
+                    }
+                    oos.writeObject(message);
                 }
                 //other commands
             }
