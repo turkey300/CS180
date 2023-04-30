@@ -1300,6 +1300,8 @@ public class Market implements Runnable {
 //                        }
 //                    } while (!valid);
                     seller.saveSeller();
+                    JOptionPane.showMessageDialog(null,"Product edited!","Edit Product",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } else if (action.equals("3. Delete a product")) {    //modify option = 3;delete a product
                     int productNum;
                     if (currentStore.getProducts() == null || currentStore.getProducts().size() == 0) {
@@ -1333,9 +1335,11 @@ public class Market implements Runnable {
 //                        }
 //                    } while (!valid);
                     //TODO connect to server
-                    Product currentProduct = currentStore.getProduct(productNum);
+                    Product currentProduct = currentStore.getProduct(productNum - 1);
                     currentStore.deleteProduct(currentProduct);
                     seller.saveSeller();
+                    JOptionPane.showMessageDialog(null,"Product deleted!","Delete Product",
+                            JOptionPane.INFORMATION_MESSAGE);
                 } else if (action.equals("4. Export products")) { //modify option = 4; export products
                     while (true) {
                         String file = showInputDialog("Please enter the file path to export to.","Export products");
