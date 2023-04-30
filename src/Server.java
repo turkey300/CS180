@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -352,6 +353,26 @@ public class Server implements Runnable {
 //                        break;
                     }
                     oos.writeObject(message);
+                } else if (command.equals("Add product")) {
+                    System.out.println("test1");
+                    Store store = (Store) ois.readObject();
+                    Seller seller = (Seller) ois.readObject();
+                    String name = (String) ois.readObject();
+                    String description = (String) ois.readObject();
+                    int quantity = (Integer) ois.readObject();
+                    double price = (Double) ois.readObject();
+                    String storeName = (String) ois.readObject();
+
+                    seller = Seller.loadSeller(seller.getUsername());
+                    ArrayList<Store> stores = seller.getStores();
+                    for (int i = 0; i < stores.size(); i++) {
+                        if (stores.get(i).getStoreName().equals(storeName))
+                            store = stores.get(i);
+                    }
+
+                    store.addProduct(new Product(name, description, quantity, price, storeName));
+                    seller.saveSeller();
+                    System.out.println("test");
                 }
                 //other commands
             }

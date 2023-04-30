@@ -300,6 +300,8 @@ public class Market implements Runnable {
 
     public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
         //checks shopping cart for updated products
+
+        //TODO: refresh customer
         customer.checkShoppingCart();
         //display of products
         ArrayList<Seller> sellers = new ArrayList<>();
@@ -1008,6 +1010,14 @@ public class Market implements Runnable {
 //                int storeNum = 0;
                 //System.out.println("Which store would you like to edit?");
                 //do {
+                try {  //this block refreshes seller info
+                    oos.writeObject("refresh user");
+                    oos.writeObject("seller");
+                    oos.writeObject(seller.getUsername());
+                    seller = (Seller) ois.readObject();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
                 ArrayList<Store> astores = seller.getStores();
                 if (astores == null) {
                     JOptionPane.showMessageDialog(null, "You don't have any stores! Please first" +
@@ -1188,12 +1198,24 @@ public class Market implements Runnable {
 //                                System.out.println("Please enter a number greater or equal to 0");
                             }
                         } while (price < 0);
-                        //TODO not sure if we have to move just two line to the server
-                        currentStore.addProduct(new Product(name, description,
-                                quantity, price, currentStore.getStoreName()));
+                        try {
+                            oos.writeObject("Add product");
+                            oos.writeObject(currentStore);
+                            oos.writeObject(seller);
+                            oos.writeObject(name);
+                            oos.writeObject(description);
+                            oos.writeObject(quantity);
+                            oos.writeObject(price);
+                            oos.writeObject(currentStore.getStoreName());
+                            oos.flush();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+//                        currentStore.addProduct(new Product(name, description,
+//                                quantity, price, currentStore.getStoreName()));
 //                        System.out.println("Product added!");
 //                        currentStore.saveStore();
-                        seller.saveSeller();
+//                        seller.saveSeller();
                         JOptionPane.showMessageDialog(null, "Product added!", "Create Product"
                                 , JOptionPane.INFORMATION_MESSAGE);
                     }
