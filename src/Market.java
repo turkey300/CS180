@@ -311,6 +311,7 @@ public class Market implements Runnable {
                 oos.flush();
                 sellers = (ArrayList<Seller>) ois.readObject();
 
+                oos.writeObject("refresh user");
                 oos.writeObject("customer");
                 oos.writeObject(customer.getUsername());
                 oos.flush();
