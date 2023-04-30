@@ -17,9 +17,9 @@ public class PurchaseHistoryGUI extends JFrame {
     public PurchaseHistoryGUI(ArrayList<PurchaseHistory> purchaseHistory, String[] purhist) {
 
         setTitle("Purchase History");
-        setSize(400, 300);
+       // setSize(400, 400);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 
         textLabel = new JLabel();
@@ -35,7 +35,7 @@ public class PurchaseHistoryGUI extends JFrame {
         add(textLabel);
         add(backButton);
         add(exportButton);
-
+        pack();
 
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -71,6 +71,7 @@ public class PurchaseHistoryGUI extends JFrame {
             }
 
         });
+
     }
 
     public boolean breakloop() {

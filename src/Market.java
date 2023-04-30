@@ -636,6 +636,13 @@ public class Market implements Runnable {
                         String input;
                         ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
                         gui.setVisible(true);
+                        while (gui.isVisible()) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         // } while (true);
                     }
                 } else if (choice == (i - 2)) {    //Modify account
@@ -739,13 +746,17 @@ public class Market implements Runnable {
                         }
                         String[] purhist = phistory.toArray(new String[0]);
                         PurchaseHistoryGUI phist = new PurchaseHistoryGUI(purchaseHistory, purhist);
-                        do {
-                            phist.setVisible(true);
-                        } while (!phist.breakloop());
+                        phist.setVisible(true);
+                        while (phist.isVisible()) {
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         //  if (phist.breakloop()) {
                         //    break;
                         //  }
-                        System.out.println(phist.breakloop());
                     }
                 } else if (choice == i) return;
             }

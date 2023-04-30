@@ -10,6 +10,8 @@ public class ShoppingCartGUI extends JFrame {
     private JButton deleteButton;
     private JButton leaveButton;
 
+    private boolean willbreak = false;
+
     public ShoppingCartGUI(String[] items, ArrayList<Seller> sellers, ArrayList<ShoppingCart> shoppingCart, Customer customer, ArrayList<String> shopprod) {
         super("Shopping Cart");
 
@@ -78,8 +80,8 @@ public class ShoppingCartGUI extends JFrame {
                     if (intInput > 0 && intInput <= shoppingCart.size()) {
                         shoppingCart.remove(intInput - 1);
                         JOptionPane.showMessageDialog(null, "Product removed from shopping cart!", "Delete?", JOptionPane.INFORMATION_MESSAGE);
-                        dispose();
                         customer.saveCustomer();
+                        dispose();
                     }
             }
         });
@@ -110,6 +112,10 @@ public class ShoppingCartGUI extends JFrame {
 
     public ArrayList<ShoppingCart> getCart() {
         return shoppingCart;
+    }
+
+    public boolean breakloop() {
+        return willbreak;
     }
 
 }
