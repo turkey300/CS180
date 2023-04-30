@@ -1472,6 +1472,7 @@ public class Market implements Runnable {
                 ArrayList<Double> revenue = new ArrayList<>(); //Revenue of each purchase
                 ArrayList<String> customers = new ArrayList<>(); //Customer username for each purchase
                 ArrayList<Integer> amount = new ArrayList<>(); //Number of products each customer purchased
+                ArrayList<String> output = new ArrayList<>();
                 for (int i = 0; i < storelist.length; i++) {
                     storelist[i] = sellstore.get(i);
                     storename[i] = storelist[i].getStoreName();
@@ -1495,18 +1496,20 @@ public class Market implements Runnable {
                             custlist[j] = (customers.get(j));
                             purchased[j] = (amount.get(j)).toString();
                             if ((custlist[j].equals("")) || (purchased[j].equals("0")) || (revlist[j].equals("0.0"))) {
-                                System.out.println("No sales have been made on this store");
+                                JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
                             }
-                            System.out.printf("Customer %s purchased %s produces for a total sale of $%s",
-                                    custlist[j], purchased[j], revlist[j]);
+                            //System.out.printf("Customer %s purchased %s produces for a total sale of $%s",
+                               //     custlist[j], purchased[j], revlist[j]);
+                            String temp = "Customer " + custlist[j] + " purchased " + purchased[j] + " products for a total sale of $" + revlist[j];
+                            output.add(temp);
                             j++;
                         } while (j < revlist.length);
                     } catch (IndexOutOfBoundsException e) {
-                        System.out.println("No sales have been made on this store");
+                        JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
-
-                System.out.println("Returning to main menu.");
+                String[] sales = output.toArray(new String[0]);
+                JOptionPane.showMessageDialog(null, sales, "Sales", JOptionPane.INFORMATION_MESSAGE);
             } else if (choice.equals("View a dashboard with statistics for each stores")) {    //choice = 3, statistics
 //                System.out.println("What would you like Statistics of?");
 //                boolean validate;
