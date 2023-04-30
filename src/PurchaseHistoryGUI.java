@@ -23,7 +23,7 @@ public class PurchaseHistoryGUI extends JFrame {
 
 
         textLabel = new JLabel();
-        textLabel.setText("Purchase History: " + String.join(", ", purhist));
+        textLabel.setText("<html>Purchase History: <br/>" + String.join("; <br/>", purhist) + "</html>");
         textLabel.setHorizontalAlignment(JLabel.CENTER);
 
 
@@ -32,6 +32,7 @@ public class PurchaseHistoryGUI extends JFrame {
 
 
         setLayout(new FlowLayout());
+        add(textLabel);
         add(backButton);
         add(exportButton);
 

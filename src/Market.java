@@ -461,9 +461,9 @@ public class Market implements Runnable {
                         }
                     }
                 } else if (choice == (i - 4)) {
-                    boolean validChoice;
+//                    boolean validChoice;
                     //do {
-                    validChoice = true;
+//                    validChoice = true;
                     // System.out.println("1. View a list of stores by number of products sold.");
                     // System.out.println("2. View a list of stores by the products purchased by you.");
                     String[] choicest = {"1. View a list of stores by number of products sold.", "2. View a list of stores by the products purchased by you."};
@@ -588,24 +588,23 @@ public class Market implements Runnable {
                     if (shoppingCart.isEmpty()) {
                         //   System.out.println("Shopping cart is empty!");
                         JOptionPane.showMessageDialog(null, "Shopping Cart is Empty!", "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
-                        break;
+                    } else {
+                        //    System.out.println("Products in your shopping cart:");
+                        ArrayList<String> shopprod = new ArrayList<>();
+                        shopprod.add("Products in your shopping cart:");
+                        for (int a = 0; a < shoppingCart.size(); a++) {
+                            //   System.out.printf("%d. Product: %s. Amount: %d.\n",
+                            //          a + 1, shoppingCart.get(a).getProduct().getProductName(),
+                            //        shoppingCart.get(a).getAmount();
+                            String temp = (a + 1) + ". Product: " + shoppingCart.get(a).getProduct().getProductName() + ". Amount: " + shoppingCart.get(a).getAmount();
+                            shopprod.add(temp);
+                        }
+                        String[] cartproducts = shopprod.toArray(new String[0]);
+                        String input;
+                        ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
+                        gui.setVisible(true);
+                        // } while (true);
                     }
-                    //    System.out.println("Products in your shopping cart:");
-                    ArrayList<String> shopprod = new ArrayList<>();
-                    shopprod.add("Products in your shopping cart:");
-                    for (int a = 0; a < shoppingCart.size(); a++) {
-                        //   System.out.printf("%d. Product: %s. Amount: %d.\n",
-                        //          a + 1, shoppingCart.get(a).getProduct().getProductName(),
-                        //        shoppingCart.get(a).getAmount();
-                        String temp = (a + 1) + ". Product: " + shoppingCart.get(a).getProduct().getProductName() + ". Amount: " + shoppingCart.get(a).getAmount();
-                        shopprod.add(temp);
-                    }
-                    String[] cartproducts = shopprod.toArray(new String[0]);
-                    String input;
-                    ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
-                    gui.setVisible(true);
-                    // } while (true);
-
                 } else if (choice == (i - 2)) {    //Modify account
                     String input;
                     String[] options = {"Edit username", "Edit password", "Delete account", "Exit"};
@@ -684,6 +683,14 @@ public class Market implements Runnable {
                     JOptionPane.showMessageDialog(null, "Returning to main page...",
                             "Marketplace", JOptionPane.INFORMATION_MESSAGE);
                 } else if (choice == (i - 1)) {
+                    try {  //this block refreshes customer info
+                        oos.writeObject("refresh user");
+                        oos.writeObject("customer");
+                        oos.writeObject(customer.getUsername());
+                        customer = (Customer) ois.readObject();
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                     ArrayList<PurchaseHistory> purchaseHistory = customer.getPurchaseHistory();
                     if (purchaseHistory.isEmpty()) {
                         JOptionPane.showMessageDialog(null, "No purchase history.", "Purchase history", JOptionPane.INFORMATION_MESSAGE);
@@ -745,7 +752,7 @@ public class Market implements Runnable {
         while (true) {
             try {   //this block refreshes product info every time customer opens/refreshes product page
                 System.out.println("Before refresh:" + currentProduct.productPageDisplay());
-                oos.writeObject("refresh");
+                oos.writeObject("refresh product");
                 oos.writeObject(currentProduct);
                 Object serverInput = ois.readObject();
                 if (!(serverInput instanceof Product)) {

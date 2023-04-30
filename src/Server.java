@@ -172,7 +172,7 @@ public class Server implements Runnable {
 //                            Product product = (Product) ois.readObject();
                             int amount = (Integer) ois.readObject();
                             Customer customer = (Customer) ois.readObject();
-
+                            customer = Customer.loadCustomer(customer.getUsername());
 //                            ArrayList<Seller> sellers = Seller.loadAllSellers();
                             String message;
                             //TODO
@@ -185,7 +185,7 @@ public class Server implements Runnable {
                             } else {
                                 message = "Sorry, there were not enough items available.";
                             }
-                            customer.saveCustomer();
+//                            customer.saveCustomer();
                             System.out.println("After purchase:" + product.productPageDisplay());
                             oos.writeObject(message);
                             oos.flush();
@@ -235,7 +235,7 @@ public class Server implements Runnable {
                             oos.flush();
                         }
                     }
-                } else if (command.equals("refresh")) {
+                } else if (command.equals("refresh product")) {
                     Product product = (Product) ois.readObject();
                     System.out.println("Before refresh:" + product.productPageDisplay());
 
@@ -257,6 +257,11 @@ public class Server implements Runnable {
                     else oos.writeObject(newProduct);
                     oos.flush();
                     System.out.println("After refresh:" + newProduct.productPageDisplay());
+                } else if(command.equals("refresh user")){
+                    String userType = (String) ois.readObject();
+                    String username = (String) ois.readObject();
+                    if(userType.equals("customer")) oos.writeObject(Customer.loadCustomer(username));
+                    else if(userType.equals("seller")) oos.writeObject(Seller.loadSeller(username));
                 }
                 //other commands
 
