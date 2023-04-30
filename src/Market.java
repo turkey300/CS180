@@ -1269,14 +1269,32 @@ public class Market implements Runnable {
                         String name = showInputDialog("Please enter a new product name:", "Edit Product");
 //                            System.out.println("Please enter a new product name:");
 //                            String name = scanner.nextLine();
-                        //TODO move this line to server??
-                        currentProduct.editProductName(name);
+                        try {
+                            oos.writeObject("Edit product");
+                            oos.writeObject("name");
+                            oos.writeObject(seller);
+                            oos.writeObject(currentProduct);
+                            oos.writeObject(name);
+                            oos.flush();
+                        } catch (Exception e) {
+//                            e.printStackTrace();
+                            //this gives socketexcpetion error so im just not printing it
+                        }
+//                        currentProduct.editProductName(name);
                     } else if (editOption.equals("2")) {
                         String description = showInputDialog("Please enter a new product description:", "Edit Product");
 //                            System.out.println("Please enter a new product description:");
 //                            String description = scanner.nextLine();
-                        //TODO move this line to server??
-                        currentProduct.editDescription(description);
+                        try {
+                            oos.writeObject("Edit product");
+                            oos.writeObject("desc");
+                            oos.writeObject(currentProduct);
+                            oos.writeObject(description);
+                            oos.flush();
+                        } catch (Exception e) {
+
+                        }
+//                        currentProduct.editDescription(description);
                     } else if (editOption.equals("3")) {
                         int availableQuantity = -1;
                         do {
@@ -1295,8 +1313,16 @@ public class Market implements Runnable {
 //                                    System.out.println("Please enter a non-negative integer.");
                             }
                         } while (availableQuantity < 0);
-                        //TODO move this line to server??
-                        currentProduct.editAvailableQuantity(availableQuantity);
+                        try {
+                            oos.writeObject("Edit product");
+                            oos.writeObject("quantity");
+                            oos.writeObject(currentProduct);
+                            oos.writeObject(availableQuantity);
+                            oos.flush();
+                        } catch (Exception e) {
+
+                        }
+//                        currentProduct.editAvailableQuantity(availableQuantity);
                     } else if (editOption.equals("4")) {
                         double price = -1;
                         do {
@@ -1314,14 +1340,22 @@ public class Market implements Runnable {
 //                                    System.out.println("Please enter a non-negative number.");
                             }
                         } while (price < 0);
-                        //TODO move this line to server??
-                        currentProduct.editPrice(price);
+                        try {
+                            oos.writeObject("Edit product");
+                            oos.writeObject("price");
+                            oos.writeObject(currentProduct);
+                            oos.writeObject(price);
+                            oos.flush();
+                        } catch (Exception e) {
+
+                        }
+//                        currentProduct.editPrice(price);
                     } //else {
 //                            System.out.println("Please enter an available option.");
 //                            valid = false;
 //                        }
 //                    } while (!valid);
-                    seller.saveSeller();
+//                    seller.saveSeller();
                     JOptionPane.showMessageDialog(null,"Product edited!","Edit Product",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else if (action.equals("3. Delete a product")) {    //modify option = 3;delete a product
