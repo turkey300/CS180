@@ -483,6 +483,17 @@ public class Server implements Runnable {
 
                     seller.saveSeller();
                     store.saveStore();
+                } else if (command.equals("Create store")) {
+                    Seller seller = (Seller) ois.readObject();
+                    String name = (String) ois.readObject();
+
+                    Store store = new Store(name, seller.getUsername());
+                    ArrayList<Seller> sellers = Seller.loadAllSellers();
+                    for (int i = 0; i < sellers.size(); i++) {
+                        if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                            seller = sellers.get(i);
+                    }
+                    seller.addStore(store);
                 }
                 //other commands
             }

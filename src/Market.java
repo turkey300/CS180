@@ -1955,9 +1955,18 @@ public class Market implements Runnable {
                 String name = showInputDialog("Please enter a store name:","Create a Store");
 //                System.out.println("Please enter a store name:");
 //                String name = scanner.nextLine();
-                //TODO use server
-                Store store = new Store(name, seller.getUsername());
-                seller.addStore(store);
+                try {
+                    oos.writeObject("Create store");
+                    oos.writeObject(seller);
+                    oos.writeObject(name);
+                    oos.flush();
+                } catch (Exception e) {
+
+                }
+//                Store store = new Store(name, seller.getUsername());
+//                seller.addStore(store);
+                JOptionPane.showMessageDialog(null, "Store successfully created!",
+                        "Marketplace", JOptionPane.INFORMATION_MESSAGE);
             } else if (choice.equals("Exit")) return;
         } while (true);
 
