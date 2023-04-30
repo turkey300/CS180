@@ -1390,10 +1390,17 @@ public class Market implements Runnable {
 //                            valid = false;
 //                        }
 //                    } while (!valid);
-                    //TODO connect to server
-                    Product currentProduct = currentStore.getProduct(productNum - 1);
-                    currentStore.deleteProduct(currentProduct);
-                    seller.saveSeller();
+                    try {
+                        oos.writeObject("Delete product");
+                        oos.writeObject(seller);
+                        oos.writeObject(currentStore);
+                        oos.writeObject(productNum - 1);
+                    } catch (Exception e) {
+
+                    }
+//                    Product currentProduct = currentStore.getProduct(productNum - 1);
+//                    currentStore.deleteProduct(currentProduct);
+//                    seller.saveSeller();
                     JOptionPane.showMessageDialog(null,"Product deleted!","Delete Product",
                             JOptionPane.INFORMATION_MESSAGE);
                 } else if (action.equals("4. Export products")) { //modify option = 4; export products

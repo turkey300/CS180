@@ -462,6 +462,27 @@ public class Server implements Runnable {
                         seller.saveSeller();
                         store.saveStore();
                     }
+                } else if (command.equals("Delete product")) {
+                    Seller seller = (Seller) ois.readObject();
+                    Store store1 = (Store) ois.readObject();
+                    int num = (Integer) ois.readObject();
+
+                    ArrayList<Seller> sellers = Seller.loadAllSellers();
+                    for (int i = 0; i < sellers.size(); i++) {
+                        if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                            seller = sellers.get(i);
+                    }
+                    ArrayList<Store> stores = seller.getStores();
+                    Store store = null;
+                    for (int i = 0; i < stores.size(); i++) {
+                        if (stores.get(i).getStoreName().equals(store1.getStoreName()))
+                            store = stores.get(i);
+                    }
+                    Product product = store.getProduct(num);
+                    store.deleteProduct(product);
+
+                    seller.saveSeller();
+                    store.saveStore();
                 }
                 //other commands
             }
