@@ -301,7 +301,6 @@ public class Market implements Runnable {
     public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
         //checks shopping cart for updated products
 
-        //TODO: refresh customer
         customer.checkShoppingCart();
         //display of products
         ArrayList<Seller> sellers = new ArrayList<>();
@@ -311,6 +310,11 @@ public class Market implements Runnable {
                 oos.writeObject("List of sellers");
                 oos.flush();
                 sellers = (ArrayList<Seller>) ois.readObject();
+
+                oos.writeObject("customer");
+                oos.writeObject(customer.getUsername());
+                oos.flush();
+                customer = (Customer) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
