@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -132,10 +129,10 @@ public class Server implements Runnable {
                     }
                 } else if (command.equals("Purchase product")) {
 //                    synchronized (sync) {
-                        Product product = (Product) ois.readObject();
+                    Product product = (Product) ois.readObject();
 //                        oos.writeObject("Waiting");
 //                        oos.flush();
-                        ArrayList<Seller> sellers = Seller.loadAllSellers();  // grabs sellers again
+                    ArrayList<Seller> sellers = Seller.loadAllSellers();  // grabs sellers again
 
 //                        try {
 //                            oos.writeObject("List of sellers");
@@ -145,52 +142,52 @@ public class Server implements Runnable {
 //                            e.printStackTrace();
 //                        }
 
-                        ArrayList<Store> stores = new ArrayList<>(); // grabbing stores again
-                        for (int j = 0; j < sellers.size(); j++) {
-                            ArrayList<Store> currentStores = sellers.get(j).getStores();
-                            stores.addAll(currentStores);
-                        }
+                    ArrayList<Store> stores = new ArrayList<>(); // grabbing stores again
+                    for (int j = 0; j < sellers.size(); j++) {
+                        ArrayList<Store> currentStores = sellers.get(j).getStores();
+                        stores.addAll(currentStores);
+                    }
 
-                        boolean stillProduct = false;
-                        Store store = null;
-                        for (int k = 0; k < stores.size(); k++) { // checking if product is in store
-                            if (product.getStoreName().equals(stores.get(k).getStoreName())) {
-                                stillProduct = true;
-                                store = stores.get(k);
-                                product = store.getProduct(product.getProductName());
-                            }
+                    boolean stillProduct = false;
+                    Store store = null;
+                    for (int k = 0; k < stores.size(); k++) { // checking if product is in store
+                        if (product.getStoreName().equals(stores.get(k).getStoreName())) {
+                            stillProduct = true;
+                            store = stores.get(k);
+                            product = store.getProduct(product.getProductName());
                         }
-                        oos.writeObject(stillProduct);
-                        oos.flush();
+                    }
+                    oos.writeObject(stillProduct);
+                    oos.flush();
 
 //                        oos.writeObject("Waiting");
 //                        oos.flush();
 //                        ois.readObject();
 //                        String stillProduct = (String) ois.readObject();
-                        if (stillProduct) {
+                    if (stillProduct) {
 //                            Store store = (Store) ois.readObject();
 //                            Product product = (Product) ois.readObject();
-                            int amount = (Integer) ois.readObject();
-                            Customer customer = (Customer) ois.readObject();
-                            customer = Customer.loadCustomer(customer.getUsername());
+                        int amount = (Integer) ois.readObject();
+                        Customer customer = (Customer) ois.readObject();
+                        customer = Customer.loadCustomer(customer.getUsername());
 //                            ArrayList<Seller> sellers = Seller.loadAllSellers();
-                            String message;
-                            //TODO
-                            System.out.println("Before purchase:" + product.productPageDisplay());
-                            if (store.purchaseProductFromStore(product, amount, customer)) {
-                                for (int i = 0; i < sellers.size(); i++) {
-                                    sellers.get(i).saveSeller();
-                                }
-                                message = "Purchased successfully!";
-                            } else {
-                                message = "Sorry, there were not enough items available.";
+                        String message;
+                        //TODO
+                        System.out.println("Before purchase:" + product.productPageDisplay());
+                        if (store.purchaseProductFromStore(product, amount, customer)) {
+                            for (int i = 0; i < sellers.size(); i++) {
+                                sellers.get(i).saveSeller();
                             }
-//                            customer.saveCustomer();
-                            System.out.println("After purchase:" + product.productPageDisplay());
-                            oos.writeObject(message);
-                            oos.flush();
-                            System.out.println(product.productPageDisplay());
+                            message = "Purchased successfully!";
+                        } else {
+                            message = "Sorry, there were not enough items available.";
                         }
+//                            customer.saveCustomer();
+                        System.out.println("After purchase:" + product.productPageDisplay());
+                        oos.writeObject(message);
+                        oos.flush();
+                        System.out.println(product.productPageDisplay());
+                    }
 //                    }
                 } else if (command.equals("Add to cart")) {
                     synchronized (sync) {
@@ -257,15 +254,74 @@ public class Server implements Runnable {
                     else oos.writeObject(newProduct);
                     oos.flush();
                     System.out.println("After refresh:" + newProduct.productPageDisplay());
-                } else if(command.equals("refresh user")){
+                } else if (command.equals("refresh user")) {
                     String userType = (String) ois.readObject();
                     String username = (String) ois.readObject();
-                    if(userType.equals("customer")) oos.writeObject(Customer.loadCustomer(username));
-                    else if(userType.equals("seller")) oos.writeObject(Seller.loadSeller(username));
+                    if (userType.equals("customer")) oos.writeObject(Customer.loadCustomer(username));
+                    else if (userType.equals("seller")) oos.writeObject(Seller.loadSeller(username));
+                } else if (command.equals("csv")) {
+                    Seller seller = Seller.loadSeller((String) ois.readObject());
+                    String name = (String) ois.readObject();
+                    ArrayList<Store> stores = seller.getStores();
+                    Store currentStore = null;
+                    for (int i = 0; i < stores.size(); i++) {
+                        if(stores.get(i).getStoreName().equals(name)) currentStore = stores.get(i);
+                    }
+                    String file = (String) ois.readObject();
+
+
+                    File f = new File(file);
+                    String message = "";
+                    try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+                        String line = bfr.readLine();
+                        while (line != null) {
+//                productName;description;int availableQuantity;double price;String storeName
+                            try {
+                                String productName;
+                                String description;
+                                int availableQuantity;
+                                double price;
+                                String storeName;
+                                String substring;
+
+                                productName = line.substring(0, line.indexOf(","));
+                                productName = productName.replaceAll("\"", "");
+                                substring = line.substring(line.indexOf(",") + 1);
+                                description = substring.substring(0, substring.indexOf(","));
+                                description = description.replaceAll("\"", "");
+                                substring = substring.substring(substring.indexOf(",") + 1);
+                                availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf("," +
+                                        "")).replaceAll("\"", ""));
+                                substring = substring.substring(substring.indexOf(",") + 1);
+                                price = Double.parseDouble(substring.substring(0, substring.indexOf("," +
+                                        "")).replaceAll("\"", ""));
+                                storeName = substring.substring(substring.indexOf(",") + 1);
+                                storeName = storeName.replaceAll("\"", "");
+
+
+                                if (availableQuantity > 0 && price >= 0) {
+                                    currentStore.addProduct(new Product(productName, description,
+                                            availableQuantity, price, currentStore.getStoreName()));
+                                    message = "Product added!";
+//                                    System.out.println("Product added!");
+                                    seller.saveSeller();
+                                } else {
+                                    message = "Product has invalid data!";
+//                                    System.out.println("Product has invalid data!");
+                                }
+                            } catch (Exception e) {
+                                message = "Error parsing product!";
+//                                System.out.println("Error parsing product!");
+                            }
+                            line = bfr.readLine();
+                        }
+                    } catch (Exception e) {
+                        message = "Error reading in product!";
+//                        System.out.println("Error reading in product!");
+                    }
+                    oos.writeObject(message);
                 }
                 //other commands
-
-
             }
         } catch (SocketException | EOFException e) {
             //SocketException catches "Connection reset"; I cannot solve EOFException, but seems like everything is working fine

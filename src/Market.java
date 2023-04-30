@@ -192,6 +192,32 @@ public class Market implements Runnable {
         return input;
     }
 
+    public static String showInputDialog(String message, String[] options, String title) {
+        String input;
+        input = (String) JOptionPane.showInputDialog(null, message
+                , title, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        while (input == null || input.isBlank()) {
+            JOptionPane.showMessageDialog(null, message + "!", "Error!",
+                    JOptionPane.ERROR_MESSAGE);
+            input = (String) JOptionPane.showInputDialog(null, message
+                    , title, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+        }
+        return input;
+    }
+
+    public static String showInputDialog(String message, String title) {
+        String input;
+        input = JOptionPane.showInputDialog(null, message, title,
+                JOptionPane.QUESTION_MESSAGE);
+        while (input == null || input.isBlank()) {
+            JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
+                    JOptionPane.ERROR_MESSAGE);
+            input = JOptionPane.showInputDialog(null, message, title,
+                    JOptionPane.QUESTION_MESSAGE);
+        }
+        return input;
+    }
+
     //log in as a customer
     public static Customer customerLogin(ObjectOutputStream oos, ObjectInputStream ois) {
         Customer customer;
@@ -682,7 +708,7 @@ public class Market implements Runnable {
 //                    System.out.println("Success! Returning to main page...");
                     JOptionPane.showMessageDialog(null, "Returning to main page...",
                             "Marketplace", JOptionPane.INFORMATION_MESSAGE);
-                } else if (choice == (i - 1)) {
+                } else if (choice == (i - 1)) {  //purchase history
                     try {  //this block refreshes customer info
                         oos.writeObject("refresh user");
                         oos.writeObject("customer");
@@ -942,6 +968,14 @@ public class Market implements Runnable {
 
     public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
         do {
+            try {  //this block refreshes seller info
+                oos.writeObject("refresh user");
+                oos.writeObject("seller");
+                oos.writeObject(seller.getUsername());
+                seller = (Seller) ois.readObject();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
             //int choice = 0;
             //System.out.println("What would you like to do?");
             //do {
@@ -955,8 +989,9 @@ public class Market implements Runnable {
             String[] selloptions = {"Modify Products", "View a list of sales by store", "View a dashboard with statistics" +
                     " for each stores", "View number of products in shopping carts", "Modify Account", "Create a store", "Exit"};
             String choice;
-            choice = (String) JOptionPane.showInputDialog(null, "What would you like to do",
-                    "Action", JOptionPane.QUESTION_MESSAGE, null, selloptions, selloptions[0]);
+            choice = showInputDialog("What would you like to do", selloptions, "Action");
+//            choice = (String) JOptionPane.showInputDialog(null, "What would you like to do",
+//                    "Action", JOptionPane.QUESTION_MESSAGE, null, selloptions, selloptions[0]);
 
             //  try {    //if input is not Integer, catch exception and repeat main page prompt
             //    choice = Integer.parseInt(scanner.nextLine());
@@ -968,8 +1003,9 @@ public class Market implements Runnable {
             //    } while (!(choice >= 1 && choice <= 7));
 
             if (choice.equals("Modify Products")) { // Modify products
+                //TODO delete "valid"
                 boolean valid;
-                int storeNum = 0;
+//                int storeNum = 0;
                 //System.out.println("Which store would you like to edit?");
                 //do {
                 valid = true;
@@ -995,7 +1031,8 @@ public class Market implements Runnable {
                  */
                 String currentStores;
                 //  System.out.println(stores[0]); just testing
-                currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?", "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
+                currentStores = showInputDialog("Which store would you like to edit?", names, "Store?");
+//                currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?", "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
                 int j;
                 j = Arrays.asList(names).indexOf(currentStores);
                 Store currentStore = stores[j];
@@ -1012,7 +1049,8 @@ public class Market implements Runnable {
                  */
                 String[] choices = {"1. Add a product", "2. Edit a product", "3. Delete a product", "4. Export products"};
                 String action;
-                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+                action = showInputDialog("What would you like to do?", choices, "Choice?");
+//                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
                 /**
                  int modifyOption = 0;
                  do {
@@ -1031,101 +1069,129 @@ public class Market implements Runnable {
                  */
                 if (action.equals("1. Add a product")) {    //add a product
                     String input;
-                    do {
-                        System.out.println("1. Import product from csv.\n2. Create product in terminal.");
-                        input = scanner.nextLine();
-                        if (!(input.equals("1") || input.equals("2")))
-                            System.out.println("Please enter an option corresponding to a product.");
-                    } while (!(input.equals("1") || input.equals("2")));
+                    input = showInputDialog("How would you like to add this product?", new String[]{
+                            "1. Import product from csv.", "2. Create product in terminal."}, "Add Product");
+//                    do {
+//                        System.out.println("1. Import product from csv.\n2. Create product in terminal.");
+//                        input = scanner.nextLine();
+//                        if (!(input.equals("1") || input.equals("2")))
+//                            System.out.println("Please enter an option corresponding to a product.");
+//                    } while (!(input.equals("1") || input.equals("2")));
 
-                    if (input.equals("1")) {    //Import product from csv.
-                        System.out.println("Please enter the file path to the csv file.");
-                        String file = scanner.nextLine();
-
-                        File f = new File(file);
-                        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
-                            String line = bfr.readLine();
-                            while (line != null) {
-//                productName;description;int availableQuantity;double price;String storeName
-                                try {
-                                    String productName;
-                                    String description;
-                                    int availableQuantity;
-                                    double price;
-                                    String storeName;
-                                    String substring;
-
-                                    productName = line.substring(0, line.indexOf(","));
-                                    productName = productName.replaceAll("\"", "");
-                                    substring = line.substring(line.indexOf(",") + 1);
-                                    description = substring.substring(0, substring.indexOf(","));
-                                    description = description.replaceAll("\"", "");
-                                    substring = substring.substring(substring.indexOf(",") + 1);
-                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf("," +
-                                            "")).replaceAll("\"", ""));
-                                    substring = substring.substring(substring.indexOf(",") + 1);
-                                    price = Double.parseDouble(substring.substring(0, substring.indexOf("," +
-                                            "")).replaceAll("\"", ""));
-                                    storeName = substring.substring(substring.indexOf(",") + 1);
-                                    storeName = storeName.replaceAll("\"", "");
-
-
-                                    if (availableQuantity > 0 && price >= 0) {
-                                        currentStore.addProduct(new Product(productName, description,
-                                                availableQuantity, price, currentStore.getStoreName()));
-                                        System.out.println("Product added!");
-                                        seller.saveSeller();
-                                    } else {
-                                        System.out.println("Product has invalid data!");
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println("Error parsing product!");
-                                }
-
-                                line = bfr.readLine();
-                            }
-                        } catch (Exception e) {
-                            System.out.println("Error reading in product!");
+                    if (input.equals("1. Import product from csv.")) {    //Import product from csv.
+                        String file = showInputDialog("Please enter the file path to the csv file.", "Import Product");
+//                        System.out.println("Please enter the file path to the csv file.");
+//                        String file = scanner.nextLine();
+                        try {
+                            oos.writeObject("csv");
+                            oos.writeObject(seller.getUsername());
+                            oos.writeObject(currentStore.getStoreName());
+                            oos.writeObject(file);
+                            String message = (String) ois.readObject();
+                            JOptionPane.showMessageDialog(null, message, "Import Product", JOptionPane.INFORMATION_MESSAGE);
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
                         }
-                    } else if (input.equals("2")) {    //Create product in terminal.
-                        System.out.println("Please enter a product name:");
-                        String name = scanner.nextLine();
-                        System.out.println("Please enter a product description:");
-                        String description = scanner.nextLine();
+
+
+//                        File f = new File(file);
+//                        try (BufferedReader bfr = new BufferedReader(new FileReader(f))) {
+//                            String line = bfr.readLine();
+//                            while (line != null) {
+////                productName;description;int availableQuantity;double price;String storeName
+//                                try {
+//                                    String productName;
+//                                    String description;
+//                                    int availableQuantity;
+//                                    double price;
+//                                    String storeName;
+//                                    String substring;
+//
+//                                    productName = line.substring(0, line.indexOf(","));
+//                                    productName = productName.replaceAll("\"", "");
+//                                    substring = line.substring(line.indexOf(",") + 1);
+//                                    description = substring.substring(0, substring.indexOf(","));
+//                                    description = description.replaceAll("\"", "");
+//                                    substring = substring.substring(substring.indexOf(",") + 1);
+//                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf("," +
+//                                            "")).replaceAll("\"", ""));
+//                                    substring = substring.substring(substring.indexOf(",") + 1);
+//                                    price = Double.parseDouble(substring.substring(0, substring.indexOf("," +
+//                                            "")).replaceAll("\"", ""));
+//                                    storeName = substring.substring(substring.indexOf(",") + 1);
+//                                    storeName = storeName.replaceAll("\"", "");
+//
+//
+//                                    if (availableQuantity > 0 && price >= 0) {
+//                                        currentStore.addProduct(new Product(productName, description,
+//                                                availableQuantity, price, currentStore.getStoreName()));
+//                                        System.out.println("Product added!");
+//                                        seller.saveSeller();
+//                                    } else {
+//                                        System.out.println("Product has invalid data!");
+//                                    }
+//                                } catch (Exception e) {
+//                                    System.out.println("Error parsing product!");
+//                                }
+//
+//                                line = bfr.readLine();
+//                            }
+//                        } catch (Exception e) {
+//                            System.out.println("Error reading in product!");
+//                        }
+                    } else if (input.equals("2. Create product in terminal.")) {    //Create product in terminal.
+                        String name = showInputDialog("Please enter a product name:", "Create Product");
+//                        System.out.println("Please enter a product name:");
+//                        String name = scanner.nextLine();
+                        String description = showInputDialog("Please enter a product description:", "Create Product");
+//                        System.out.println("Please enter a product description:");
+//                        String description = scanner.nextLine();
                         String q;
                         String p;
                         double price = -1;
                         int quantity = 0;
 
                         do {
-                            System.out.println("Please enter an available quantity.");
-                            q = scanner.nextLine();
+                            q = showInputDialog("Please enter an available quantity.", "Create Product");
+//                            System.out.println("Please enter an available quantity.");
+//                            q = scanner.nextLine();
                             try {
                                 quantity = Integer.parseInt(q);
                                 if (quantity <= 0)
-                                    System.out.println("Please enter an integer greater than 0");
+                                    JOptionPane.showMessageDialog(null, "Please enter an integer " +
+                                            "greater than 0", "Error!", JOptionPane.ERROR_MESSAGE);
+//                                    System.out.println("Please enter an integer greater than 0");
                             } catch (Exception e) {
-                                System.out.println("Please enter an integer greater than 0");
+                                JOptionPane.showMessageDialog(null, "Please enter an integer " +
+                                        "greater than 0", "Error!", JOptionPane.ERROR_MESSAGE);
+//                                System.out.println("Please enter an integer greater than 0");
                             }
                         } while (quantity <= 0);
 
                         do {
-                            System.out.println("Please enter a price for the product.");
-                            p = scanner.nextLine();
+                            p = showInputDialog("Please enter a price for the product.", "Create Product");
+//                            System.out.println("Please enter a price for the product.");
+//                            p = scanner.nextLine();
                             try {
                                 price = Double.parseDouble(p);
                                 if (price < 0)
-                                    System.out.println("Please enter a number greater or equal to 0");
+                                    JOptionPane.showMessageDialog(null, "Please enter a number " +
+                                            "greater or equal to 0", "Error!", JOptionPane.ERROR_MESSAGE);
+//                                System.out.println("Please enter a number greater or equal to 0");
                             } catch (Exception e) {
-                                System.out.println("Please enter a number greater or equal to 0");
+                                JOptionPane.showMessageDialog(null, "Please enter a number " +
+                                        "greater or equal to 0", "Error!", JOptionPane.ERROR_MESSAGE);
+//                                System.out.println("Please enter a number greater or equal to 0");
                             }
-                        } while (!(price >= 0));
-
+                        } while (price < 0);
+                        //TODO not sure if we have to move just two line to the server
                         currentStore.addProduct(new Product(name, description,
                                 quantity, price, currentStore.getStoreName()));
-                        System.out.println("Product added!");
-                        currentStore.saveStore();
+//                        System.out.println("Product added!");
+//                        currentStore.saveStore();
                         seller.saveSeller();
+                        JOptionPane.showMessageDialog(null,"Product added!","Create Product"
+                        ,JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else if (action.equals("2. Edit a product")) {    //edit a product
                     int productNum = -1;
