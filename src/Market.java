@@ -40,8 +40,9 @@ public class Market implements Runnable {
                     JOptionPane.INFORMATION_MESSAGE);
             String[] userTypeOptions = {"Seller", "Customer"};
             do {
-                userType = (String) JOptionPane.showInputDialog(null, "Please select your user type."
-                        , "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
+                userType = (String) JOptionPane.showInputDialog(null, "Please select your user " +
+                                "type.", "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
+                        userTypeOptions[0]);
                 if (userType == null)
                    // JOptionPane.showMessageDialog(null, "Please select your user type!", "Error",
                    //         JOptionPane.ERROR_MESSAGE);
@@ -50,8 +51,10 @@ public class Market implements Runnable {
 
             userTypeOptions = new String[]{"Log in", "Create an account"};
             do {
-                accountType = (String) JOptionPane.showInputDialog(null, "Please select your account type."
-                        , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
+                accountType = (String) JOptionPane.showInputDialog(null, "Please select your " +
+                                "account type."
+                        , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
+                        userTypeOptions[0]);
                 if (accountType == null) {
                     //  JOptionPane.showMessageDialog(null, "Please select your account type!", "Error",
                     //   JOptionPane.ERROR_MESSAGE);
@@ -233,7 +236,8 @@ public class Market implements Runnable {
         Customer customer;
         while (true) {
             try {
-                String username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                String username = JOptionPane.showInputDialog(null, "Please enter your " +
+                                "username/email."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
                 if (username == null) {
                     System.exit(0);
@@ -253,7 +257,7 @@ public class Market implements Runnable {
 //                if (Customer.checkAccount(username, password)) {
 //                    customer = Customer.loadCustomer(username);
 //                    break;
-//                } else { // if account details are wrong throws error
+//                } else This{ // if account details are wrong throws error
 //                    throw new NoUserException("This account does not exist!");
 //                }
 //            } catch (NoUserException e) {
@@ -279,7 +283,8 @@ public class Market implements Runnable {
         Seller seller;
         while (true) {
             try {
-                String username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                String username = JOptionPane.showInputDialog(null, "Please enter your " +
+                                "username/email."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
                 String password = JOptionPane.showInputDialog(null, "Please enter your password."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
@@ -314,7 +319,8 @@ public class Market implements Runnable {
         return seller;
     }
 
-    public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
+    public static void customerMarketplace(Customer customer, ObjectOutputStream oos, ObjectInputStream ois,
+                                           Scanner scanner) {
         //checks shopping cart for updated products
 
         customer.checkShoppingCart();
@@ -368,8 +374,10 @@ public class Market implements Runnable {
             int choice;
             String choyce;
             String[] choices = prodstring.toArray(new String[0]);
-            choyce = showInputDialog("Please select an option to visit a product page or perform an action", choices);
-//            choyce = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product page or perform an action", "Option?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+            choyce = showInputDialog("Please select an option to visit a product page or perform an action",
+                    choices);
+//            choyce = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product page or
+//            perform an action", "Option?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
             choyce = choyce.substring(0, choyce.indexOf(".")); // if they press X this errors because its null
             choice = Integer.parseInt(choyce);
             //  try {    //if input is not Integer, catch exception and repeat main page prompt
@@ -407,8 +415,10 @@ public class Market implements Runnable {
                         }
                         allprodlist.add(i + ". Back to main page.");
                         String[] markchoice = allprodlist.toArray(new String[0]);
-                        String chosen = showInputDialog("Searched products are listed below. Please select an option to visit a product's page", markchoice);
-//                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
+                        String chosen = showInputDialog("Searched products are listed below. Please select an "
+                                + "option to visit a product's page", markchoice);
+//                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit
+//                        a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
                         chosen = Character.toString(chosen.charAt(0));
                         choice = Integer.parseInt(chosen);
                         // System.out.println(i + ". Back to main page.");
@@ -446,8 +456,10 @@ public class Market implements Runnable {
                         }
                         sortprodlist.add(i + ". Back to main page.");
                         String[] markchoice = sortprodlist.toArray(new String[0]);
-                        String chosen = showInputDialog("Products sorted. Please select an option to visit a product's page", markchoice);
-//                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
+                        String chosen = showInputDialog("Products sorted. Please select an option to visit a " +
+                                "product's page", markchoice);
+//                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit
+//                        a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
                         chosen = Character.toString(chosen.charAt(0));
                         choice = Integer.parseInt(chosen);
                         //  System.out.println(i + ". Back to main page.");
@@ -487,8 +499,10 @@ public class Market implements Runnable {
                         }
                         anothersortlist.add(i + ". Back to main page.");
                         String[] markchoice = anothersortlist.toArray(new String[0]);
-                        String chosen = showInputDialog("Products sorted. Please select an option to visit a product's page", markchoice);
-//                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
+                        String chosen = showInputDialog("Products sorted. Please select an option to visit a " +
+                                "product's page", markchoice);
+//                        String chosen = (String) JOptionPane.showInputDialog(null, "Please select an option to visit
+//                        a product's page", "Product?", JOptionPane.QUESTION_MESSAGE, null, markchoice, markchoice[0]);
                         chosen = Character.toString(chosen.charAt(0));
                         choice = Integer.parseInt(chosen);
                         //  System.out.println(i + ". Back to main page.");
@@ -516,8 +530,10 @@ public class Market implements Runnable {
 //                    validChoice = true;
                     // System.out.println("1. View a list of stores by number of products sold.");
                     // System.out.println("2. View a list of stores by the products purchased by you.");
-                    String[] choicest = {"1. View a list of stores by number of products sold.", "2. View a list of stores by the products purchased by you."};
-                    String chosen = showInputDialog("View a list of stores by number of products sold or products purchased by you", choicest);
+                    String[] choicest = {"1. View a list of stores by number of products sold.", "2. View a list of " +
+                            "stores by the products purchased by you."};
+                    String chosen = showInputDialog("View a list of stores by number of products sold or " +
+                            "products purchased by you", choicest);
                     String dashboardChoice = Character.toString(chosen.charAt(0));
                     //  String dashboardChoice = scanner.nextLine();
                     if (dashboardChoice.equals("1")) {
@@ -528,7 +544,8 @@ public class Market implements Runnable {
                         // for (int j = 0; j < allStores.size(); j++) {
                         //      System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
                         //             allStores.get(j).getStoreName(), allStores.get(j).getProductsSold());
-                        //      String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
+                        //      String temp = (j+1) + "Store name: " + allStores.get(j).getStoreName() + ", products
+                        //      sold: " + allStores.get(j).getProductsSold();
                         //       prods.add(temp);
                         //    }
                         //  String[] markchoice = prods.toArray(new String[0]);
@@ -536,7 +553,8 @@ public class Market implements Runnable {
                         //  System.out.println("1. Sort by low - high.");
                         //  System.out.println("2. Sort by high - low.");
                         //  System.out.println("3. Back to main page.");
-                        String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
+                        String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.",
+                                "4. Don't sort"};
                         String sortdec = showInputDialog("Would you like to sort the data?", sort);
                         // dashboardChoice = scanner.nextLine();
                         //if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
@@ -555,11 +573,13 @@ public class Market implements Runnable {
                             for (int j = 0; j < allStores.size(); j++) {
                                 // System.out.printf("%d. Store name: %s, products sold: %d\n", (j + 1),
                                 //    allStores.get(j).getStoreName(), allStores.get(j).getProductsSold();
-                                String temp = (j + 1) + ". Store name: " + allStores.get(j).getStoreName() + ", products sold: " + allStores.get(j).getProductsSold();
+                                String temp = (j + 1) + ". Store name: " + allStores.get(j).getStoreName() + ", " +
+                                        "products sold: " + allStores.get(j).getProductsSold();
                                 prods.add(temp);
                             }
                             String[] markchoice = prods.toArray(new String[0]);
-                            JOptionPane.showMessageDialog(null, markchoice, "Products", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, markchoice, "Products", JOptionPane.
+                                    INFORMATION_MESSAGE);
                         }
                         //else if (sortdec.equals("3. Back to main page.")) {
 //                            break;//dashboardChoice = 3; return to main page
@@ -585,7 +605,8 @@ public class Market implements Runnable {
                         //  System.out.println("2. Sort by high - low.");
                         // System.out.println("3. Back to main page.");
                         //  dashboardChoice = scanner.nextLine();
-                        String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.", "4. Don't sort"};
+                        String[] sort = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Back to main page.",
+                                "4. Don't sort"};
                         String sortdec = showInputDialog("Would you like to sort the data?", sort);
                         //  if (!(dashboardChoice.equals("1") || dashboardChoice.equals("2") ||
                         //          dashboardChoice.equals("3"))) {
@@ -612,16 +633,19 @@ public class Market implements Runnable {
                             for (int num : purchasedProducts) {
                                 for (Map.Entry<String, Integer> entry : historyByStore.entrySet()) {
                                     if (entry.getValue() == num) {
-                                        // System.out.printf("%d. Store name: %s, products purchased by you: %d\n", index,
+                                        // System.out.printf("%d. Store name: %s, products purchased by you: %d\n",
+                                        // index,
                                         //        entry.getKey(), entry.getValue());
-                                        String temp = index + ". Store Name: " + entry.getKey() + ", products purchased by you" + entry.getValue();
+                                        String temp = index + ". Store Name: " + entry.getKey() + ", products purchased"
+                                                + " by you" + entry.getValue();
                                         storeprods.add(temp);
                                         index++;
                                     }
                                 }
                             }
                             String[] sortedStores = storeprods.toArray(new String[0]);
-                            JOptionPane.showMessageDialog(null, sortedStores, "Stores", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, sortedStores, "Stores",
+                                    JOptionPane.INFORMATION_MESSAGE);
                         }
                         //  System.out.println("Press any key to return to main page.");
                         // scanner.nextLine();
@@ -637,7 +661,8 @@ public class Market implements Runnable {
                     ArrayList<ShoppingCart> shoppingCart = customer.getShoppingCart();
                     if (shoppingCart.isEmpty()) {
                         //   System.out.println("Shopping cart is empty!");
-                        JOptionPane.showMessageDialog(null, "Shopping Cart is Empty!", "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Shopping Cart is Empty!",
+                                "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         //    System.out.println("Products in your shopping cart:");
                         ArrayList<String> shopprod = new ArrayList<>();
@@ -646,12 +671,14 @@ public class Market implements Runnable {
                             //   System.out.printf("%d. Product: %s. Amount: %d.\n",
                             //          a + 1, shoppingCart.get(a).getProduct().getProductName(),
                             //        shoppingCart.get(a).getAmount();
-                            String temp = (a + 1) + ". Product: " + shoppingCart.get(a).getProduct().getProductName() + ". Amount: " + shoppingCart.get(a).getAmount();
+                            String temp = (a + 1) + ". Product: " + shoppingCart.get(a).getProduct().getProductName()
+                                    + ". Amount: " + shoppingCart.get(a).getAmount();
                             shopprod.add(temp);
                         }
-                        String[] cartproducts = shopprod.toArray(new String[0]);
+                        String[] cartProducts = shopprod.toArray(new String[0]);
                         String input;
-                        ShoppingCartGUI gui = new ShoppingCartGUI(cartproducts, sellers, shoppingCart, customer, shopprod);
+                        ShoppingCartGUI gui = new ShoppingCartGUI(cartProducts, sellers, shoppingCart, customer,
+                                shopprod);
                         gui.setVisible(true);
                         while (gui.isVisible()) {
                             try {
@@ -750,15 +777,18 @@ public class Market implements Runnable {
                     }
                     ArrayList<PurchaseHistory> purchaseHistory = customer.getPurchaseHistory();
                     if (purchaseHistory.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "No purchase history.", "Purchase history", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "No purchase history.",
+                                "Purchase history", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         //System.out.println("Purchase history: (Newest products purchased listed first)");
                         ArrayList<String> phistory = new ArrayList<>();
                         for (int j = purchaseHistory.size() - 1; j >= 0; j--) {
                             PurchaseHistory history = purchaseHistory.get(j);
                             //   System.out.printf("Product: %s. Amount purchased: %d. Store: %s\n",
-                            //           history.getProduct().getProductName(), history.getAmount(), history.getStoreName());
-                            String temp = "Product: " + history.getProduct().getProductName() + ". Amount purchased: " + history.getAmount() + ". Store: " + history.getStoreName();
+                            //           history.getProduct().getProductName(), history.getAmount(), history.getStoreN
+                            //           ame());
+                            String temp = "Product: " + history.getProduct().getProductName() + ". Amount purchased: "
+                                    + history.getAmount() + ". Store: " + history.getStoreName();
                             phistory.add(temp);
                         }
                         String[] purhist = phistory.toArray(new String[0]);
@@ -829,7 +859,8 @@ public class Market implements Runnable {
                 e.printStackTrace();
             }
 
-            String input = showInputDialog(currentProduct.productPageDisplay(), new String[]{"1. Purchase this product.",
+            String input = showInputDialog(currentProduct.productPageDisplay(), new String[]{"1. Purchase this " +
+                    "product.",
                     "2. Add this product to shopping cart.", "3. Refresh page.", "4. Back to main page."});
 //            System.out.println(currentProduct.productPageDisplay());
 //            System.out.println("1. Purchase this product.");
@@ -985,8 +1016,10 @@ public class Market implements Runnable {
 //                            }
 //                            break;
 //                        } else {
-//                            String message = "Sorry, we don't have enough items available.\nReturning to product's page...\n";
-//                            JOptionPane.showMessageDialog(null, message, "Purchase Status", JOptionPane.INFORMATION_MESSAGE);
+//                            String message = "Sorry, we don't have enough items available.\nReturning to product's
+//                            page...\n";
+//                            JOptionPane.showMessageDialog(null, message, "Purchase Status", JOptionPane.INFORMATION
+//                            _MESSAGE);
 ////                            System.out.println("Sorry, we don't have enough items available.");
 ////                            System.out.println("Returning to product's page...\n");
 //                            break;
@@ -1002,7 +1035,8 @@ public class Market implements Runnable {
 
     }
 
-    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
+    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner)
+    {
         do {
             try {  //this block refreshes seller info
                 oos.writeObject("refresh user");
@@ -1023,8 +1057,10 @@ public class Market implements Runnable {
             // System.out.println("5. Modify Account.");
             // System.out.println("6. Create a store.");
             // System.out.println("7. Exit.");
-            String[] selloptions = {"Modify Products", "View a list of sales by store", "View a dashboard with statistics" +
-                    " for each stores", "View number of products in shopping carts", "Modify Account", "Create a store", "Exit"};
+            String[] selloptions = {"Modify Products", "View a list of sales by store", "View a dashboard with " +
+                    "statistics" +
+                    " for each stores", "View number of products in shopping carts", "Modify Account", "Create a store"
+                    , "Exit"};
             String choice;
             choice = showInputDialog("What would you like to do", selloptions, "Action");
 //            choice = (String) JOptionPane.showInputDialog(null, "What would you like to do",
@@ -1055,7 +1091,8 @@ public class Market implements Runnable {
                 }
                 ArrayList<Store> astores = seller.getStores();
                 if (astores == null) {
-                    JOptionPane.showMessageDialog(null, "You don't have any stores! Please first" +
+                    JOptionPane.showMessageDialog(null, "You don't have any stores! " +
+                            "Please first" +
                             "create a store!", "No Stores", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
@@ -1081,7 +1118,8 @@ public class Market implements Runnable {
                 String currentStores;
                 //  System.out.println(stores[0]); just testing
                 currentStores = showInputDialog("Which store would you like to edit?", names, "Store?");
-//                currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?", "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
+//                currentStores = (String) JOptionPane.showInputDialog(null, "Which store would you like to edit?",
+//                "Store?", JOptionPane.QUESTION_MESSAGE, null, names, names[0]);
                 int j;
                 j = Arrays.asList(names).indexOf(currentStores);
                 Store currentStore = stores[j];
@@ -1096,10 +1134,12 @@ public class Market implements Runnable {
                  System.out.println("3. Delete a product");
                  System.out.println("4. Export products");
                  */
-                String[] choices = {"1. Add a product", "2. Edit a product", "3. Delete a product", "4. Export products"};
+                String[] choices = {"1. Add a product", "2. Edit a product", "3. Delete a product", "4. Export products"
+                        + ""};
                 String action;
                 action = showInputDialog("What would you like to do?", choices, "Choice?");
-//                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?", JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
+//                action = (String) JOptionPane.showInputDialog(null, "What would you like to do?", "Choice?",
+//                JOptionPane.QUESTION_MESSAGE, null, choices, choices[0]);
                 /**
                  int modifyOption = 0;
                  do {
@@ -1128,7 +1168,8 @@ public class Market implements Runnable {
 //                    } while (!(input.equals("1") || input.equals("2")));
 
                     if (input.equals("1. Import product from csv.")) {    //Import product from csv.
-                        String file = showInputDialog("Please enter the file path to the csv file.", "Import Product");
+                        String file = showInputDialog("Please enter the file path to the csv file.",
+                                "Import Product");
 //                        System.out.println("Please enter the file path to the csv file.");
 //                        String file = scanner.nextLine();
                         try {
@@ -1138,7 +1179,8 @@ public class Market implements Runnable {
                             oos.writeObject(file);
                             oos.flush();
                             String message = (String) ois.readObject();
-                            JOptionPane.showMessageDialog(null, message, "Import Product", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, message, "Import Product",
+                                    JOptionPane.INFORMATION_MESSAGE);
                         } catch (IOException | ClassNotFoundException e) {
                             e.printStackTrace();
                         }
@@ -1163,7 +1205,8 @@ public class Market implements Runnable {
 //                                    description = substring.substring(0, substring.indexOf(","));
 //                                    description = description.replaceAll("\"", "");
 //                                    substring = substring.substring(substring.indexOf(",") + 1);
-//                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf("," +
+//                                    availableQuantity = Integer.parseInt(substring.substring(0, substring.indexOf(
+//                                    "," +
 //                                            "")).replaceAll("\"", ""));
 //                                    substring = substring.substring(substring.indexOf(",") + 1);
 //                                    price = Double.parseDouble(substring.substring(0, substring.indexOf("," +
@@ -1193,7 +1236,8 @@ public class Market implements Runnable {
                         String name = showInputDialog("Please enter a product name:", "Create Product");
 //                        System.out.println("Please enter a product name:");
 //                        String name = scanner.nextLine();
-                        String description = showInputDialog("Please enter a product description:", "Create Product");
+                        String description = showInputDialog("Please enter a product description:",
+                                "Create Product");
 //                        System.out.println("Please enter a product description:");
 //                        String description = scanner.nextLine();
                         String q;
@@ -1208,7 +1252,8 @@ public class Market implements Runnable {
                             try {
                                 quantity = Integer.parseInt(q);
                                 if (quantity <= 0)
-                                    JOptionPane.showMessageDialog(null, "Please enter an integer " +
+                                    JOptionPane.showMessageDialog(null, "Please enter an " +
+                                            "integer " +
                                             "greater than 0", "Error!", JOptionPane.ERROR_MESSAGE);
 //                                    System.out.println("Please enter an integer greater than 0");
                             } catch (Exception e) {
@@ -1225,7 +1270,8 @@ public class Market implements Runnable {
                             try {
                                 price = Double.parseDouble(p);
                                 if (price < 0)
-                                    JOptionPane.showMessageDialog(null, "Please enter a number " +
+                                    JOptionPane.showMessageDialog(null, "Please enter a number "
+                                            +
                                             "greater or equal to 0", "Error!", JOptionPane.ERROR_MESSAGE);
 //                                System.out.println("Please enter a number greater or equal to 0");
                             } catch (Exception e) {
@@ -1252,14 +1298,16 @@ public class Market implements Runnable {
 //                        System.out.println("Product added!");
 //                        currentStore.saveStore();
 //                        seller.saveSeller();
-                        JOptionPane.showMessageDialog(null, "Product added!", "Create Product"
+                        JOptionPane.showMessageDialog(null, "Product added!",
+                                "Create Product"
                                 , JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else if (action.equals("2. Edit a product")) {    //edit a product
                     int productNum;
                     if (currentStore.getProducts() == null || currentStore.getProducts().size() == 0) {
-                        JOptionPane.showMessageDialog(null, "There's no products in this store! " +
-                                "Please add products or choose another store!", "No Products", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "There's no products in this store! "
+                                + "Please add products or choose another store!", "No Products", JOptionPane.
+                                ERROR_MESSAGE);
                         continue;
                     }
 //                    do {
@@ -1273,7 +1321,8 @@ public class Market implements Runnable {
                         productArrList.add(tmp);
                     }
                     String[] productArr = productArrList.toArray(new String[0]);
-                    String productChoice = showInputDialog("Please select a product to edit.", productArr, "Edit Product");
+                    String productChoice = showInputDialog("Please select a product to edit.", productArr,
+                            "Edit Product");
 //                        System.out.println("Please select a product to edit.");
                     productNum = Integer.parseInt(productChoice.substring(0, productChoice.indexOf('.')));
 //                        try {
@@ -1318,7 +1367,8 @@ public class Market implements Runnable {
                         }
 //                        currentProduct.editProductName(name);
                     } else if (editOption.equals("2")) {
-                        String description = showInputDialog("Please enter a new product description:", "Edit Product");
+                        String description = showInputDialog("Please enter a new product description:",
+                                "Edit Product");
 //                            System.out.println("Please enter a new product description:");
 //                            String description = scanner.nextLine();
                         try {
@@ -1397,8 +1447,10 @@ public class Market implements Runnable {
                 } else if (action.equals("3. Delete a product")) {    //modify option = 3;delete a product
                     int productNum;
                     if (currentStore.getProducts() == null || currentStore.getProducts().size() == 0) {
-                        JOptionPane.showMessageDialog(null, "There's no products in this store! " +
-                                "Please add products or choose another store!", "No Products", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "There's no products in this store!" +
+                                " " +
+                                "Please add products or choose another store!", "No Products", JOptionPane.
+                                ERROR_MESSAGE);
                         continue;
                     }
 //                    do {
@@ -1412,7 +1464,8 @@ public class Market implements Runnable {
                         productArrList.add(tmp);
                     }
                     String[] productArr = productArrList.toArray(new String[0]);
-                    String productChoice = showInputDialog("Please select a product to delete.", productArr, "Delete Product");
+                    String productChoice = showInputDialog("Please select a product to delete.", productArr,
+                            "Delete Product");
 //                        System.out.println("Please select a product to edit.");
                     productNum = Integer.parseInt(productChoice.substring(0, productChoice.indexOf('.')));
 //                        try {
@@ -1441,7 +1494,8 @@ public class Market implements Runnable {
                             JOptionPane.INFORMATION_MESSAGE);
                 } else if (action.equals("4. Export products")) { //modify option = 4; export products
                     while (true) {
-                        String file = showInputDialog("Please enter the file path to export to.", "Export products");
+                        String file = showInputDialog("Please enter the file path to export to.",
+                                "Export products");
 //                        System.out.println("Please enter the file path to export to.");
 //                        String file = scanner.nextLine();
                         try {
@@ -1472,7 +1526,8 @@ public class Market implements Runnable {
 ////                productName;description;int availableQuantity;double price;String storeName
 //                                    Product product = products.get(i);
 //                                    pw.printf("%s,%s,%d,%f,%s\n", product.getProductName(), product.getDescription(),
-//                                            product.getAvailableQuantity(), product.getPrice(), product.getStoreName());
+//                                            product.getAvailableQuantity(), product.getPrice(), product.getSto
+//                                            reName());
 //                                }
 //                            } catch (Exception e) {
 //                                System.out.println("Error exporting file!");
@@ -1519,17 +1574,20 @@ public class Market implements Runnable {
                             purchased[j] = (amount.get(j)).toString();
                             if ((custlist[j].equals("")) || (purchased[j].equals("0")) || (revlist[j].equals("0.0"))) {
                                 output.add("No sales have been made on this store.");
-                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales",
+                                // JOptionPane.INFORMATION_MESSAGE);
                             }
                             //System.out.printf("Customer %s purchased %s produces for a total sale of $%s",
                             //     custlist[j], purchased[j], revlist[j]);
-                            String temp = "Customer " + custlist[j] + " purchased " + purchased[j] + " products for a total sale of $" + revlist[j];
+                            String temp = "Customer " + custlist[j] + " purchased " + purchased[j] + " products for a " +
+                                    "total sale of $" + revlist[j];
                             output.add(temp);
                             j++;
                         } while (j < revlist.length);
                     } catch (IndexOutOfBoundsException e) {
                         output.add("No sales have been made on this store.");
-                        //  JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                        //  JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales",
+                        //  JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
                 String[] sales = output.toArray(new String[0]);
@@ -1629,11 +1687,13 @@ public class Market implements Runnable {
                                     sorted.add(temp);
                                 }
                             } catch (NullPointerException e) {
-                                JOptionPane.showMessageDialog(null, "No sales have been made at this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "No sales have been made " +
+                                        "at this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                         String[] sortsed = sorted.toArray(new String[0]);
-                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.
+                                INFORMATION_MESSAGE);
                     } else if (sortdec.equals("2. Sort by high - low.")) {
                         for (int i = 0; i < stores.length; i++) {
                             stores[i] = storelist.get(i);
@@ -1677,11 +1737,13 @@ public class Market implements Runnable {
                                 }
                             } catch (NullPointerException e) {
                                 sorted.add("No sales have been made at this store.");
-                                // JOptionPane.showMessageDialog(null, "No sales have been made at this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                // JOptionPane.showMessageDialog(null, "No sales have been made at this store", "Sales",
+                                // JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                         String[] sortsed = sorted.toArray(new String[0]);
-                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.
+                                INFORMATION_MESSAGE);
                     } else {
                         for (int i = 0; i < stores.length; i++) {
                             stores[i] = storelist.get(i);
@@ -1711,11 +1773,13 @@ public class Market implements Runnable {
                                 }
                             } catch (NullPointerException e) {
                                 sorted.add("No sales have been made at this store.");
-                                // JOptionPane.showMessageDialog(null, "No sales have been made at this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                // JOptionPane.showMessageDialog(null, "No sales have been made at this store", "Sales"
+                                // , JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                         String[] sortsed = sorted.toArray(new String[0]);
-                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.
+                                INFORMATION_MESSAGE);
                     }
                 } else {
                     //  System.out.println("Would you like to sort the statistics? (yes/no)");
@@ -1790,20 +1854,24 @@ public class Market implements Runnable {
                                         }
                                     }
                                     if ((custlist[j].equals("")) || (purchased[j] == 0) || (revlist[j] == 0.0)) {
-                                        // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                        // JOptionPane.showMessageDialog(null, "No sales have been made on this store
+                                        // ", "Sales", JOptionPane.INFORMATION_MESSAGE);
                                         sorted.add("No sales have been made on this store.");
                                     }
-                                    String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] + "products for a total sale of " + revlist[j];
+                                    String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] +
+                                            "products for a total sale of " + revlist[j];
                                     sorted.add(temp);
                                     j++;
                                 } while (j < revlist.length);
                             } catch (Exception e) {
-                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store",
+                                // "Sales", JOptionPane.INFORMATION_MESSAGE);
                                 sorted.add("No sales have been made on this store.");
                             }
                         }
                         String[] sortsed = sorted.toArray(new String[0]);
-                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.
+                                INFORMATION_MESSAGE);
                     } else if (sortdec.equals("2. Sort by high - low.")) {
                         ArrayList<Store> sellstore = new ArrayList<>();
                         sellstore = seller.getStores();
@@ -1856,21 +1924,25 @@ public class Market implements Runnable {
                                     }
                                     if ((custlist[j].equals("")) || (purchased[j] == 0) || (revlist[j] == 0.0)) {
                                         sorted.add("No sales have been made at this store.");
-                                        // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                        // JOptionPane.showMessageDialog(null, "No sales have been made on this store",
+                                        // "Sales", JOptionPane.INFORMATION_MESSAGE);
                                     }
 
-                                        String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] + "products for a total sale of " + revlist[j];
+                                        String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] +
+                                                "products for a total sale of " + revlist[j];
                                         sorted.add(temp);
                                         //}
                                         j++;
                                     } while (i < revlist.length);
                                 } catch (Exception e) {
                                     sorted.add("No sales have been made at this store.");
-                                  //  JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                  //  JOptionPane.showMessageDialog(null, "No sales have been made on this store",
+                                //  "Sales", JOptionPane.INFORMATION_MESSAGE);
                                 }
                             }
                             String[] sortsed = sorted.toArray(new String[0]);
-                            JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane
+                                    .INFORMATION_MESSAGE);
                         }
 
                     else {
@@ -1905,18 +1977,22 @@ public class Market implements Runnable {
                                     if ((custlist[j].equals("")) || (purchased[j].equals("0")) ||
                                             (revlist[j].equals("0.0"))) {
                                         sorted.add("No sales have been made at this store.");
-                                        // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                        // JOptionPane.showMessageDialog(null, "No sales have been made on this store"
+                                        // , "Sales", JOptionPane.INFORMATION_MESSAGE);
                                     }
-                                    String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] + "products for a total sale of " + revlist[j];
+                                    String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] + "products" +
+                                            " for a total sale of " + revlist[j];
                                     sorted.add(temp);
                                 }
                             } catch (Exception e) {
                                 sorted.add("No sales have been made at this store.");
-                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
+                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales
+                                // ", JOptionPane.INFORMATION_MESSAGE);
                             }
                         }
                         String[] sortsed = sorted.toArray(new String[0]);
-                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane.
+                                INFORMATION_MESSAGE);
                     }
                 }
 
@@ -1934,24 +2010,29 @@ public class Market implements Runnable {
                             for (int k = 0; k < customers.size(); k++) {
                                 ArrayList<ShoppingCart> cart = customers.get(k).getShoppingCart();
                                 for (int l = 0; l < cart.size(); l++) {
-                                    if (products.get(j).getProductName().equals(cart.get(l).getProduct().getProductName()))
+                                    if (products.get(j).getProductName().equals(cart.get(l).getProduct().
+                                            getProductName()))
                                         amount += cart.get(l).getAmount();
                                 }
                             }
-                            String temp = "Amount of " + products.get(i).getProductName() + "in shopping carts: " + amount;
+                            String temp = "Amount of " + products.get(i).getProductName() + "in shopping carts: " +
+                                    amount;
                             sprods.add(temp);
                         }
                     }
                     String[] numProd = sprods.toArray(new String[0]);
-                    JOptionPane.showMessageDialog(null, numProd, "Statistics", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, numProd, "Statistics", JOptionPane.
+                            INFORMATION_MESSAGE);
                 } catch (IndexOutOfBoundsException e) {
-                    JOptionPane.showMessageDialog(null, "No products in any shopping carts!", "Statistics", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "No products in any shopping carts!",
+                            "Statistics", JOptionPane.INFORMATION_MESSAGE);
                 }
 
             } else if (choice.equals("Modify Account")) { // modify account
                 String input;
                 String[] options = {"Edit username", "Edit password", "Delete account", "Exit"};
-                input = showInputDialog("How would you like to modify your account?", options, "Modify account");
+                input = showInputDialog("How would you like to modify your account?", options,
+                        "Modify account");
 //                do {
 //                    System.out.println("1. Edit username.");
 //                    System.out.println("2. Edit password.");
