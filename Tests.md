@@ -17,13 +17,54 @@ Test Status: Passed
 4. User logs in using their username and password
 5. User selects a product to visit its product page
 6. User selects purchase product, and enters the amount to purchase
-7. User returns to main page and exits
+7. User returns to main page and selects “view purchase history”, purchase history for the product should appear at the top
+8. User returns to main page and exits
 
 Expected Result: Program connects to server, logs into the account, 
 Goes to the product page and purchases the amount requested, and finally exits out of the program.
 
 Test Status: Passed
-### Test 3: Seller functions
+### Test 3: Adding product to cart
+1. User launches program
+2. User enters hostname (localhost)
+3. User selects customer as type of user
+4. User logs in using their username and password
+5. User selects a product to visit its product page
+6. User selects add product to cart, and enters the amount to purchase
+7. User returns to main page and selects “view shopping cart”, added product should appear in the shopping cart
+8. User returns to main page and exits
+
+Expected Result: Program connects to server, logs into the account, 
+Goes to the product page and adds the amount requested to shopping cart, and finally exits out of the program.
+### Test 4: Search specific product(s)
+1. User launches program
+2. User enters hostname (localhost)
+3. User selects customer as type of user
+4. User logs in using their username and password
+6. User selects search function, and enters the term for searching
+7. List of products containing should be in the dropdown and available to choose
+8.User selects a product and is taken to the product’s page
+9. User returns to main page and exits
+
+Expected Result: Program connects to server, logs into the account, 
+Searches for required products can access product page of these products, and finally exits out of the program.
+Test Status: Passed
+### Test 5: Sort marketplace
+1. User launches program
+2. User enters hostname (localhost)
+3. User selects customer as type of user
+4. User logs in using their username and password
+6. User selects “Sort the marketplace on price”
+7. Products are sorted by price (low to high) and available to choose and view product’s page
+8. User returns to main page and selects “Sort the marketplace on quantity available.”
+9. Products are sorted by quantity available (high to low) and available to choose and view product’s page
+10. User returns to main page and exits
+
+Expected Result: Program connects to server, logs into the account, 
+Sorts products as required, and finally exits out of the program.
+Test Status: Passed
+
+### Test 6: Seller functions
 1. User launches program
 2. User enters hostname (localhost)
 3. User selects seller as type of user
