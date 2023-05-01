@@ -5,7 +5,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
-
+/**
+ * Server class
+ *
+ * @author Ekaterina Tszyao, Dimitri Paikos, Rayan Timmerman, Tyler Kei, Lab12
+ * @version 05/01/2023
+ */
 public class Server implements Runnable {
     private Socket socket;
     public static Object sync = new Object(); // this will be the synchronize object

@@ -2,7 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
+/**
+ * Shopping cart gui to display items within shopping cart object
+ *
+ * @author Ekaterina Tszyao, Dimitri Paikos, Rayan Timmerman, Tyler Kei, Lab12
+ * @version 05/01/2023
+ */
 public class ShoppingCartGUI extends JFrame {
     private JLabel label;
     private ArrayList<ShoppingCart> shoppingCart;

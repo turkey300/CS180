@@ -4,7 +4,7 @@ import java.util.ArrayList;
 /**
  * This is a Shopping Cart records the product, its seller and amount a customer had put into their shopping cart.
  *
- * @author Dimitri Paikos, Lab12
+ * @author Dimitri Paikos, Tyler Kei, Lab12
  * @version 4/10/2023
  */
 public class ShoppingCart implements Serializable {

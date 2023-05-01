@@ -5,6 +5,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+/**
+ * Display for purchase history of sellers
+ *
+ * @author Ekaterina Tszyao, Dimitri Paikos, Rayan Timmerman, Tyler Kei, Lab12
+ * @version 05/01/2023
+ */
 
 public class PurchaseHistoryGUI extends JFrame {
     private JButton backButton;

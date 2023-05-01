@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * This is a Seller class which sorts the user info of a seller, as well as thw stores they own.
  * It provides methods related methods to be called from the Market.
  *
- * @author Dimitri Paikos,Ekaterina Tszyao, Ryan Timmerman, Lab12
+ * @author Dimitri Paikos,Ekaterina Tszyao, Ryan Timmerman, Tyle Kei, Lab12
  * @version 4/10/2023
  */
 public class Seller implements Serializable {
