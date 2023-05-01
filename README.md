@@ -8,7 +8,7 @@ Similarly, the Server file is the server, and needs to be running for the client
 Finally, check Tests.md for the tests ran on the program. Replicating these tests should return the exact same results
 as described in the file.
 #### Submission
-Tyler - Submitted report on Brightpace. Kate - Submitted Vocareum workspace and presentation.
+Tyler - Submitted report on Brightpace. Kate - Submitted presentation. Dimitri - Submitted Vocarium workspace.
 #### Market Class
 The market class contains all the logic for the client. Because of this, it is closely tied to the server class, 
 often communicating to and from it. It displays the marketplace, and communicates to the server what the user has 
