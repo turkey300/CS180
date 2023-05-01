@@ -1846,7 +1846,7 @@ public class Market implements Runnable {
                                         //}
                                         j++;
                                     } while (i < revlist.length);
-                                } catch (IndexOutOfBoundsException e) {
+                                } catch (Exception e) {
                                     sorted.add("No sales have been made at this store.");
                                   //  JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
                                 }
@@ -1892,7 +1892,7 @@ public class Market implements Runnable {
                                     String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] + "products for a total sale of " + revlist[j];
                                     sorted.add(temp);
                                 }
-                            } catch (NullPointerException e) {
+                            } catch (Exception e) {
                                 sorted.add("No sales have been made at this store.");
                                // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
                             }
