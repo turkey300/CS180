@@ -19,7 +19,9 @@ public class Market implements Runnable {
         this.socket = socket;
     }
 
-    public Socket getSocket() {return socket;}
+    public Socket getSocket() {
+        return socket;
+    }
 
     public static void main(String[] args) throws IOException {
         Market market = new Market(connect());
@@ -30,7 +32,7 @@ public class Market implements Runnable {
 
     public void run() {
         // logging in/creating account
-        while(true) {
+        while (true) {
             try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                  ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
 //            oos.flush();
@@ -43,22 +45,22 @@ public class Market implements Runnable {
                 JOptionPane.showMessageDialog(null, "Welcome to the marketplace!", "Welcome",
                         JOptionPane.INFORMATION_MESSAGE);
                 String[] userTypeOptions = {"Seller", "Customer"};
-               // do {
-                    userType = (String) JOptionPane.showInputDialog(null, "Please select your user " +
-                                    "type.", "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
-                            userTypeOptions[0]);
+                // do {
+                userType = (String) JOptionPane.showInputDialog(null, "Please select your user " +
+                                "type.", "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
+                        userTypeOptions[0]);
                 //} while (userType == null);
                 if (userType == null) {
                     break;
                 }
 
                 userTypeOptions = new String[]{"Log in", "Create an account"};
-               // do {
-                    accountType = (String) JOptionPane.showInputDialog(null, "Please select your " +
-                                    "account type."
-                            , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
-                            userTypeOptions[0]);
-               // } while (accountType == null);
+                // do {
+                accountType = (String) JOptionPane.showInputDialog(null, "Please select your " +
+                                "account type."
+                        , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
+                        userTypeOptions[0]);
+                // } while (accountType == null);
                 if (accountType == null) {
                     break;
                 }
