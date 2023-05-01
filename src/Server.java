@@ -26,7 +26,6 @@ public class Server implements Runnable {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-//                System.out.println("Connected"); //this line is only for testing
                 Server server = new Server(socket);
                 new Thread(server).start();
             } catch (IOException e) {
@@ -70,7 +69,6 @@ public class Server implements Runnable {
                             Seller seller = Seller.loadSeller(username);
                             oos.writeObject(seller);
                         } else {    // if account details are wrong throws error
-//                            oos.writeObject(new NoUserException("This account does not exist!"));
                             oos.writeObject("This account does not exist!");
                         }
                         oos.flush();
@@ -79,7 +77,6 @@ public class Server implements Runnable {
                             Customer customer = Customer.loadCustomer(username);
                             oos.writeObject(customer);
                         } else {    // if account details are wrong throws error
-//                            oos.writeObject(new NoUserException("This account does not exist!"));
                             oos.writeObject("This account does not exist!");
                         }
                         oos.flush();
@@ -137,17 +134,7 @@ public class Server implements Runnable {
                 } else if (command.equals("Purchase product")) {
                     synchronized (sync) {
                         Product product = (Product) ois.readObject();
-//                        oos.writeObject("Waiting");
-//                        oos.flush();
                         ArrayList<Seller> sellers = Seller.loadAllSellers();  // grabs sellers again
-
-//                        try {
-//                            oos.writeObject("List of sellers");
-//                            oos.flush();
-//                            sellers = (ArrayList<Seller>) ois.readObject();
-//                        } catch (IOException | ClassNotFoundException e) {
-//                            e.printStackTrace();
-//                        }
 
                         ArrayList<Store> stores = new ArrayList<>(); // grabbing stores again
                         for (int j = 0; j < sellers.size(); j++) {
@@ -167,19 +154,11 @@ public class Server implements Runnable {
                         oos.writeObject(stillProduct);
                         oos.flush();
 
-//                        oos.writeObject("Waiting");
-//                        oos.flush();
-//                        ois.readObject();
-//                        String stillProduct = (String) ois.readObject();
                         if (stillProduct) {
-//                            Store store = (Store) ois.readObject();
-//                            Product product = (Product) ois.readObject();
                             int amount = (Integer) ois.readObject();
                             Customer customer = (Customer) ois.readObject();
                             customer = Customer.loadCustomer(customer.getUsername());
-//                            ArrayList<Seller> sellers = Seller.loadAllSellers();
                             String message;
-//                        System.out.println("Before purchase:" + product.productPageDisplay());
                             if (store.purchaseProductFromStore(product, amount, customer)) {
                                 for (int i = 0; i < sellers.size(); i++) {
                                     sellers.get(i).saveSeller();
@@ -188,11 +167,8 @@ public class Server implements Runnable {
                             } else {
                                 message = "Sorry, there were not enough items available.";
                             }
-//                            customer.saveCustomer();
-//                        System.out.println("After purchase:" + product.productPageDisplay());
                             oos.writeObject(message);
                             oos.flush();
-//                        System.out.println(product.productPageDisplay());
                         }
                     }
                 } else if (command.equals("Add to cart")) {
@@ -240,8 +216,6 @@ public class Server implements Runnable {
                     }
                 } else if (command.equals("refresh product")) {
                     Product product = (Product) ois.readObject();
-//                    System.out.println("Before refresh:" + product.productPageDisplay());
-
                     Product newProduct = null;
                     ArrayList<Seller> sellers = Seller.loadAllSellers();
                     for (int i = 0; i < sellers.size(); i++) {
@@ -259,7 +233,6 @@ public class Server implements Runnable {
                     if (newProduct == null) oos.writeObject("not found");
                     else oos.writeObject(newProduct);
                     oos.flush();
-//                    System.out.println("After refresh:" + newProduct.productPageDisplay());
                 } else if (command.equals("refresh user")) {
                     String userType = (String) ois.readObject();
                     String username = (String) ois.readObject();
@@ -315,21 +288,17 @@ public class Server implements Runnable {
                                     currentStore.addProduct(new Product(productName, description,
                                             availableQuantity, price, currentStore.getStoreName()));
                                     message = "Product added!";
-//                                    System.out.println("Product added!");
                                     seller.saveSeller();
                                 } else {
                                     message = "Product has invalid data!";
-//                                    System.out.println("Product has invalid data!");
                                 }
                             } catch (Exception e) {
                                 message = "Error parsing product!";
-//                                System.out.println("Error parsing product!");
                             }
                             line = bfr.readLine();
                         }
                     } catch (Exception e) {
                         message = "Error reading in product!";
-//                        System.out.println("Error reading in product!");
                     }
                     oos.writeObject(message);
                 } else if (command.equals("Export products")) {
@@ -345,7 +314,6 @@ public class Server implements Runnable {
                     String message;
                     if (f.exists()) {
                         message = "This file already exists! Try a new file path.";
-//                        System.out.println("This file already exists! Try a new file path.");
                     } else {
                         ArrayList<Product> products = currentStore.getProducts();
                         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
@@ -357,11 +325,8 @@ public class Server implements Runnable {
                             }
                         } catch (Exception e) {
                             message = "Error exporting file!";
-//                            System.out.println("Error exporting file!");
                         }
                         message = "Products exported!";
-//                        System.out.println("Products exported!");
-//                        break;
                     }
                     oos.writeObject(message);
                 } else if (command.equals("Add product")) {
