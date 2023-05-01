@@ -54,17 +54,33 @@ Test Status: Passed
 2. User enters hostname (localhost)
 3. User selects customer as type of user
 4. User logs in using their username and password
-6. User selects “Sort the marketplace on price”
-7. Products are sorted by price (low to high) and available to choose and view product’s page
-8. User returns to main page and selects “Sort the marketplace on quantity available.”
-9. Products are sorted by quantity available (high to low) and available to choose and view product’s page
-10. User returns to main page and exits
+5. User selects “Sort the marketplace on price”
+6. Products are sorted by price (low to high) and available to choose and view product’s page
+7. User returns to main page and selects “Sort the marketplace on quantity available.”
+8. Products are sorted by quantity available (high to low) and available to choose and view product’s page
+9. User returns to main page and exits
 
 Expected Result: Program connects to server, logs into the account, 
 Sorts products as required, and finally exits out of the program.
 Test Status: Passed
+### Test 6: View Dashboard
+1. User launches program
+2. User enters hostname (localhost)
+3. User selects customer as type of user
+4. User logs in using their username and password
+5. User selects “View a dashboard with store and seller information.”, selects sorting by products sold, then selects a sorting option, for example low-high
+6. A list of stores is sorted by their sales low-high.
+7.User returns to main page and repeats step 5 with different sorting options. 
+8.User returns to main page, selects “View a dashboard with store and seller information.”, selects sorting by “products purchased by you”, then selects a sorting option, for example low-high.
+9. A list of stores is sorted low-high by number of products the user purchased in this store.
+10.User returns to main page and repeats step 8 with different sorting options. 
+11.User returns to main page and exits.
 
-### Test 6: Seller functions
+Expected Result: Program connects to server, logs into the account, 
+Sorts stores by products sold or by number of products the user purchased in this store according to the sorting option user chose, and finally exits out of the program.
+Test Status: Passed
+
+### Test 7: Seller functions
 1. User launches program
 2. User enters hostname (localhost)
 3. User selects seller as type of user
