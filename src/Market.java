@@ -1700,9 +1700,9 @@ public class Market implements Runnable {
                     }
                 } else {
                   //  System.out.println("Would you like to sort the statistics? (yes/no)");
-                    String sort = scanner.nextLine();
+                   // String sort = scanner.nextLine();
                     String[] sorts = {"1. Sort by low - high.", "2. Sort by high - low.", "3. Don't sort"};
-                    String sortdec = showInputDialog("Would you like to sort the data?", sort);
+                    String sortdec = showInputDialog("Would you like to sort the data?", sorts);
                     boolean valids = true;
                         int choices = 0;
                        // do {
@@ -1778,7 +1778,7 @@ public class Market implements Runnable {
                                         sorted.add(temp);
                                         j++;
                                     } while (j < revlist.length);
-                                } catch (IndexOutOfBoundsException e) {
+                                } catch (Exception e) {
                                     // JOptionPane.showMessageDialog(null, "No sales have been made on this store", "Sales", JOptionPane.INFORMATION_MESSAGE);
                                     sorted.add("No sales have been made on this store.");
                                 }
