@@ -28,6 +28,7 @@ public class Server implements Runnable {
                 Server server = new Server(socket);
                 new Thread(server).start();
             } catch (IOException e) {
+                int p;
             }
         }
     }
