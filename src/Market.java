@@ -29,7 +29,7 @@ public class Market implements Runnable {
         Scanner scanner = new Scanner(System.in);//TODO:delete this
         try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
              ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
-            oos.flush();
+//            oos.flush();
             String userType;    //Seller or Customer
             String accountType; //log in or create an account
             String username;
@@ -44,8 +44,8 @@ public class Market implements Runnable {
                                 "type.", "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
                         userTypeOptions[0]);
                 if (userType == null)
-                   // JOptionPane.showMessageDialog(null, "Please select your user type!", "Error",
-                   //         JOptionPane.ERROR_MESSAGE);
+                    // JOptionPane.showMessageDialog(null, "Please select your user type!", "Error",
+                    //         JOptionPane.ERROR_MESSAGE);
                     System.exit(0);
             } while (userType == null);
 
@@ -80,7 +80,7 @@ public class Market implements Runnable {
                 oos.writeObject(userType);
                 oos.writeObject(username);
                 oos.writeObject(password);
-                oos.flush();
+//                oos.flush();
                 if (userType.equals("Customer")) {    //Creating customer account
 //                    try {
 //                        Customer newCustomer = new Customer(username, password, true);
@@ -251,7 +251,7 @@ public class Market implements Runnable {
                 oos.writeObject("Customer");
                 oos.writeObject(username);
                 oos.writeObject(password);
-                oos.flush();
+//                oos.flush();
                 Object newCustomer = ois.readObject();
 //            try {
 //                if (Customer.checkAccount(username, password)) {
@@ -292,7 +292,7 @@ public class Market implements Runnable {
                 oos.writeObject("Seller");
                 oos.writeObject(username);
                 oos.writeObject(password);
-                oos.flush();
+//                oos.flush();
                 Object newSeller = ois.readObject();
 //                try {
 //                    if (Seller.checkAccount(username, password)) {
@@ -330,13 +330,13 @@ public class Market implements Runnable {
         while (true) {   //loop for the main page
             try { // moved get sellers inside loop so it refreshes
                 oos.writeObject("List of sellers");
-                oos.flush();
+//                oos.flush();
                 sellers = (ArrayList<Seller>) ois.readObject();
 
                 oos.writeObject("refresh user");
                 oos.writeObject("customer");
                 oos.writeObject(customer.getUsername());
-                oos.flush();
+//                oos.flush();
                 customer = (Customer) ois.readObject();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -493,7 +493,8 @@ public class Market implements Runnable {
                         for (int j = 0; j < allProducts.size(); j++) {
                             // System.out.print(i + ". ");
                             // System.out.println(allProducts.get(j).marketplaceDisplay());
-                            String temp = i + ". " + allProducts.get(j).marketplaceDisplay();
+                            String temp = i + ". " + allProducts.get(j).marketplaceDisplay() + ", available quantity: "
+                                    + allProducts.get(j).getAvailableQuantity();
                             anothersortlist.add(temp);
                             i++;
                         }
@@ -711,7 +712,7 @@ public class Market implements Runnable {
                             oos.writeObject("Customer");
                             oos.writeObject(customer);
                             oos.writeObject(input);
-                            oos.flush();
+//                            oos.flush();
 
                             customer = (Customer) ois.readObject();
                         } catch (IOException | ClassNotFoundException e) {
@@ -727,7 +728,7 @@ public class Market implements Runnable {
                             oos.writeObject("Customer");
                             oos.writeObject(customer);
                             oos.writeObject(input);
-                            oos.flush();
+//                            oos.flush();
 
                             customer = (Customer) ois.readObject();
                         } catch (IOException | ClassNotFoundException e) {
@@ -746,7 +747,7 @@ public class Market implements Runnable {
                                 oos.writeObject("Delete account");
                                 oos.writeObject("Customer");
                                 oos.writeObject(customer);
-                                oos.flush();
+//                                oos.flush();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -818,7 +819,7 @@ public class Market implements Runnable {
         Store currentStore = null;
         try { // grabs sellers again
             oos.writeObject("List of sellers");
-            oos.flush();
+//            oos.flush();
             sellers = (ArrayList<Seller>) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -844,7 +845,7 @@ public class Market implements Runnable {
         while (true) {
             try {   //this block refreshes product info every time customer opens/refreshes product page
                 // System.out.println("Before refresh:" + currentProduct.productPageDisplay());
-                //  oos.writeObject("refresh product");
+                oos.writeObject("refresh product");
                 oos.writeObject(currentProduct);
                 Object serverInput = ois.readObject();
                 if (!(serverInput instanceof Product)) {
@@ -891,7 +892,7 @@ public class Market implements Runnable {
                     try {
                         //  System.out.println("Before purchase:" + currentProduct.productPageDisplay());
                         oos.writeObject("Purchase product");
-                        oos.flush();
+//                        oos.flush();
                         oos.writeObject(currentProduct);
 //                        ois.readObject();
 //                        oos.writeObject("Waiting");
@@ -925,7 +926,7 @@ public class Market implements Runnable {
 //                            oos.writeObject(currentProduct);
                             oos.writeObject(amount);
                             oos.writeObject(customer);
-                            oos.flush();
+//                            oos.flush();
 
                             String message = (String) ois.readObject();
                             JOptionPane.showMessageDialog(null, message, "Marketplace",
@@ -980,7 +981,7 @@ public class Market implements Runnable {
                     }
                     try {
                         oos.writeObject("Add to cart");
-                        oos.flush();
+//                        oos.flush();
                         oos.writeObject(currentProduct);
                         boolean stillProduct = (boolean) ois.readObject();
 
@@ -990,7 +991,7 @@ public class Market implements Runnable {
 //                            oos.writeObject(currentProduct);
                             oos.writeObject(amount1);
                             oos.writeObject(customer);
-                            oos.flush();
+//                            oos.flush();
 
                             String message = (String) ois.readObject();
                             JOptionPane.showMessageDialog(null, message, "Marketplace",
@@ -1035,8 +1036,7 @@ public class Market implements Runnable {
 
     }
 
-    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner)
-    {
+    public static void sellerMarketplace(Seller seller, ObjectOutputStream oos, ObjectInputStream ois, Scanner scanner) {
         do {
             try {  //this block refreshes seller info
                 oos.writeObject("refresh user");
@@ -1928,24 +1928,22 @@ public class Market implements Runnable {
                                         // "Sales", JOptionPane.INFORMATION_MESSAGE);
                                     }
 
-                                        String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] +
-                                                "products for a total sale of " + revlist[j];
-                                        sorted.add(temp);
-                                        //}
-                                        j++;
-                                    } while (i < revlist.length);
-                                } catch (Exception e) {
-                                    sorted.add("No sales have been made at this store.");
-                                  //  JOptionPane.showMessageDialog(null, "No sales have been made on this store",
+                                    String temp = "Customer " + custlist[j] + " purhcased " + purchased[j] +
+                                            "products for a total sale of " + revlist[j];
+                                    sorted.add(temp);
+                                    //}
+                                    j++;
+                                } while (i < revlist.length);
+                            } catch (Exception e) {
+                                sorted.add("No sales have been made at this store.");
+                                //  JOptionPane.showMessageDialog(null, "No sales have been made on this store",
                                 //  "Sales", JOptionPane.INFORMATION_MESSAGE);
-                                }
                             }
-                            String[] sortsed = sorted.toArray(new String[0]);
-                            JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane
-                                    .INFORMATION_MESSAGE);
                         }
-
-                    else {
+                        String[] sortsed = sorted.toArray(new String[0]);
+                        JOptionPane.showMessageDialog(null, sortsed, "Sales", JOptionPane
+                                .INFORMATION_MESSAGE);
+                    } else {
                         ArrayList<Store> sellstore = new ArrayList<>();
                         sellstore = seller.getStores();
                         Store[] storelist = new Store[sellstore.size()];
