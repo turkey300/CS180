@@ -20,7 +20,7 @@ public class Server implements Runnable {
         while (true) {
             try {
                 Socket socket = serverSocket.accept();
-                System.out.println("Connected"); //this line is only for testing
+//                System.out.println("Connected"); //this line is only for testing
                 Server server = new Server(socket);
                 new Thread(server).start();
             } catch (IOException e) {
@@ -173,8 +173,7 @@ public class Server implements Runnable {
                         customer = Customer.loadCustomer(customer.getUsername());
 //                            ArrayList<Seller> sellers = Seller.loadAllSellers();
                         String message;
-                        //TODO
-                        System.out.println("Before purchase:" + product.productPageDisplay());
+//                        System.out.println("Before purchase:" + product.productPageDisplay());
                         if (store.purchaseProductFromStore(product, amount, customer)) {
                             for (int i = 0; i < sellers.size(); i++) {
                                 sellers.get(i).saveSeller();
@@ -184,10 +183,10 @@ public class Server implements Runnable {
                             message = "Sorry, there were not enough items available.";
                         }
 //                            customer.saveCustomer();
-                        System.out.println("After purchase:" + product.productPageDisplay());
+//                        System.out.println("After purchase:" + product.productPageDisplay());
                         oos.writeObject(message);
                         oos.flush();
-                        System.out.println(product.productPageDisplay());
+//                        System.out.println(product.productPageDisplay());
                     }
 //                    }
                 } else if (command.equals("Add to cart")) {
@@ -235,7 +234,7 @@ public class Server implements Runnable {
                     }
                 } else if (command.equals("refresh product")) {
                     Product product = (Product) ois.readObject();
-                    System.out.println("Before refresh:" + product.productPageDisplay());
+//                    System.out.println("Before refresh:" + product.productPageDisplay());
 
                     Product newProduct = null;
                     ArrayList<Seller> sellers = Seller.loadAllSellers();
@@ -254,12 +253,18 @@ public class Server implements Runnable {
                     if (newProduct == null) oos.writeObject("not found");
                     else oos.writeObject(newProduct);
                     oos.flush();
-                    System.out.println("After refresh:" + newProduct.productPageDisplay());
+//                    System.out.println("After refresh:" + newProduct.productPageDisplay());
                 } else if (command.equals("refresh user")) {
                     String userType = (String) ois.readObject();
                     String username = (String) ois.readObject();
-                    if (userType.equals("customer")) oos.writeObject(Customer.loadCustomer(username));
-                    else if (userType.equals("seller")) oos.writeObject(Seller.loadSeller(username));
+                    if (userType.equals("customer")) {
+                        oos.writeObject(Customer.loadCustomer(username));
+                        oos.flush();
+                    } else if (userType.equals("seller")) {
+                        oos.writeObject(Seller.loadSeller(username));
+                        oos.flush();
+                    }
+
                 } else if (command.equals("csv")) {
                     Seller seller = Seller.loadSeller((String) ois.readObject());
                     String name = (String) ois.readObject();
