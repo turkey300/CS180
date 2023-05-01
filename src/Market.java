@@ -19,98 +19,123 @@ public class Market implements Runnable {
         this.socket = socket;
     }
 
+    public Socket getSocket() {return socket;}
+
     public static void main(String[] args) throws IOException {
         Market market = new Market(connect());
-        new Thread(market).start();
+        if (market.getSocket() != null) {
+            new Thread(market).start();
+        }
     }
 
     public void run() {
         // logging in/creating account
-        try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
+        while(true) {
+            try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+                 ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
 //            oos.flush();
-            String userType;    //Seller or Customer
-            String accountType; //log in or create an account
-            String username;
-            String password;
-            Customer customer = null; // customer account if they select customer
-            Seller seller = null;
-            JOptionPane.showMessageDialog(null, "Welcome to the marketplace!", "Welcome",
-                    JOptionPane.INFORMATION_MESSAGE);
-            String[] userTypeOptions = {"Seller", "Customer"};
-            do {
-                userType = (String) JOptionPane.showInputDialog(null, "Please select your user " +
-                                "type.", "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
-                        userTypeOptions[0]);
-            } while (userType == null);
+                String userType;    //Seller or Customer
+                String accountType; //log in or create an account
+                String username;
+                String password;
+                Customer customer = null; // customer account if they select customer
+                Seller seller = null;
+                JOptionPane.showMessageDialog(null, "Welcome to the marketplace!", "Welcome",
+                        JOptionPane.INFORMATION_MESSAGE);
+                String[] userTypeOptions = {"Seller", "Customer"};
+               // do {
+                    userType = (String) JOptionPane.showInputDialog(null, "Please select your user " +
+                                    "type.", "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
+                            userTypeOptions[0]);
+                //} while (userType == null);
+                if (userType == null) {
+                    break;
+                }
 
-            userTypeOptions = new String[]{"Log in", "Create an account"};
-            do {
-                accountType = (String) JOptionPane.showInputDialog(null, "Please select your " +
-                                "account type."
-                        , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
-                        userTypeOptions[0]);
-            } while (accountType == null);
+                userTypeOptions = new String[]{"Log in", "Create an account"};
+               // do {
+                    accountType = (String) JOptionPane.showInputDialog(null, "Please select your " +
+                                    "account type."
+                            , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions,
+                            userTypeOptions[0]);
+               // } while (accountType == null);
+                if (accountType == null) {
+                    break;
+                }
 
 
-            // creating account
-            if (accountType.equals("Create an account")) {
-                username = JOptionPane.showInputDialog(null, "Please enter your username/email."
-                        , "Username", JOptionPane.QUESTION_MESSAGE);
+                // creating account
+                if (accountType.equals("Create an account")) {
+                    username = JOptionPane.showInputDialog(null, "Please enter your username/email."
+                            , "Username", JOptionPane.QUESTION_MESSAGE);
+                    if (username == null) {
+                        break;
+                    }
 
-                password = JOptionPane.showInputDialog(null, "Please enter your password."
-                        , "Username", JOptionPane.QUESTION_MESSAGE);
-                oos.writeObject(accountType);
-                oos.writeObject(userType);
-                oos.writeObject(username);
-                oos.writeObject(password);
+                    password = JOptionPane.showInputDialog(null, "Please enter your password."
+                            , "Username", JOptionPane.QUESTION_MESSAGE);
+                    if (password == null) {
+                        break;
+                    }
+                    oos.writeObject(accountType);
+                    oos.writeObject(userType);
+                    oos.writeObject(username);
+                    oos.writeObject(password);
 //                oos.flush();
-                if (userType.equals("Customer")) {    //Creating customer account
-                    Object newCustomer = ois.readObject();
-                    if (newCustomer instanceof Customer) {
-                        JOptionPane.showMessageDialog(null, "Account created. Please log in."
-                                , "Log in", JOptionPane.INFORMATION_MESSAGE); // logging in now
+                    if (userType.equals("Customer")) {    //Creating customer account
+                        Object newCustomer = ois.readObject();
+                        if (newCustomer instanceof Customer) {
+                            JOptionPane.showMessageDialog(null, "Account created. Please log in."
+                                    , "Log in", JOptionPane.INFORMATION_MESSAGE); // logging in now
+                            customer = customerLogin(oos, ois);
+                        } else {
+                            JOptionPane.showMessageDialog(null, newCustomer, "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;   //if failed to create an account(AlreadyUser or OtherUser), program ends
+                        }
+
+                    } else if (userType.equals("Seller")) {    //creating Seller account
+                        Object newSeller = ois.readObject();
+                        if (newSeller instanceof Seller) {
+                            JOptionPane.showMessageDialog(null, "Account created. Please log in."
+                                    , "Log in", JOptionPane.INFORMATION_MESSAGE); // logging in now
+                            seller = sellerLogin(oos, ois);
+                        } else {
+                            JOptionPane.showMessageDialog(null, newSeller, "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;   //if failed to create an account(AlreadyUser or OtherUser), program ends
+                        }
+                    }
+                } else if (accountType.equals("Log in")) { // if they want to log in
+                    if (userType.equals("Customer")) {    //log in as a customer
                         customer = customerLogin(oos, ois);
-                    } else {
-                        JOptionPane.showMessageDialog(null, newCustomer, "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;   //if failed to create an account(AlreadyUser or OtherUser), program ends
-                    }
-
-                } else if (userType.equals("Seller")) {    //creating Seller account
-                    Object newSeller = ois.readObject();
-                    if (newSeller instanceof Seller) {
-                        JOptionPane.showMessageDialog(null, "Account created. Please log in."
-                                , "Log in", JOptionPane.INFORMATION_MESSAGE); // logging in now
+                        if (customer == null) {
+                            break;
+                        }
+                    } else if (userType.equals("Seller")) {    //log in as a seller
                         seller = sellerLogin(oos, ois);
-                    } else {
-                        JOptionPane.showMessageDialog(null, newSeller, "Error",
-                                JOptionPane.ERROR_MESSAGE);
-                        return;   //if failed to create an account(AlreadyUser or OtherUser), program ends
+                        if (seller == null) {
+                            break;
+                        }
                     }
                 }
-            } else if (accountType.equals("Log in")) { // if they want to log in
-                if (userType.equals("Customer")) {    //log in as a customer
-                    customer = customerLogin(oos, ois);
-                } else if (userType.equals("Seller")) {    //log in as a seller
-                    seller = sellerLogin(oos, ois);
-                }
-            }
 
-            JOptionPane.showMessageDialog(null, "Successfully logged in!"
-                    , "Successful Log In", JOptionPane.INFORMATION_MESSAGE);
-            // main marketplace
-            if (customer != null) {
-                // marketplace for customer
-                customerMarketplace(customer, oos, ois);
-            } else {
-                // marketplace for seller
-                sellerMarketplace(seller, oos, ois);
+                JOptionPane.showMessageDialog(null, "Successfully logged in!"
+                        , "Successful Log In", JOptionPane.INFORMATION_MESSAGE);
+                // main marketplace
+                if (customer != null) {
+                    // marketplace for customer
+                    customerMarketplace(customer, oos, ois);
+                } else {
+                    // marketplace for seller
+                    sellerMarketplace(seller, oos, ois);
+                }
+                JOptionPane.showMessageDialog(null, "Goodbye!"
+                        , "Farewell", JOptionPane.INFORMATION_MESSAGE);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-            JOptionPane.showMessageDialog(null, "Goodbye!"
-                    , "Farewell", JOptionPane.INFORMATION_MESSAGE);
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            break;
         }
     }
 
@@ -119,6 +144,10 @@ public class Market implements Runnable {
         String input;
         while (true) {
             input = showInputDialog("Enter hostname");
+            if (input == null) {
+                Socket socket = null;
+                return socket;
+            }
             try {
                 Socket socket1 = new Socket(input, 4242);
                 return socket1;
@@ -146,13 +175,22 @@ public class Market implements Runnable {
 
     public static String showInputDialog(String message) {
         String input;
-        input = JOptionPane.showInputDialog(null, message, "Marketplace",
-                JOptionPane.QUESTION_MESSAGE);
-        while (input == null || input.isBlank()) {
-            JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
-                    JOptionPane.ERROR_MESSAGE);
+        while (true) {
             input = JOptionPane.showInputDialog(null, message, "Marketplace",
                     JOptionPane.QUESTION_MESSAGE);
+            if (input == null) {
+                break;
+            }
+            while (input.isBlank()) {
+                JOptionPane.showMessageDialog(null, "Input cannot be blank!", "Error!",
+                        JOptionPane.ERROR_MESSAGE);
+                input = JOptionPane.showInputDialog(null, message, "Marketplace",
+                        JOptionPane.QUESTION_MESSAGE);
+                if (input == null) {
+                    break;
+                }
+            }
+            break;
         }
 
         return input;
@@ -186,15 +224,21 @@ public class Market implements Runnable {
 
     //log in as a customer
     public static Customer customerLogin(ObjectOutputStream oos, ObjectInputStream ois) {
-        Customer customer;
+        Customer customer = null;
         while (true) {
             try {
                 String username = JOptionPane.showInputDialog(null, "Please enter your " +
                                 "username/email."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (username == null) {
+                    break;
+                }
 
                 String password = JOptionPane.showInputDialog(null, "Please enter your password."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (password == null) {
+                    break;
+                }
 
                 oos.writeObject("Log in");
                 oos.writeObject("Customer");
@@ -219,14 +263,20 @@ public class Market implements Runnable {
 
     //log in as a seller
     public static Seller sellerLogin(ObjectOutputStream oos, ObjectInputStream ois) {
-        Seller seller;
+        Seller seller = null;
         while (true) {
             try {
                 String username = JOptionPane.showInputDialog(null, "Please enter your " +
                                 "username/email."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (username == null) {
+                    break;
+                }
                 String password = JOptionPane.showInputDialog(null, "Please enter your password."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (password == null) {
+                    break;
+                }
                 oos.writeObject("Log in");
                 oos.writeObject("Seller");
                 oos.writeObject(username);
