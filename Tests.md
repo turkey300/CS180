@@ -36,6 +36,8 @@ Test Status: Passed
 
 Expected Result: Program connects to server, logs into the account, 
 Goes to the product page and adds the amount requested to shopping cart, and finally exits out of the program.
+
+Test Status: Passed
 ### Test 4: Search specific product(s)
 1. User launches program
 2. User enters hostname (localhost)
@@ -48,6 +50,7 @@ Goes to the product page and adds the amount requested to shopping cart, and fin
 
 Expected Result: Program connects to server, logs into the account, 
 Searches for required products can access product page of these products, and finally exits out of the program.
+
 Test Status: Passed
 ### Test 5: Sort marketplace
 1. User launches program
@@ -62,6 +65,7 @@ Test Status: Passed
 
 Expected Result: Program connects to server, logs into the account, 
 Sorts products as required, and finally exits out of the program.
+
 Test Status: Passed
 ### Test 6: View Dashboard
 1. User launches program
@@ -78,6 +82,7 @@ Test Status: Passed
 
 Expected Result: Program connects to server, logs into the account, 
 Sorts stores by products sold or by number of products the user purchased in this store according to the sorting option user chose, and finally exits out of the program.
+
 Test Status: Passed
 ### Test 7: Modify account
 1. User launches program.
@@ -95,6 +100,7 @@ Test Status: Passed
 13.User repeats steps 1-4 to log in.
 
 Expected Result: User is able to change their password and log in with their new password after step 8; User is able to change their username and log in with their new username after step 11; User is able to delete account and can’t log in after step 13. System should give an error indicating there’s no such user.
+
 Test Status: Passed
 
 ### Test 8: Seller functions
