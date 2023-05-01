@@ -503,7 +503,8 @@ public class Server implements Runnable {
                 //other commands
             }
         } catch (SocketException | EOFException e) {
-            //SocketException catches "Connection reset"; I cannot solve EOFException, but seems like everything is working fine
+            //SocketException catches "Connection reset"; I cannot solve EOFException, but seems like everything is
+            // working fine
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

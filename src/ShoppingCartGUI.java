@@ -12,7 +12,8 @@ public class ShoppingCartGUI extends JFrame {
 
     private boolean willbreak = false;
 
-    public ShoppingCartGUI(String[] items, ArrayList<Seller> sellers, ArrayList<ShoppingCart> shoppingCart, Customer customer, ArrayList<String> shopprod) {
+    public ShoppingCartGUI(String[] items, ArrayList<Seller> sellers, ArrayList<ShoppingCart> shoppingCart, Customer
+            customer, ArrayList<String> shopprod) {
         super("Shopping Cart");
 
         label = new JLabel();
@@ -60,7 +61,8 @@ public class ShoppingCartGUI extends JFrame {
                 for (int b = 0; b < delete.size(); b++) {
                     shoppingCart.remove(shoppingCart.get(delete.get(b)));
                 }
-                JOptionPane.showMessageDialog(null, "Purchased all available products, leaving shopping cart!", "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Purchased all available products, leaving" +
+                        " shopping cart!", "Shopping Cart", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
             }
 
@@ -72,14 +74,17 @@ public class ShoppingCartGUI extends JFrame {
                 // add code to delete product here
                 System.out.println("Which product would you like to delete?");
                 String[] cartproducts = shopprod.toArray(new String[0]);
-                String select = (String) JOptionPane.showInputDialog(null, "Which product would you like to delete?", "Delete?", JOptionPane.QUESTION_MESSAGE, null, cartproducts, cartproducts[0]);
+                String select = (String) JOptionPane.showInputDialog(null, "Which product would" +
+                        " you like to delete?", "Delete?", JOptionPane.QUESTION_MESSAGE, null, cartproducts,
+                        cartproducts[0]);
                 select = Character.toString(select.charAt(0));
                 int intInput = Integer.parseInt(select);
                // String[] prods = products.toArray(new String[0]);
 
                     if (intInput > 0 && intInput <= shoppingCart.size()) {
                         shoppingCart.remove(intInput - 1);
-                        JOptionPane.showMessageDialog(null, "Product removed from shopping cart!", "Delete?", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Product removed from shopping cart!"
+                                , "Delete?", JOptionPane.INFORMATION_MESSAGE);
                         customer.saveCustomer();
                         dispose();
                     }

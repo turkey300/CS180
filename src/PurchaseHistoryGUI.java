@@ -47,10 +47,12 @@ public class PurchaseHistoryGUI extends JFrame {
         exportButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 while (true) {
-                    String file = JOptionPane.showInputDialog(null, "Please enter the file path to export to.", "File", JOptionPane.QUESTION_MESSAGE);
+                    String file = JOptionPane.showInputDialog(null, "Please enter the file path" +
+                            " to export to.", "File", JOptionPane.QUESTION_MESSAGE);
                     File f = new File(file);
                     if (f.exists()) {
-                        JOptionPane.showMessageDialog(null, "This file already exists! Try a new file path.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "This file already exists! Try a new"
+                                + " " + "" + "file path.", "Error", JOptionPane.ERROR_MESSAGE);
 
                     } else {
                         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file))) {
@@ -60,10 +62,12 @@ public class PurchaseHistoryGUI extends JFrame {
                                                 .getProduct().getProductName(), product.getAmount(),
                                         product.getStoreName());
                             }
-                            JOptionPane.showMessageDialog(null, "Purchase history exported!", "Export", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Purchase history exported!",
+                                    "Export", JOptionPane.INFORMATION_MESSAGE);
                             break;
                         } catch (Exception g) {
-                            JOptionPane.showMessageDialog(null, "Error while writing to file!", "Error", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Error while writing to file!",
+                                    "Error", JOptionPane.ERROR_MESSAGE);
                         }
                     }
                 }
