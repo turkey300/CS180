@@ -1,13 +1,12 @@
-import javax.swing.*;
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 
 /**
- * Server class
+ * This is the server end of Market, which responds to request made by user through client. It's mainly responsible for
+ * loading and saving data for the client.
  *
  * @author Ekaterina Tszyao, Dimitri Paikos, Rayan Timmerman, Tyler Kei, Lab12
  * @version 05/01/2023

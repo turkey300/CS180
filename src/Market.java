@@ -5,12 +5,12 @@ import javax.swing.*;
 
 
 /**
- * This is the Market class containing a main method to run the program. It contains customer marketplace and seller
- * market, which contain functions customer or seller can select from.
+ * This is the client end of Market containing a main method to run the program. It contains customer marketplace and
+ * seller market, which contain functions customer or seller can select from.
  * The end user runs this code, this is the "Client".
  *
  * @author Ekaterina Tszyao, Dimitri Paikos, Tyler Kei, Ryan Timmerman, Lab12
- * @version 4/10/2023
+ * @version 5/1/2023
  */
 public class Market implements Runnable {
     private Socket socket;
