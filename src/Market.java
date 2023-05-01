@@ -43,17 +43,20 @@ public class Market implements Runnable {
                 userType = (String) JOptionPane.showInputDialog(null, "Please select your user type."
                         , "User Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
                 if (userType == null)
-                    JOptionPane.showMessageDialog(null, "Please select your user type!", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                   // JOptionPane.showMessageDialog(null, "Please select your user type!", "Error",
+                   //         JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
             } while (userType == null);
 
             userTypeOptions = new String[]{"Log in", "Create an account"};
             do {
                 accountType = (String) JOptionPane.showInputDialog(null, "Please select your account type."
                         , "Account Type", JOptionPane.QUESTION_MESSAGE, null, userTypeOptions, userTypeOptions[0]);
-                if (accountType == null)
-                    JOptionPane.showMessageDialog(null, "Please select your account type!", "Error",
-                            JOptionPane.ERROR_MESSAGE);
+                if (accountType == null) {
+                    //  JOptionPane.showMessageDialog(null, "Please select your account type!", "Error",
+                    //   JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
+                }
             } while (accountType == null);
 
 
@@ -61,8 +64,15 @@ public class Market implements Runnable {
             if (accountType.equals("Create an account")) {
                 username = JOptionPane.showInputDialog(null, "Please enter your username/email."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (username == null) {
+                    System.exit(0);
+                }
+
                 password = JOptionPane.showInputDialog(null, "Please enter your password."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (password == null) {
+                    System.exit(0);
+                }
                 oos.writeObject(accountType);
                 oos.writeObject(userType);
                 oos.writeObject(username);
@@ -225,8 +235,14 @@ public class Market implements Runnable {
             try {
                 String username = JOptionPane.showInputDialog(null, "Please enter your username/email."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (username == null) {
+                    System.exit(0);
+                }
                 String password = JOptionPane.showInputDialog(null, "Please enter your password."
                         , "Username", JOptionPane.QUESTION_MESSAGE);
+                if (password == null) {
+                    System.exit(0);
+                }
                 oos.writeObject("Log in");
                 oos.writeObject("Customer");
                 oos.writeObject(username);
