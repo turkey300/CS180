@@ -79,8 +79,25 @@ Test Status: Passed
 Expected Result: Program connects to server, logs into the account, 
 Sorts stores by products sold or by number of products the user purchased in this store according to the sorting option user chose, and finally exits out of the program.
 Test Status: Passed
+### Test 7: Modify account
+1. User launches program.
+2. User enters hostname (localhost)
+3. User selects the type of user they are.
+4. User logs in using their username and password.
+5. User selects “Modify account.”
+6. User selects to edit password then enters new password.
+7. User returns to main page and exits.
+8. User repeats steps 1-4, using new password to log in.
+9. User selects “Modify account.”, selects to edit username then enters new username.
+10.User returns to main page and exits.
+11. User repeats steps 1-4, using new username to log in.
+12. User selects “Modify account.”, selects to delete account and confirms.
+13.User repeats steps 1-4 to log in.
 
-### Test 7: Seller functions
+Expected Result: User is able to change their password and log in with their new password after step 8; User is able to change their username and log in with their new username after step 11; User is able to delete account and can’t log in after step 13. System should give an error indicating there’s no such user.
+Test Status: Passed
+
+### Test 8: Seller functions
 1. User launches program
 2. User enters hostname (localhost)
 3. User selects seller as type of user
