@@ -5,6 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
+
 /**
  * Server class
  *
@@ -134,11 +135,11 @@ public class Server implements Runnable {
                         }
                     }
                 } else if (command.equals("Purchase product")) {
-//                    synchronized (sync) {
-                    Product product = (Product) ois.readObject();
+                    synchronized (sync) {
+                        Product product = (Product) ois.readObject();
 //                        oos.writeObject("Waiting");
 //                        oos.flush();
-                    ArrayList<Seller> sellers = Seller.loadAllSellers();  // grabs sellers again
+                        ArrayList<Seller> sellers = Seller.loadAllSellers();  // grabs sellers again
 
 //                        try {
 //                            oos.writeObject("List of sellers");
@@ -148,52 +149,52 @@ public class Server implements Runnable {
 //                            e.printStackTrace();
 //                        }
 
-                    ArrayList<Store> stores = new ArrayList<>(); // grabbing stores again
-                    for (int j = 0; j < sellers.size(); j++) {
-                        ArrayList<Store> currentStores = sellers.get(j).getStores();
-                        stores.addAll(currentStores);
-                    }
-
-                    boolean stillProduct = false;
-                    Store store = null;
-                    for (int k = 0; k < stores.size(); k++) { // checking if product is in store
-                        if (product.getStoreName().equals(stores.get(k).getStoreName())) {
-                            stillProduct = true;
-                            store = stores.get(k);
-                            product = store.getProduct(product.getProductName());
+                        ArrayList<Store> stores = new ArrayList<>(); // grabbing stores again
+                        for (int j = 0; j < sellers.size(); j++) {
+                            ArrayList<Store> currentStores = sellers.get(j).getStores();
+                            stores.addAll(currentStores);
                         }
-                    }
-                    oos.writeObject(stillProduct);
-                    oos.flush();
+
+                        boolean stillProduct = false;
+                        Store store = null;
+                        for (int k = 0; k < stores.size(); k++) { // checking if product is in store
+                            if (product.getStoreName().equals(stores.get(k).getStoreName())) {
+                                stillProduct = true;
+                                store = stores.get(k);
+                                product = store.getProduct(product.getProductName());
+                            }
+                        }
+                        oos.writeObject(stillProduct);
+                        oos.flush();
 
 //                        oos.writeObject("Waiting");
 //                        oos.flush();
 //                        ois.readObject();
 //                        String stillProduct = (String) ois.readObject();
-                    if (stillProduct) {
+                        if (stillProduct) {
 //                            Store store = (Store) ois.readObject();
 //                            Product product = (Product) ois.readObject();
-                        int amount = (Integer) ois.readObject();
-                        Customer customer = (Customer) ois.readObject();
-                        customer = Customer.loadCustomer(customer.getUsername());
+                            int amount = (Integer) ois.readObject();
+                            Customer customer = (Customer) ois.readObject();
+                            customer = Customer.loadCustomer(customer.getUsername());
 //                            ArrayList<Seller> sellers = Seller.loadAllSellers();
-                        String message;
+                            String message;
 //                        System.out.println("Before purchase:" + product.productPageDisplay());
-                        if (store.purchaseProductFromStore(product, amount, customer)) {
-                            for (int i = 0; i < sellers.size(); i++) {
-                                sellers.get(i).saveSeller();
+                            if (store.purchaseProductFromStore(product, amount, customer)) {
+                                for (int i = 0; i < sellers.size(); i++) {
+                                    sellers.get(i).saveSeller();
+                                }
+                                message = "Purchased successfully!";
+                            } else {
+                                message = "Sorry, there were not enough items available.";
                             }
-                            message = "Purchased successfully!";
-                        } else {
-                            message = "Sorry, there were not enough items available.";
-                        }
 //                            customer.saveCustomer();
 //                        System.out.println("After purchase:" + product.productPageDisplay());
-                        oos.writeObject(message);
-                        oos.flush();
+                            oos.writeObject(message);
+                            oos.flush();
 //                        System.out.println(product.productPageDisplay());
+                        }
                     }
-//                    }
                 } else if (command.equals("Add to cart")) {
                     synchronized (sync) {
                         Product product = (Product) ois.readObject();
@@ -276,7 +277,7 @@ public class Server implements Runnable {
                     ArrayList<Store> stores = seller.getStores();
                     Store currentStore = null;
                     for (int i = 0; i < stores.size(); i++) {
-                        if(stores.get(i).getStoreName().equals(name)) currentStore = stores.get(i);
+                        if (stores.get(i).getStoreName().equals(name)) currentStore = stores.get(i);
                     }
                     String file = (String) ois.readObject();
 
@@ -331,13 +332,13 @@ public class Server implements Runnable {
 //                        System.out.println("Error reading in product!");
                     }
                     oos.writeObject(message);
-                } else if(command.equals("Export products")){
+                } else if (command.equals("Export products")) {
                     Seller seller = Seller.loadSeller((String) ois.readObject());
                     String name = (String) ois.readObject();
                     ArrayList<Store> stores = seller.getStores();
                     Store currentStore = null;
                     for (int i = 0; i < stores.size(); i++) {
-                        if(stores.get(i).getStoreName().equals(name)) currentStore = stores.get(i);
+                        if (stores.get(i).getStoreName().equals(name)) currentStore = stores.get(i);
                     }
                     String file = (String) ois.readObject();
                     File f = new File(file);
@@ -382,117 +383,121 @@ public class Server implements Runnable {
                     store.addProduct(new Product(name, description, quantity, price, storeName));
                     seller.saveSeller();
                 } else if (command.equals("Edit product")) {
-                    String input = (String) ois.readObject();
-                    if (input.equals("name")) {
-                        Seller seller = (Seller) ois.readObject();
-                        Product product = (Product) ois.readObject();
-                        String name = (String) ois.readObject();
+                    synchronized (sync) {
+                        String input = (String) ois.readObject();
+                        if (input.equals("name")) {
+                            Seller seller = (Seller) ois.readObject();
+                            Product product = (Product) ois.readObject();
+                            String name = (String) ois.readObject();
 
-                        ArrayList<Seller> sellers = Seller.loadAllSellers();
-                        for (int i = 0; i < sellers.size(); i++) {
-                            if (sellers.get(i).getUsername().equals(seller.getUsername()))
-                                seller = sellers.get(i);
+                            ArrayList<Seller> sellers = Seller.loadAllSellers();
+                            for (int i = 0; i < sellers.size(); i++) {
+                                if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                                    seller = sellers.get(i);
+                            }
+                            ArrayList<Store> stores = seller.getStores();
+                            Store store = null;
+                            for (int i = 0; i < stores.size(); i++) {
+                                if (stores.get(i).getStoreName().equals(product.getStoreName()))
+                                    store = stores.get(i);
+                            }
+
+                            product = store.getProduct(product.getProductName());
+
+                            product.editProductName(name);
+                            seller.saveSeller();
+                            store.saveStore();
+                        } else if (input.equals("desc")) {
+                            Seller seller = (Seller) ois.readObject();
+                            Product product = (Product) ois.readObject();
+                            String desc = (String) ois.readObject();
+
+                            ArrayList<Seller> sellers = Seller.loadAllSellers();
+                            for (int i = 0; i < sellers.size(); i++) {
+                                if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                                    seller = sellers.get(i);
+                            }
+                            ArrayList<Store> stores = seller.getStores();
+                            Store store = null;
+                            for (int i = 0; i < stores.size(); i++) {
+                                if (stores.get(i).getStoreName().equals(product.getStoreName()))
+                                    store = stores.get(i);
+                            }
+
+                            product = store.getProduct(product.getProductName());
+
+                            product.editDescription(desc);
+                            seller.saveSeller();
+                            store.saveStore();
+                        } else if (input.equals("quantity")) {
+                            Seller seller = (Seller) ois.readObject();
+                            Product product = (Product) ois.readObject();
+                            int quantity = (Integer) ois.readObject();
+
+                            ArrayList<Seller> sellers = Seller.loadAllSellers();
+                            for (int i = 0; i < sellers.size(); i++) {
+                                if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                                    seller = sellers.get(i);
+                            }
+                            ArrayList<Store> stores = seller.getStores();
+                            Store store = null;
+                            for (int i = 0; i < stores.size(); i++) {
+                                if (stores.get(i).getStoreName().equals(product.getStoreName()))
+                                    store = stores.get(i);
+                            }
+
+                            product = store.getProduct(product.getProductName());
+
+                            product.editAvailableQuantity(quantity);
+                            seller.saveSeller();
+                            store.saveStore();
+                        } else if (input.equals("price")) {
+                            Seller seller = (Seller) ois.readObject();
+                            Product product = (Product) ois.readObject();
+                            Double price = (Double) ois.readObject();
+
+                            ArrayList<Seller> sellers = Seller.loadAllSellers();
+                            for (int i = 0; i < sellers.size(); i++) {
+                                if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                                    seller = sellers.get(i);
+                            }
+                            ArrayList<Store> stores = seller.getStores();
+                            Store store = null;
+                            for (int i = 0; i < stores.size(); i++) {
+                                if (stores.get(i).getStoreName().equals(product.getStoreName()))
+                                    store = stores.get(i);
+                            }
+
+                            product = store.getProduct(product.getProductName());
+
+                            product.editPrice(price);
+                            seller.saveSeller();
+                            store.saveStore();
                         }
-                        ArrayList<Store> stores = seller.getStores();
-                        Store store = null;
-                        for (int i = 0; i < stores.size(); i++) {
-                            if (stores.get(i).getStoreName().equals(product.getStoreName()))
-                                store = stores.get(i);
-                        }
-
-                        product = store.getProduct(product.getProductName());
-
-                        product.editProductName(name);
-                        seller.saveSeller();
-                        store.saveStore();
-                    } else if (input.equals("desc")) {
-                        Seller seller = (Seller) ois.readObject();
-                        Product product = (Product) ois.readObject();
-                        String desc = (String) ois.readObject();
-
-                        ArrayList<Seller> sellers = Seller.loadAllSellers();
-                        for (int i = 0; i < sellers.size(); i++) {
-                            if (sellers.get(i).getUsername().equals(seller.getUsername()))
-                                seller = sellers.get(i);
-                        }
-                        ArrayList<Store> stores = seller.getStores();
-                        Store store = null;
-                        for (int i = 0; i < stores.size(); i++) {
-                            if (stores.get(i).getStoreName().equals(product.getStoreName()))
-                                store = stores.get(i);
-                        }
-
-                        product = store.getProduct(product.getProductName());
-
-                        product.editDescription(desc);
-                        seller.saveSeller();
-                        store.saveStore();
-                    } else if (input.equals("quantity")) {
-                        Seller seller = (Seller) ois.readObject();
-                        Product product = (Product) ois.readObject();
-                        int quantity = (Integer) ois.readObject();
-
-                        ArrayList<Seller> sellers = Seller.loadAllSellers();
-                        for (int i = 0; i < sellers.size(); i++) {
-                            if (sellers.get(i).getUsername().equals(seller.getUsername()))
-                                seller = sellers.get(i);
-                        }
-                        ArrayList<Store> stores = seller.getStores();
-                        Store store = null;
-                        for (int i = 0; i < stores.size(); i++) {
-                            if (stores.get(i).getStoreName().equals(product.getStoreName()))
-                                store = stores.get(i);
-                        }
-
-                        product = store.getProduct(product.getProductName());
-
-                        product.editAvailableQuantity(quantity);
-                        seller.saveSeller();
-                        store.saveStore();
-                    } else if (input.equals("price")) {
-                        Seller seller = (Seller) ois.readObject();
-                        Product product = (Product) ois.readObject();
-                        Double price = (Double) ois.readObject();
-
-                        ArrayList<Seller> sellers = Seller.loadAllSellers();
-                        for (int i = 0; i < sellers.size(); i++) {
-                            if (sellers.get(i).getUsername().equals(seller.getUsername()))
-                                seller = sellers.get(i);
-                        }
-                        ArrayList<Store> stores = seller.getStores();
-                        Store store = null;
-                        for (int i = 0; i < stores.size(); i++) {
-                            if (stores.get(i).getStoreName().equals(product.getStoreName()))
-                                store = stores.get(i);
-                        }
-
-                        product = store.getProduct(product.getProductName());
-
-                        product.editPrice(price);
-                        seller.saveSeller();
-                        store.saveStore();
                     }
                 } else if (command.equals("Delete product")) {
-                    Seller seller = (Seller) ois.readObject();
-                    Store store1 = (Store) ois.readObject();
-                    int num = (Integer) ois.readObject();
+                    synchronized (sync) {
+                        Seller seller = (Seller) ois.readObject();
+                        Store store1 = (Store) ois.readObject();
+                        int num = (Integer) ois.readObject();
 
-                    ArrayList<Seller> sellers = Seller.loadAllSellers();
-                    for (int i = 0; i < sellers.size(); i++) {
-                        if (sellers.get(i).getUsername().equals(seller.getUsername()))
-                            seller = sellers.get(i);
-                    }
-                    ArrayList<Store> stores = seller.getStores();
-                    Store store = null;
-                    for (int i = 0; i < stores.size(); i++) {
-                        if (stores.get(i).getStoreName().equals(store1.getStoreName()))
-                            store = stores.get(i);
-                    }
-                    Product product = store.getProduct(num);
-                    store.deleteProduct(product);
+                        ArrayList<Seller> sellers = Seller.loadAllSellers();
+                        for (int i = 0; i < sellers.size(); i++) {
+                            if (sellers.get(i).getUsername().equals(seller.getUsername()))
+                                seller = sellers.get(i);
+                        }
+                        ArrayList<Store> stores = seller.getStores();
+                        Store store = null;
+                        for (int i = 0; i < stores.size(); i++) {
+                            if (stores.get(i).getStoreName().equals(store1.getStoreName()))
+                                store = stores.get(i);
+                        }
+                        Product product = store.getProduct(num);
+                        store.deleteProduct(product);
 
-                    seller.saveSeller();
-                    store.saveStore();
+                        seller.saveSeller();
+                        store.saveStore();
+                    }
                 } else if (command.equals("Create store")) {
                     Seller seller = (Seller) ois.readObject();
                     String name = (String) ois.readObject();

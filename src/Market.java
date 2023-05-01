@@ -8,6 +8,7 @@ import javax.swing.*;
 /**
  * This is the Market class containing a main method to run the program. It contains customer marketplace and seller
  * market, which contain functions customer or seller can select from.
+ * The end user runs this code, this is the "Client".
  *
  * @author Ekaterina Tszyao, Dimitri Paikos, Tyler Kei, Ryan Timmerman, Lab12
  * @version 4/10/2023
@@ -210,7 +211,7 @@ public class Market implements Runnable {
         input = (String) JOptionPane.showInputDialog(null, message
                 , title, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
         while (input == null || input.isBlank()) {
-            JOptionPane.showMessageDialog(null, message + "!", "Error!",
+            JOptionPane.showMessageDialog(null, "Please select an option!", "Error!",
                     JOptionPane.ERROR_MESSAGE);
             input = (String) JOptionPane.showInputDialog(null, message
                     , title, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
@@ -1159,7 +1160,7 @@ public class Market implements Runnable {
                 if (action.equals("1. Add a product")) {    //add a product
                     String input;
                     input = showInputDialog("How would you like to add this product?", new String[]{
-                            "1. Import product from csv.", "2. Create product in terminal."}, "Add Product");
+                            "1. Import product from csv.", "2. Create product in gui."}, "Add Product");
 //                    do {
 //                        System.out.println("1. Import product from csv.\n2. Create product in terminal.");
 //                        input = scanner.nextLine();
